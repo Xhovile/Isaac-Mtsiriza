@@ -23,7 +23,7 @@ import {
 import { motion, AnimatePresence } from 'motion/react';
 import { Listing, Seller, University, Category } from './types';
 import { UNIVERSITIES, CATEGORIES } from './constants';
-import { auth as firebaseAuth, db as firestoreDb, isConfigValid } from './firebase';
+import { auth, db as firestore } from './firebase';
 import { 
   createUserWithEmailAndPassword, 
   signInWithEmailAndPassword, 
@@ -254,9 +254,8 @@ export default function App() {
   const [showPassword, setShowPassword] = useState(false);
   const [firestoreError, setFirestoreError] = useState<string | null>(null);
   const [profileLoading, setProfileLoading] = useState(true);
-  const isFirebaseConfigured = isConfigValid && !!firebaseAuth && !!firestoreDb;
-  const auth = firebaseAuth!;
-  const firestore = firestoreDb!;
+
+  const isFirebaseConfigured = !!import.meta.env.VITE_FIREBASE_API_KEY;
 
   // Form states
   const [newListing, setNewListing] = useState({
@@ -280,7 +279,6 @@ export default function App() {
 
   useEffect(() => {
     console.log("Auth: Initializing listener");
-    if (!isFirebaseConfigured) return;
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       console.log("Auth: State changed", user ? `User logged in: ${user.uid}` : "User logged out");
       setFirebaseUser(user);
@@ -400,17 +398,6 @@ export default function App() {
       alert(err.message);
     } finally {
       setLoading(false);
-    }
-  };
-
-
-  const handleResendVerification = async () => {
-    if (!firebaseUser) return;
-    try {
-      await sendEmailVerification(firebaseUser);
-      alert("Verification email resent!");
-    } catch (err: any) {
-      alert(err?.message || "Failed to resend verification email.");
     }
   };
 
@@ -643,7 +630,12 @@ export default function App() {
                       <RefreshCw className="w-4 h-4" /> I've Verified
                     </button>
                     <button 
-                      onClick={handleResendVerification}
+                      onClick={async () => {
+                        if (firebaseUser) {
+                          await sendEmailVerification(firebaseUser);
+                          alert("Verification email resent!");
+                        }
+                      }}
                       className="text-primary text-sm font-bold hover:underline"
                     >
                       Resend Verification Email
@@ -1031,19 +1023,10 @@ export default function App() {
                       <MapPin className="w-4 h-4" /> {userSeller.university}
                     </p>
                     {!firebaseUser?.emailVerified && (
-                      <>
-                        <div className="mb-6 p-3 bg-amber-50 border border-amber-100 rounded-xl text-amber-700 text-xs font-medium flex items-center gap-2 justify-center">
-                          <AlertTriangle className="w-4 h-4" />
-                          Verify your email to post listings
-                        </div>
-                        <button
-                          type="button"
-                          onClick={handleResendVerification}
-                          className="mt-2 text-primary text-xs font-bold hover:underline"
-                        >
-                          Resend Verification Email
-                        </button>
-                      </>
+                      <div className="mb-6 p-3 bg-amber-50 border border-amber-100 rounded-xl text-amber-700 text-xs font-medium flex items-center gap-2 justify-center">
+                        <AlertTriangle className="w-4 h-4" />
+                        Verify your email to post listings
+                      </div>
                     )}
                     {userSeller.bio && (
                       <p className="text-sm text-zinc-600 mb-6 max-w-xs mx-auto italic">
