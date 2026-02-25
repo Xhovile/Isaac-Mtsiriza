@@ -39,6 +39,7 @@ import {
   setDoc, 
   getDoc, 
   deleteDoc,
+  updateDoc,
   serverTimestamp 
 } from 'firebase/firestore';
 
@@ -422,6 +423,47 @@ export default function App() {
       alert(err.message);
     }
   };
+  const refreshVerificationStatus = async () => {
+  if (!firebaseUser) return;
+
+  try {
+    // 1) refresh the firebase user object
+    await firebaseUser.reload();
+
+    if (!firebaseUser.emailVerified) {
+      alert("Not verified yet. Please click the verification link in your email, then try again.");
+      return;
+    }
+
+    // 2) update Firestore users/{uid}
+    const userRef = doc(firestore, "users", firebaseUser.uid);
+    await updateDoc(userRef, { is_verified: true });
+
+    // 3) update your local state so UI updates instantly
+    setUserSeller((prev: any) => (prev ? { ...prev, is_verified: true } : prev));
+
+    // 4) sync to SQLite backend (server)
+    await fetch("/api/sellers", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        uid: firebaseUser.uid,
+        email: firebaseUser.email,
+        business_name: userSeller?.business_name || "",
+        business_logo: userSeller?.business_logo || "",
+        university: userSeller?.university || "",
+        bio: userSeller?.bio || "",
+        is_verified: true,
+        join_date: userSeller?.join_date || new Date().toISOString(),
+      }),
+    });
+
+    alert("✅ Verified! You can now create listings.");
+  } catch (e: any) {
+    console.error(e);
+    alert(e?.message || "Failed to refresh verification status.");
+  }
+};
 
   const handleDeleteAccount = async () => {
     if (!firebaseUser) return;
@@ -624,7 +666,7 @@ export default function App() {
                   <p className="text-zinc-500 mb-6">Please verify your email to post listings. Check your inbox for the verification link.</p>
                   <div className="space-y-3">
                     <button 
-                      onClick={() => window.location.reload()}
+                      onClick={refreshVerificationStatus}
                       className="w-full bg-zinc-900 text-white py-3 rounded-xl font-bold hover:bg-zinc-800 transition-colors flex items-center justify-center gap-2"
                     >
                       <RefreshCw className="w-4 h-4" /> I've Verified
