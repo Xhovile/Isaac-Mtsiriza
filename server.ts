@@ -29,7 +29,15 @@ const upload = multer({
   }
 });
 
-const db = new Database("market.db");
+let db: Database.Database;
+try {
+  db = new Database("market.db");
+  console.log("Database initialized successfully");
+} catch (err) {
+  console.error("Failed to initialize database:", err);
+  // Fallback or exit? For now, let's just log and see.
+  process.exit(1);
+}
 
 // Simple migration: check if 'sellers' table has 'uid' column
 try {
@@ -85,13 +93,34 @@ async function startServer() {
   const app = express();
   const PORT = 3000;
 
-  // API Routes (Multipart handled first)
+  // Basic middleware
+  app.use(express.json({ limit: '10mb' }));
+  app.use(express.urlencoded({ extended: true, limit: '10mb' }));
+
+  // Logging middleware
+  app.use((req, res, next) => {
+    console.log(`${new Date().toISOString()} - ${req.method} ${req.url}`);
+    next();
+  });
+
+  // API Routes
   app.get("/api/upload", (req, res) => {
     res.json({ status: "ready", method: "POST required" });
   });
 
-  app.post(["/api/upload", "/api/upload/"], upload.single("image"), async (req, res) => {
-    console.log("Upload request received");
+  app.post(["/api/upload", "/api/upload/"], (req, res, next) => {
+    upload.single("image")(req, res, (err) => {
+      if (err instanceof multer.MulterError) {
+        console.error("Multer error:", err);
+        return res.status(400).json({ error: "File upload error", details: err.message });
+      } else if (err) {
+        console.error("Unknown upload error:", err);
+        return res.status(500).json({ error: "Upload failed", details: err.message });
+      }
+      next();
+    });
+  }, async (req, res) => {
+    console.log("Upload request processing...");
     try {
       if (!req.file) {
         console.log("No file in request");
@@ -102,7 +131,6 @@ async function startServer() {
       // Check if Cloudinary is configured
       if (!process.env.CLOUDINARY_CLOUD_NAME || !process.env.CLOUDINARY_API_KEY || !process.env.CLOUDINARY_API_SECRET) {
         console.warn("Cloudinary not configured, returning mock URL");
-        // Fallback for demo if keys are missing
         return res.json({ url: `https://picsum.photos/seed/${Date.now()}/800/600` });
       }
 
@@ -117,12 +145,10 @@ async function startServer() {
       console.log("Upload successful:", result.secure_url);
       res.json({ url: result.secure_url });
     } catch (error) {
-      console.error("Upload error:", error);
+      console.error("Upload handler error:", error);
       res.status(500).json({ error: "Upload failed", details: error instanceof Error ? error.message : String(error) });
     }
   });
-
-  app.use(express.json());
 
   app.get("/api/listings", (req, res) => {
     const { category, university, search } = req.query;
