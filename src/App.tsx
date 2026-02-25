@@ -292,19 +292,32 @@ export default function App() {
           const docSnap = await getDoc(docRef);
           
           if (docSnap.exists()) {
-            const profile = docSnap.data() as Seller;
-            console.log("Firestore: Profile found", profile.business_name);
-            setUserSeller(profile);
-            
-            // Sync with local SQLite
-            setAuthView('profile');   
+  const profile = docSnap.data() as Seller;
+  console.log("Firestore: Profile found", profile.business_name);
+  setUserSeller(profile);
+
+  // ✅ Sync with SQLite
+  try {
+    const syncRes = await fetch('/api/sellers', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(profile)
+    });
+    if (!syncRes.ok) console.error("SQLite: Sync failed", syncRes.status);
+  } catch (syncErr) {
+    console.error("SQLite: Sync error", syncErr);
+  }
+
+  // ✅ Only show profile if profile exists
+  setAuthView('profile');
+
 } else {
-            try {
-              const syncRes = await fetch('/api/sellers', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(profile)
-              });
+  console.warn("Firestore: No profile document found for user", user.uid);
+  setUserSeller(null);
+
+  // ✅ Show signup instead
+  setAuthView('signup');
+}
               if (!syncRes.ok) console.error("SQLite: Sync failed", syncRes.status);
             } catch (syncErr) {
               console.error("SQLite: Sync error", syncErr);
