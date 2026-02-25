@@ -157,18 +157,58 @@ async function startServer() {
   });
 
   app.post("/api/sellers", (req, res) => {
-    const { uid, email, business_name, business_logo, university, bio } = req.body;
-    try {
-      db.prepare(`
-        INSERT OR REPLACE INTO sellers (uid, email, business_name, business_logo, university, bio)
-        VALUES (?, ?, ?, ?, ?, ?)
-      `).run(uid, email, business_name, business_logo, university, bio);
-      res.json({ success: true });
-    } catch (error) {
-      console.error("Seller sync error:", error);
-      res.status(500).json({ error: "Failed to sync seller profile" });
-    }
-  });
+  const {
+    uid,
+    email,
+    business_name,
+    business_logo,
+    university,
+    bio,
+    is_verified,
+    join_date,
+  } = req.body;
+
+  if (!uid || !email) {
+    return res.status(400).json({ error: "uid and email are required" });
+  }
+
+  try {
+    db.prepare(`
+      INSERT INTO sellers (
+        uid,
+        email,
+        business_name,
+        business_logo,
+        university,
+        bio,
+        is_verified,
+        join_date
+      )
+      VALUES (?, ?, ?, ?, ?, ?, ?, COALESCE(?, CURRENT_TIMESTAMP))
+      ON CONFLICT(uid) DO UPDATE SET
+        email = excluded.email,
+        business_name = excluded.business_name,
+        business_logo = excluded.business_logo,
+        university = excluded.university,
+        bio = excluded.bio,
+        is_verified = excluded.is_verified
+    `).run(
+      uid,
+      email,
+      business_name ?? "",
+      business_logo ?? "",
+      university ?? "",
+      bio ?? null,
+      is_verified ? 1 : 0,
+      join_date ?? null
+    );
+
+    return res.json({ success: true });
+  } catch (error) {
+    console.error("Seller sync error:", error);
+    return res.status(500).json({ error: "Failed to sync seller profile" });
+  }
+});
 
   app.post("/api/listings", (req, res) => {
     const { seller_uid, name, price, description, category, university, photos, whatsapp_number } = req.body;
