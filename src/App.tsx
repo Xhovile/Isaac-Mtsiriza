@@ -296,14 +296,27 @@ export default function App() {
   console.log("Firestore: Profile found", profile.business_name);
   setUserSeller(profile);
 
-  // Sync with local SQLite
+  // Sync with SQLite backend
   try {
     const syncRes = await fetch('/api/sellers', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(profile)
     });
-    
+    if (!syncRes.ok) {
+      console.error("SQLite: Sync failed", syncRes.status);
+    }
+  } catch (syncErr) {
+    console.error("SQLite: Sync error", syncErr);
+  }
+
+  setAuthView('profile');
+
+} else {
+  console.warn("Firestore: No profile document found", user.uid);
+  setUserSeller(null);
+  setAuthView('signup');
+}
         } catch (firestoreErr: any) {
           console.error("Firestore: Error fetching profile", firestoreErr);
           setFirestoreError(firestoreErr.message || "Unknown Firestore error");
