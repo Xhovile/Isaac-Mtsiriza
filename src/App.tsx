@@ -303,17 +303,7 @@ export default function App() {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(profile)
     });
-    if (!syncRes.ok) console.error("SQLite: Sync failed", syncRes.status);
-  } catch (syncErr) {
-    console.error("SQLite: Sync error", syncErr);
-  }
-
-  setAuthView('profile');
-} else {
-  console.warn("Firestore: No profile document found for user", user.uid);
-  setUserSeller(null);
-  setAuthView('signup');
-}
+    
         } catch (firestoreErr: any) {
           console.error("Firestore: Error fetching profile", firestoreErr);
           setFirestoreError(firestoreErr.message || "Unknown Firestore error");
