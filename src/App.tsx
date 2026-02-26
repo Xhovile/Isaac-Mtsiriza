@@ -130,7 +130,7 @@ const ListingCard = ({ listing, onReport }: { listing: Listing, onReport: (id: n
         </div>
         <button 
           onClick={() => onReport(listing.id)}
-          className="absolute top-4 right-4 p-2 bg-white/90 backdrop-blur-md rounded-xl text-zinc-400 hover:text-red-500 hover:bg-red-50 transition-all shadow-sm opacity-0 group-hover:opacity-100"
+          className="absolute top-4 right-4 p-2 bg-white/90 backdrop-blur-md rounded-xl text-zinc-400 hover:text-red-500 hover:bg-red-50 transition-all shadow-sm"
         >
           <AlertTriangle className="w-4 h-4" />
         </button>
@@ -433,9 +433,9 @@ export default function App() {
     } catch (err: any) {
       console.error("Auth: Signup failed", err);
       let message = err.message;
+
       if (err.code === 'auth/email-already-in-use') {
         message = "This email is already registered. Please try logging in instead.";
-        // Optionally switch to login view after a short delay or via a confirm
         if (window.confirm(message + "\n\nWould you like to switch to the Login screen?")) {
           setAuthView('login');
           return;
@@ -443,6 +443,8 @@ export default function App() {
       }
       if (err.code === 'auth/invalid-email') message = "Please enter a valid email address.";
       if (err.code === 'auth/weak-password') message = "Password should be at least 6 characters.";
+      if (err.message && err.message.includes("blocked")) message = "API Connection Error. Please check your Firebase configuration.";
+      
       alert(message);
     } finally {
       setLoading(false);
@@ -466,7 +468,6 @@ export default function App() {
       console.error("Auth: Login failed", err);
       let message = "Invalid email or password. Please try again.";
       
-      // Map Firebase error codes to user-friendly messages
       if (err.code === 'auth/invalid-credential') {
         message = "Invalid email or password. If you've forgotten your password, use the 'Forgot Password' link.";
       } else if (err.code === 'auth/user-not-found') {
@@ -474,9 +475,9 @@ export default function App() {
       } else if (err.code === 'auth/wrong-password') {
         message = "Incorrect password. Please try again.";
       } else if (err.code === 'auth/too-many-requests') {
-        message = "Too many failed attempts. Please try again later or reset your password.";
-      } else if (err.code === 'auth/user-disabled') {
-        message = "This account has been disabled. Please contact support.";
+        message = "Too many failed attempts. Please try again later.";
+      } else if (err.message && err.message.includes("blocked")) {
+        message = "API Connection Error. Please check your Firebase configuration.";
       }
       
       alert(message);
