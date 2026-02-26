@@ -340,7 +340,10 @@ export default function App() {
             try {
               const syncRes = await fetch('/api/sellers', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: {
+                  'Content-Type': 'application/json',
+                     ...(await authHeaders()),
+                 },
                 body: JSON.stringify(profile)
               });
               if (!syncRes.ok) {
