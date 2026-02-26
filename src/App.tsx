@@ -61,11 +61,11 @@ const Navbar = ({
     <nav className="sticky top-0 z-50 glass px-4 py-3">
       <div className="max-w-7xl mx-auto flex items-center justify-between gap-4">
         <div className="flex items-center gap-2.5 cursor-pointer group" onClick={() => window.location.reload()}>
-          <div className="w-10 h-10 bg-primary rounded-2xl flex items-center justify-center text-white font-extrabold text-xl shadow-lg shadow-primary/20 group-hover:scale-105 transition-transform">
+          <div className="w-10 h-10 bg-red-900 rounded-2xl flex items-center justify-center text-white font-extrabold text-xl shadow-lg shadow-red-900/20 group-hover:scale-105 transition-transform">
             B
           </div>
-          <h1 className="hidden sm:block text-xl font-display font-extrabold tracking-tight text-zinc-900">
-            Buy<span className="text-primary">Mesho</span>
+          <h1 className="hidden sm:block text-xl font-sans font-extrabold tracking-tight">
+            <span className="text-red-900">Buy</span><span className="text-zinc-700">Mesho</span>
           </h1>
         </div>
 
@@ -706,19 +706,20 @@ export default function App() {
 
       <main className="max-w-7xl mx-auto px-4">
         {/* Hero Section */}
-        <section className="py-12 sm:py-20 text-center space-y-6">
-          <motion.div
+        <section className="py-12 sm:py-24 text-center space-y-16">
+          <motion.h1
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="inline-block px-4 py-1.5 rounded-full bg-primary/5 border border-primary/10 text-primary text-[10px] font-extrabold uppercase tracking-[0.2em]"
+            className="text-6xl sm:text-8xl font-black tracking-tighter font-sans"
           >
-            The Ultimate Student Marketplace
-          </motion.div>
+            <span className="text-red-900">Buy</span>
+            <span className="text-zinc-700">Mesho</span>
+          </motion.h1>
           <motion.h2 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="text-4xl sm:text-6xl font-extrabold text-zinc-900 tracking-tight leading-[1.1]"
+            className="text-3xl sm:text-5xl font-extrabold text-zinc-900 tracking-tight leading-[1.1]"
           >
             Buy & Sell anything <br/> 
             <span className="text-primary">on your campus.</span>
@@ -778,10 +779,12 @@ export default function App() {
       <footer className="mt-20 border-t border-zinc-100 py-12 bg-white">
         <div className="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-8">
           <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 bg-zinc-900 rounded-xl flex items-center justify-center text-white font-extrabold text-sm">
+            <div className="w-8 h-8 bg-red-900 rounded-xl flex items-center justify-center text-white font-extrabold text-sm">
               B
             </div>
-            <span className="text-sm font-bold text-zinc-900">BuyMesho Malawi</span>
+            <span className="text-sm font-bold text-zinc-900">
+              <span className="text-red-900">Buy</span><span className="text-zinc-700">Mesho</span> Malawi
+            </span>
           </div>
           
           <div className="flex items-center gap-8 text-xs font-bold text-zinc-400 uppercase tracking-widest">
