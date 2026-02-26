@@ -706,11 +706,11 @@ export default function App() {
 
       <main className="max-w-7xl mx-auto px-4">
         {/* Hero Section */}
-        <section className="py-12 sm:py-24 text-center space-y-16">
+        <section className="py-12 sm:py-24 text-center space-y-6">
           <motion.h1
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="text-6xl sm:text-8xl font-black tracking-tighter font-sans"
+            className="text-6xl sm:text-8xl font-black tracking-tighter font-sans mb-16 sm:mb-24"
           >
             <span className="text-red-900">Buy</span>
             <span className="text-zinc-700">Mesho</span>
