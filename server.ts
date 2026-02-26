@@ -6,6 +6,7 @@ import { fileURLToPath } from "url";
 import multer from "multer";
 import { v2 as cloudinary } from "cloudinary";
 import dotenv from "dotenv";
+import { requireAuth } from "./server/middleware/requireAuth";
 
 dotenv.config();
 
