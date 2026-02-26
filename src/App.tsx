@@ -544,8 +544,9 @@ async function authHeaders() {
   try {
     // 1) refresh the firebase user object
     await firebaseUser.reload();
-
-    if (!firebaseUser.emailVerified) {
+    const refreshedUser = auth.currentUser;
+    
+      if (!refreshedUser?.emailVerified) {
       alert("Not verified yet. Please click the verification link in your email, then try again.");
       return;
     }
