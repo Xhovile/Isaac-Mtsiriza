@@ -188,8 +188,9 @@ async function startServer() {
     })));
   });
 
-  app.post("/api/sellers", (req, res) => {
-    const { uid, email, business_name, business_logo, university, bio } = req.body;
+  app.post("/api/sellers", requireAuth, (req, res) => {
+    const uid = req.user!.uid; // secure UID from Firebase
+const { email, business_name, business_logo, university, bio } = req.body;
     try {
       db.prepare(`
         INSERT OR REPLACE INTO sellers (uid, email, business_name, business_logo, university, bio)
