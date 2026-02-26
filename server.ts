@@ -135,7 +135,7 @@ async function startServer() {
       
       const result = await cloudinary.uploader.upload(dataURI, {
         resource_type: "auto",
-        folder: "campus_market",
+        folder: "buymesho",
       });
 
       console.log("Cloudinary success:", result.secure_url);

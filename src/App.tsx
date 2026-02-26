@@ -62,10 +62,10 @@ const Navbar = ({
       <div className="max-w-7xl mx-auto flex items-center justify-between gap-4">
         <div className="flex items-center gap-2.5 cursor-pointer group" onClick={() => window.location.reload()}>
           <div className="w-10 h-10 bg-primary rounded-2xl flex items-center justify-center text-white font-extrabold text-xl shadow-lg shadow-primary/20 group-hover:scale-105 transition-transform">
-            C
+            B
           </div>
           <h1 className="hidden sm:block text-xl font-display font-extrabold tracking-tight text-zinc-900">
-            Campus<span className="text-primary">Market</span>
+            Buy<span className="text-primary">Mesho</span>
           </h1>
         </div>
 
@@ -151,7 +151,7 @@ const ListingCard = ({ listing, onReport }: { listing: Listing, onReport: (id: n
           
           {/* WhatsApp Button - Always Visible */}
           <a 
-            href={`https://wa.me/${listing.whatsapp_number}?text=Hi, I'm interested in your ${listing.name} on CampusMarket.`}
+            href={`https://wa.me/${listing.whatsapp_number}?text=Hi, I'm interested in your ${listing.name} on BuyMesho.`}
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center gap-1.5 bg-[#25D366] hover:bg-[#128C7E] text-white px-3 py-1.5 rounded-xl text-[10px] font-extrabold uppercase tracking-wider transition-all hover:shadow-lg hover:shadow-[#25D366]/20 active:scale-95"
@@ -779,9 +779,9 @@ export default function App() {
         <div className="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-8">
           <div className="flex items-center gap-2.5">
             <div className="w-8 h-8 bg-zinc-900 rounded-xl flex items-center justify-center text-white font-extrabold text-sm">
-              C
+              B
             </div>
-            <span className="text-sm font-bold text-zinc-900">CampusMarket Malawi</span>
+            <span className="text-sm font-bold text-zinc-900">BuyMesho Malawi</span>
           </div>
           
           <div className="flex items-center gap-8 text-xs font-bold text-zinc-400 uppercase tracking-widest">
@@ -1013,7 +1013,7 @@ export default function App() {
               <div className="p-6 border-b border-zinc-100 flex items-center justify-between">
                 <h2 className="text-xl font-display">
                   {authView === 'login' && "Welcome Back"}
-                  {authView === 'signup' && "Join CampusMarket"}
+                  {authView === 'signup' && "Join BuyMesho"}
                   {authView === 'forgot' && "Reset Password"}
                   {authView === 'profile' && "My Profile"}
                 </h2>
