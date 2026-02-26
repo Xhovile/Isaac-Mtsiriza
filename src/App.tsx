@@ -635,7 +635,8 @@ async function authHeaders() {
 } catch (err: any) {
   alert(err?.message || "Failed to create listing");
 }
-
+};
+  
   const handleReport = async (listingId: number) => {
     const reason = prompt("Why are you reporting this listing?");
     if (!reason) return;
