@@ -599,31 +599,42 @@ async function authHeaders() {
     }
 
     try {
-      await fetch('/api/listings', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          ...newListing,
-          seller_uid: userSeller.uid,
-          price: parseFloat(newListing.price),
-          photos: newListing.photos.filter(p => p.trim() !== "")
-        })
-      });
-      setShowAddModal(false);
-      setNewListing({
-        name: "",
-        price: "",
-        description: "",
-        category: CATEGORIES[0] as Category,
-        university: UNIVERSITIES[0] as University,
-        photos: [""],
-        whatsapp_number: ""
-      });
-      fetchListings();
-    } catch (err) {
-      alert("Failed to create listing");
-    }
+  const headers = {
+    "Content-Type": "application/json",
+    ...(await authHeaders()),
   };
+
+  const res = await fetch("/api/listings", {
+    method: "POST",
+    headers,
+    body: JSON.stringify({
+      ...newListing,
+      price: parseFloat(newListing.price),
+      photos: newListing.photos.filter((p) => p.trim() !== ""),
+    }),
+  });
+
+  if (!res.ok) {
+    const msg = await res.text();
+    throw new Error(msg || `Failed: ${res.status}`);
+  }
+
+  setShowAddModal(false);
+  setNewListing({
+    name: "",
+    price: "",
+    description: "",
+    category: CATEGORIES[0] as Category,
+    university: UNIVERSITIES[0] as University,
+    photos: [""],
+    whatsapp_number: "",
+  });
+
+  fetchListings();
+
+} catch (err: any) {
+  alert(err?.message || "Failed to create listing");
+}
 
   const handleReport = async (listingId: number) => {
     const reason = prompt("Why are you reporting this listing?");
