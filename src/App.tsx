@@ -385,14 +385,20 @@ export default function App() {
     setLoading(true);
     console.log("Auth: Starting signup for", authForm.email);
     try {
-      console.log("Auth: Creating user in Firebase...");
-      const userCredential = await createUserWithEmailAndPassword(auth, authForm.email, authForm.password);
-      const user = userCredential.user;
-      console.log("Auth: User created successfully", user.uid);
-
-      console.log("Auth: Sending verification email...");
-      await sendEmailVerification(user);
-      console.log("Auth: Verification email sent");
+      let user = auth.currentUser;
+      
+      if (!user) {
+        console.log("Auth: Creating new user in Firebase...");
+        const userCredential = await createUserWithEmailAndPassword(auth, authForm.email, authForm.password);
+        user = userCredential.user;
+        console.log("Auth: User created successfully", user.uid);
+        
+        console.log("Auth: Sending verification email...");
+        await sendEmailVerification(user);
+        console.log("Auth: Verification email sent");
+      } else {
+        console.log("Auth: User already authenticated, skipping creation", user.uid);
+      }
 
       const profile: Seller = {
         uid: user.uid,
@@ -426,7 +432,18 @@ export default function App() {
       setAuthView('profile');
     } catch (err: any) {
       console.error("Auth: Signup failed", err);
-      alert(err.message);
+      let message = err.message;
+      if (err.code === 'auth/email-already-in-use') {
+        message = "This email is already registered. Please try logging in instead.";
+        // Optionally switch to login view after a short delay or via a confirm
+        if (window.confirm(message + "\n\nWould you like to switch to the Login screen?")) {
+          setAuthView('login');
+          return;
+        }
+      }
+      if (err.code === 'auth/invalid-email') message = "Please enter a valid email address.";
+      if (err.code === 'auth/weak-password') message = "Password should be at least 6 characters.";
+      alert(message);
     } finally {
       setLoading(false);
     }
@@ -447,10 +464,21 @@ export default function App() {
       // onAuthStateChanged will handle the view transition
     } catch (err: any) {
       console.error("Auth: Login failed", err);
-      let message = err.message;
-      if (err.code === 'auth/invalid-credential') message = "Invalid email or password.";
-      if (err.code === 'auth/user-not-found') message = "No account found with this email.";
-      if (err.code === 'auth/wrong-password') message = "Incorrect password.";
+      let message = "Invalid email or password. Please try again.";
+      
+      // Map Firebase error codes to user-friendly messages
+      if (err.code === 'auth/invalid-credential') {
+        message = "Invalid email or password. If you've forgotten your password, use the 'Forgot Password' link.";
+      } else if (err.code === 'auth/user-not-found') {
+        message = "No account found with this email. Please sign up first.";
+      } else if (err.code === 'auth/wrong-password') {
+        message = "Incorrect password. Please try again.";
+      } else if (err.code === 'auth/too-many-requests') {
+        message = "Too many failed attempts. Please try again later or reset your password.";
+      } else if (err.code === 'auth/user-disabled') {
+        message = "This account has been disabled. Please contact support.";
+      }
+      
       alert(message);
     } finally {
       setLoading(false);
@@ -1054,6 +1082,17 @@ export default function App() {
                       Don't have an account?{" "}
                       <button type="button" onClick={() => setAuthView('signup')} className="text-primary font-bold hover:underline">Sign Up</button>
                     </p>
+                    {firebaseUser && (
+                      <div className="pt-4 border-t border-zinc-100 text-center">
+                        <button 
+                          type="button" 
+                          onClick={() => signOut(auth)} 
+                          className="text-xs font-bold text-red-500 hover:underline flex items-center justify-center gap-1 mx-auto"
+                        >
+                          <LogOut className="w-3 h-3" /> Sign Out of Current Session
+                        </button>
+                      </div>
+                    )}
                   </form>
                 )}
 
