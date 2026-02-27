@@ -27,7 +27,6 @@ import { auth, db as firestore } from './firebase';
 import { 
   createUserWithEmailAndPassword, 
   signInWithEmailAndPassword, 
-  onAuthStateChanged, 
   signOut, 
   sendEmailVerification, 
   sendPasswordResetEmail,
@@ -327,7 +326,6 @@ export default function App() {
   const [showAddModal, setShowAddModal] = useState(false);
   const [showProfileModal, setShowProfileModal] = useState(false);
   const [userSeller, setUserSeller] = useState<Seller | null>(null);
-  const [firebaseUser, setFirebaseUser] = useState<FirebaseUser | null>(null);
   const [uploading, setUploading] = useState(false);
   const [authView, setAuthView] = useState<'login' | 'signup' | 'forgot' | 'profile'>('login');
   const [showPassword, setShowPassword] = useState(false);
@@ -336,7 +334,8 @@ export default function App() {
   const [editingListing, setEditingListing] = useState<Listing | null>(null);
 
   const isFirebaseConfigured = true; // Hardcoded in firebase.ts
-
+  const { user: firebaseUser, loading: authLoading } = useAuthUser();
+  
   // Form states
   const [newListing, setNewListing] = useState({
     name: "",
@@ -358,23 +357,20 @@ export default function App() {
   });
 
   useEffect(() => {
-    if (!auth) {
-      console.error("Auth: Firebase Auth object is not initialized.");
-      return;
-    }
-    console.log("Auth: Initializing listener. Config valid:", isFirebaseConfigured);
-    const unsubscribe = onAuthStateChanged(auth, async (user) => {
-      console.log("Auth: State changed", user ? `User logged in: ${user.uid}` : "User logged out");
-      setFirebaseUser(user);
-      setProfileLoading(true);
-      
-      if (user) {
+  if (authLoading) return; // wait until Firebase finishes checking
+
+  setProfileLoading(true);
+
+  (async () => {
+    try {
+      if (firebaseUser) {
         try {
           setFirestoreError(null);
-          console.log("Firestore: Fetching profile for", user.uid);
-          const docRef = doc(firestore, "users", user.uid);
+          console.log("Firestore: Fetching profile for", firebaseUser.uid);
+
+          const docRef = doc(firestore, "users", firebaseUser.uid);
           const docSnap = await getDoc(docRef);
-          
+
           if (docSnap.exists()) {
             const profile = docSnap.data() as Seller;
             console.log("Firestore: Profile found", profile.business_name);
@@ -382,14 +378,15 @@ export default function App() {
 
             // Sync with SQLite backend
             try {
-              const syncRes = await fetch('/api/sellers', {
-                method: 'POST',
+              const syncRes = await fetch("/api/sellers", {
+                method: "POST",
                 headers: {
-                  'Content-Type': 'application/json',
-                     ...(await authHeaders()),
-                 },
-                body: JSON.stringify(profile)
+                  "Content-Type": "application/json",
+                  ...(await authHeaders()),
+                },
+                body: JSON.stringify(profile),
               });
+
               if (!syncRes.ok) {
                 console.error("SQLite: Sync failed", syncRes.status);
               }
@@ -397,27 +394,25 @@ export default function App() {
               console.error("SQLite: Sync error", syncErr);
             }
 
-            setAuthView('profile');
+            setAuthView("profile");
           } else {
-            console.warn("Firestore: No profile document found for UID:", user.uid);
+            console.warn("Firestore: No profile document found for UID:", firebaseUser.uid);
             setUserSeller(null);
-            // If user exists in Auth but not in Firestore, they might need to complete signup
-            setAuthView('signup');
+            setAuthView("signup");
           }
         } catch (firestoreErr: any) {
           console.error("Firestore: Error fetching profile", firestoreErr);
           setFirestoreError(firestoreErr.message || "Unknown Firestore error");
-          // Don't force logout, but show error
-        } 
+        }
       } else {
         setUserSeller(null);
-        // Only switch to login if we're not already on signup or forgot password
-        setAuthView(prev => (prev === 'signup' || prev === 'forgot') ? prev : 'login');
+        setAuthView((prev) => (prev === "signup" || prev === "forgot" ? prev : "login"));
       }
+    } finally {
       setProfileLoading(false);
-    });
-    return () => unsubscribe();
-  }, []);
+    }
+  })();
+}, [firebaseUser, authLoading]);
 
 async function authHeaders() {
   const token = await auth.currentUser?.getIdToken();
