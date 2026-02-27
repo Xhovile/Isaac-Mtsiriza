@@ -622,7 +622,6 @@ const handleUpdateListing = async (listingId: number, updated: Partial<Listing>)
     try {
       await signOut(auth);
       setUserSeller(null);
-      setFirebaseUser(null);
     } catch (err: any) {
       alert(err.message);
     }
