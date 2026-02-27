@@ -446,6 +446,55 @@ async function authHeaders() {
     }
   };
 
+  const handleDeleteListing = async (listingId: number) => {
+  if (!confirm("Delete this listing?")) return;
+
+  try {
+    await apiFetch(`/api/listings/${listingId}`, { method: "DELETE" });
+    // safest: refresh list from server
+    fetchListings();
+  } catch (err: any) {
+    alert(err?.message || "Failed to delete listing");
+  }
+};
+
+const handleEditListing = async (listing: Listing) => {
+  // Simple safe edit for now: edit name + price + description via prompts
+  const newName = prompt("New name:", listing.name);
+  if (newName === null) return;
+
+  const newPriceStr = prompt("New price:", String(listing.price));
+  if (newPriceStr === null) return;
+
+  const newDescription = prompt("New description:", listing.description || "");
+  if (newDescription === null) return;
+
+  const newPrice = Number(newPriceStr);
+  if (Number.isNaN(newPrice)) {
+    alert("Invalid price");
+    return;
+  }
+
+  try {
+    await apiFetch(`/api/listings/${listing.id}`, {
+      method: "PUT",
+      body: JSON.stringify({
+        name: newName,
+        price: newPrice,
+        description: newDescription,
+        category: listing.category,
+        university: listing.university,
+        photos: listing.photos ?? [],
+        whatsapp_number: listing.whatsapp_number,
+      }),
+    });
+
+    fetchListings();
+  } catch (err: any) {
+    alert(err?.message || "Failed to update listing");
+  }
+};
+
   const handleSignUp = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
