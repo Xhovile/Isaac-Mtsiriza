@@ -1,6 +1,5 @@
 import type { Request, Response, NextFunction } from "express";
-import { verifyIdToken } from "../auth/firebaseAdmin";
-
+import { verifyIdToken } from "../auth/firebaseAdmin.js";
 function getBearerToken(req: Request): string | null {
   const header = req.headers.authorization;
   if (!header) return null;
