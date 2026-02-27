@@ -633,23 +633,18 @@ const handleUpdateListing = async (listingId: number, updated: Partial<Listing>)
     setUserSeller((prev: any) => (prev ? { ...prev, is_verified: true } : prev));
 
     // 4) sync to SQLite backend (server)
-    await fetch("/api/sellers", {
-      method: "POST",
-      headers: {
-          "Content-Type": "application/json",
-          ...(await authHeaders()),
-       },
-      body: JSON.stringify({
-        
-        email: firebaseUser.email,
-        business_name: userSeller?.business_name || "",
-        business_logo: userSeller?.business_logo || "",
-        university: userSeller?.university || "",
-        bio: userSeller?.bio || "",
-        is_verified: true,
-        join_date: userSeller?.join_date || new Date().toISOString(),
-      }),
-    });
+    await apiFetch("/api/sellers", {
+  method: "POST",
+  body: JSON.stringify({
+    email: firebaseUser?.email,
+    business_name: userSeller?.business_name || "",
+    business_logo: userSeller?.business_logo || "",
+    university: userSeller?.university || "",
+    bio: userSeller?.bio || "",
+    is_verified: true,
+    join_date: userSeller?.join_date || new Date().toISOString(),
+  }),
+});
 
     alert("✅ Verified! You can now create listings.");
   } catch (e: any) {
