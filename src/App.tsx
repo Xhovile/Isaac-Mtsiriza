@@ -333,6 +333,7 @@ export default function App() {
   const [showPassword, setShowPassword] = useState(false);
   const [firestoreError, setFirestoreError] = useState<string | null>(null);
   const [profileLoading, setProfileLoading] = useState(true);
+  const [editingListing, setEditingListing] = useState<Listing | null>(null);
 
   const isFirebaseConfigured = true; // Hardcoded in firebase.ts
 
