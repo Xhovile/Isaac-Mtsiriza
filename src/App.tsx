@@ -413,11 +413,6 @@ export default function App() {
     }
   })();
 }, [firebaseUser, authLoading]);
-
-async function authHeaders() {
-  const token = await auth.currentUser?.getIdToken();
-  return token ? { Authorization: `Bearer ${token}` } : {};
-}
   
   useEffect(() => {
     fetchListings();
