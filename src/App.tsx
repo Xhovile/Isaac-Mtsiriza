@@ -1454,6 +1454,13 @@ const handleUpdateListing = async (listingId: number, updated: Partial<Listing>)
           </div>
         )}
       </AnimatePresence>
+      {editingListing && (
+  <EditListingModal
+    listing={editingListing}
+    onClose={() => setEditingListing(null)}
+    onSave={(updated) => handleUpdateListing(editingListing.id, updated)}
+  />
+)}
     </div>
   );
 }
