@@ -2,25 +2,22 @@ import admin from "firebase-admin";
 
 /**
  * Priority:
- * 1) FIREBASE_SERVICE_ACCOUNT_JSON (recommended for Codespaces / CI)
- * 2) GOOGLE_APPLICATION_CREDENTIALS / ADC (fallback for servers that support it)
+ * 1) FIREBASE_SERVICE_ACCOUNT_JSON (Codespaces / CI / private env)
+ * 2) Application Default Credentials (fallback)
  */
 function getCredential() {
   const json = process.env.FIREBASE_SERVICE_ACCOUNT_JSON;
 
   if (json && json.trim().length > 0) {
-    // The secret value is a full JSON string
     const serviceAccount = JSON.parse(json);
 
     return admin.credential.cert({
       projectId: serviceAccount.project_id,
       clientEmail: serviceAccount.client_email,
-      // Handle escaped newlines in the private key
       privateKey: (serviceAccount.private_key as string).replace(/\\n/g, "\n"),
     });
   }
 
-  // Fallback (works if GOOGLE_APPLICATION_CREDENTIALS is set or on GCP)
   return admin.credential.applicationDefault();
 }
 
