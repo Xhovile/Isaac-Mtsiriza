@@ -8,10 +8,15 @@ async function authHeader() {
 }
 
 export async function apiFetch(url: string, init: RequestInit = {}) {
-  const headers = {
-    ...(init.headers || {}),
+  const headers: Record<string, string> = {
+    ...(init.headers as Record<string, string> | undefined),
     ...(await authHeader()),
   };
+
+  // ✅ If sending a JSON body and no content-type set, set it
+  if (init.body && !headers["Content-Type"]) {
+    headers["Content-Type"] = "application/json";
+  }
 
   const res = await fetch(url, { ...init, headers });
 
