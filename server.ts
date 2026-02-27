@@ -230,6 +230,104 @@ const { email, business_name, business_logo, university, bio } = req.body;
     res.status(500).json({ error: "Failed to create listing" });
   }
 });
+  
+  app.delete("/api/listings/:id", requireAuth, (req, res) => {
+  const uid = req.user!.uid;
+  const id = Number(req.params.id);
+
+  if (!Number.isInteger(id)) {
+    return res.status(400).json({ error: "Invalid listing id" });
+  }
+
+  try {
+    const listing = db.prepare(
+      "SELECT id, seller_uid FROM listings WHERE id = ?"
+    ).get(id) as { id: number; seller_uid: string } | undefined;
+
+    if (!listing) {
+      return res.status(404).json({ error: "Listing not found" });
+    }
+
+    // 🔐 Ownership check
+    if (listing.seller_uid !== uid) {
+      return res.status(403).json({ error: "Forbidden: not your listing" });
+    }
+
+    db.prepare("DELETE FROM listings WHERE id = ?").run(id);
+
+    res.json({ success: true });
+  } catch (error) {
+    console.error("Delete error:", error);
+    res.status(500).json({ error: "Failed to delete listing" });
+  }
+});
+
+  app.put("/api/listings/:id", requireAuth, (req, res) => {
+  const uid = req.user!.uid;
+  const id = Number(req.params.id);
+
+  if (!Number.isInteger(id)) {
+    return res.status(400).json({ error: "Invalid listing id" });
+  }
+
+  const { name, price, description, category, university, photos, whatsapp_number } = req.body;
+
+  // Minimal validation
+  if (!name || typeof name !== "string") {
+    return res.status(400).json({ error: "name is required" });
+  }
+
+  if (price === undefined || Number.isNaN(Number(price))) {
+    return res.status(400).json({ error: "price must be a number" });
+  }
+
+  if (!category || typeof category !== "string") {
+    return res.status(400).json({ error: "category is required" });
+  }
+
+  if (!university || typeof university !== "string") {
+    return res.status(400).json({ error: "university is required" });
+  }
+
+  if (!whatsapp_number || typeof whatsapp_number !== "string") {
+    return res.status(400).json({ error: "whatsapp_number is required" });
+  }
+
+  try {
+    const listing = db.prepare(
+      "SELECT id, seller_uid FROM listings WHERE id = ?"
+    ).get(id) as { id: number; seller_uid: string } | undefined;
+
+    if (!listing) {
+      return res.status(404).json({ error: "Listing not found" });
+    }
+
+    // 🔐 Ownership enforcement
+    if (listing.seller_uid !== uid) {
+      return res.status(403).json({ error: "Forbidden: not your listing" });
+    }
+
+    db.prepare(`
+      UPDATE listings
+      SET name = ?, price = ?, description = ?, category = ?, university = ?, photos = ?, whatsapp_number = ?
+      WHERE id = ?
+    `).run(
+      name,
+      Number(price),
+      description ?? null,
+      category,
+      university,
+      JSON.stringify(photos ?? []),
+      whatsapp_number,
+      id
+    );
+
+    res.json({ success: true });
+  } catch (error) {
+    console.error("Update error:", error);
+    res.status(500).json({ error: "Failed to update listing" });
+  }
+});
 
   app.post("/api/reports", (req, res) => {
     const { listing_id, reason } = req.body;
