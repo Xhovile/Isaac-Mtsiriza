@@ -6,8 +6,7 @@ import { fileURLToPath } from "url";
 import multer from "multer";
 import { v2 as cloudinary } from "cloudinary";
 import dotenv from "dotenv";
-import { requireAuth } from "./server/middleware/requireAuth";
-
+import { requireAuth } from "./server/middleware/requireAuth.js";
 dotenv.config();
 
 console.log("SERVER STARTING: Environment loaded");
