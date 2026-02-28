@@ -328,10 +328,42 @@ const { email, business_name, business_logo, university, bio } = req.body;
   }
 });
 // --- helper: get Cloudinary public_id from a Cloudinary URL ---
-function cloudinaryPublicIdFromUrl(url: string): string | null {
-  // Matches: .../upload/v1234/folder/name.jpg  OR .../upload/folder/name.png
-  const m = url.match(/\/upload\/(?:v\d+\/)?(.+)\.[a-zA-Z0-9]+$/);
-  return m ? m[1] : null;
+function cloudinaryPublicIdFromUrl(rawUrl: string): string | null {
+  try {
+    const u = new URL(rawUrl);
+    const parts = u.pathname.split("/").filter(Boolean);
+
+    // Find the "upload" segment
+    const uploadIndex = parts.findIndex(p => p === "upload");
+    if (uploadIndex === -1) return null;
+
+    // Everything after "upload"
+    let after = parts.slice(uploadIndex + 1);
+
+    // Remove transformations (they contain commas/underscores like c_fill,w_400)
+    // Keep skipping until we reach either v123 or the actual folder/file
+    while (after.length && !/^v\d+$/.test(after[0]) && after[0].includes(",")) {
+      after = after.slice(1);
+    }
+
+    // Drop version segment if present
+    if (after.length && /^v\d+$/.test(after[0])) after = after.slice(1);
+
+    if (!after.length) return null;
+
+    // Last part is filename.ext
+    const filename = after[after.length - 1];
+    const dot = filename.lastIndexOf(".");
+    if (dot === -1) return null;
+
+    // Replace last segment with filename without extension
+    after[after.length - 1] = filename.slice(0, dot);
+
+    // public_id is the remaining path
+    return after.join("/");
+  } catch {
+    return null;
+  }
 }
 
 // ✅ Delete profile + all listings + all Cloudinary images
