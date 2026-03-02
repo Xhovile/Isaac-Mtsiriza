@@ -1487,6 +1487,91 @@ await apiFetch("/api/listings", {
             </motion.div>
           </div>
         )}
+        {publicProfileOpen && (
+  <div className="fixed inset-0 z-[70] flex items-center justify-center p-4">
+    <div
+      className="absolute inset-0 bg-zinc-900/60 backdrop-blur-sm"
+      onClick={() => setPublicProfileOpen(false)}
+    />
+    <div className="relative w-full max-w-3xl bg-white rounded-3xl shadow-2xl overflow-hidden">
+      <div className="p-6 border-b border-zinc-100 flex items-center justify-between">
+        <h2 className="text-xl font-bold">Profile</h2>
+        <button
+          onClick={() => setPublicProfileOpen(false)}
+          className="p-2 hover:bg-zinc-100 rounded-full"
+        >
+          <X className="w-5 h-5" />
+        </button>
+      </div>
+
+      <div className="p-6">
+        {publicProfileLoading ? (
+          <div className="flex items-center justify-center py-16 gap-2">
+            <Loader2 className="w-5 h-5 animate-spin" />
+            <span>Loading profile...</span>
+          </div>
+        ) : publicProfile ? (
+          <>
+            <div className="flex items-center gap-4 mb-6">
+              <img
+                src={publicProfile.business_logo}
+                alt={publicProfile.business_name}
+                className="w-20 h-20 rounded-2xl object-cover border"
+              />
+              <div>
+                <div className="flex items-center gap-2">
+                  <h3 className="text-2xl font-extrabold">
+                    {publicProfile.business_name}
+                  </h3>
+                  {publicProfile.is_verified ? (
+                    <ShieldCheck className="w-5 h-5 text-blue-500" />
+                  ) : null}
+                </div>
+                <p className="text-sm text-zinc-500">{publicProfile.university}</p>
+                {publicProfile.bio ? (
+                  <p className="text-sm text-zinc-700 mt-2 italic">
+                    “{publicProfile.bio}”
+                  </p>
+                ) : null}
+              </div>
+            </div>
+
+            <div className="flex items-center justify-between mb-3">
+              <h4 className="text-lg font-bold">Listings</h4>
+              <span className="text-xs text-zinc-400 font-bold">
+                {publicProfileListings.length} item(s)
+              </span>
+            </div>
+
+            {publicProfileListings.length ? (
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                {publicProfileListings.map((l) => (
+                  <ListingCard
+                    key={l.id}
+                    listing={l}
+                    onReport={handleReport}
+                    currentUid={firebaseUser?.uid}
+                    onDelete={handleDeleteListing}
+                    onEdit={handleEditListing}
+                    onOpenProfile={openPublicProfile}
+                  />
+                ))}
+              </div>
+            ) : (
+              <div className="py-10 text-center text-zinc-500">
+                No listings yet.
+              </div>
+            )}
+          </>
+        ) : (
+          <div className="py-10 text-center text-zinc-500">
+            Profile not found.
+          </div>
+        )}
+      </div>
+    </div>
+  </div>
+)}
       </AnimatePresence>
       {editingListing && (
   <EditListingModal
