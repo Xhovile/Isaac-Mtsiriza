@@ -196,7 +196,31 @@ const ListingCard = ({
         </p>
 
         <div className="flex items-center justify-between pt-4 border-t border-zinc-50">
-          <div className="flex items-center gap-2.5">
+          <button
+  type="button"
+  onClick={handleOpenProfile}
+  className="flex items-center gap-2.5 text-left"
+>
+  <div className="relative">
+    <img
+      src={listing.business_logo}
+      alt={listing.business_name}
+      className="w-9 h-9 rounded-xl object-cover border border-zinc-100 shadow-sm"
+    />
+    {listing.is_verified && (
+      <div className="absolute -right-1.5 -bottom-1.5 bg-white rounded-full p-0.5 shadow-sm">
+        <ShieldCheck className="w-3.5 h-3.5 text-blue-500 fill-blue-50" />
+      </div>
+    )}
+  </div>
+
+  <div className="flex flex-col">
+    <span className="text-xs font-bold text-zinc-800 hover:underline">
+      {listing.business_name}
+    </span>
+    <span className="text-[10px] text-zinc-400 font-medium">View profile</span>
+  </div>
+</button>
             <div className="relative">
               <img
                 src={listing.business_logo}
