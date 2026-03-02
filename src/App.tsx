@@ -654,20 +654,33 @@ const handleUpdateListing = async (listingId: number, updated: Partial<Listing>)
 };
 
   const handleDeleteAccount = async () => {
-    if (!firebaseUser) return;
-    if (!confirm("Are you sure you want to delete your account? This will permanently remove your profile and all your listings.")) return;
+  if (!firebaseUser) return;
+  if (
+    !confirm(
+      "Are you sure you want to delete your account? This will permanently remove your profile and all your listings."
+    )
+  )
+    return;
 
-    try {
-      // Delete from Firestore
-      await deleteDoc(doc(firestore, "users", firebaseUser.uid));
-      // Delete from Firebase Auth
-      await deleteUser(firebaseUser);
-      alert("Account deleted.");
-    } catch (err: any) {
-      alert("Error deleting account: " + err.message + ". You may need to re-authenticate to perform this action.");
-    }
-  };
+  try {
+    // ✅ 1) Delete from SQLite backend first (needs auth token)
+    await apiFetch("/api/profile", { method: "DELETE" });
 
+    // 2) Delete from Firestore
+    await deleteDoc(doc(firestore, "users", firebaseUser.uid));
+
+    // 3) Delete from Firebase Auth
+    await deleteUser(firebaseUser);
+
+    alert("Account deleted.");
+  } catch (err: any) {
+    alert(
+      "Error deleting account: " +
+        (err?.message || String(err)) +
+        ". You may need to re-authenticate to perform this action."
+    );
+  }
+};
   const handleCreateListing = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!userSeller || !firebaseUser) return;
