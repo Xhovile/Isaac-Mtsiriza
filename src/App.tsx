@@ -921,6 +921,7 @@ await apiFetch("/api/listings", {
                    onReport={handleReport}
                    currentUid={firebaseUser?.uid}
                    onDelete={handleDeleteListing}
+                   onOpenProfile={openPublicProfile}
                    onEdit={handleEditListing}
                   />
             ))}
