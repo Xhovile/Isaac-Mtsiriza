@@ -813,6 +813,7 @@ await apiFetch("/api/listings", {
     category: CATEGORIES[0] as Category,
     university: UNIVERSITIES[0] as University,
     photos: [""],
+    video_url: "",
     whatsapp_number: "",
   });
 
