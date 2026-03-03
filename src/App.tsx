@@ -792,7 +792,8 @@ await apiFetch("/api/listings", {
   body: JSON.stringify({
     ...newListing,
     price: parseFloat(newListing.price),
-    photos: newListing.photos.filter((p) => p.trim() !== ""),
+    photos: newListing.photos.slice(0, 5),
+    video_url: newListing.video_url?.trim() || null,
   }),
 });
 
