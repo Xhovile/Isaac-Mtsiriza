@@ -63,6 +63,11 @@ app.delete("/api/listings/:id", requireAuth, async (req, res) => {
       }
     }
 
+    // Log Cloudinary results for server-side debugging (do not include in API response)
+    if (cloudinaryResults.length > 0) {
+      console.info("Cloudinary deletion results for listing", id, cloudinaryResults);
+    }
+
     // Delete reports for that listing id (optional) then delete the listing row
     try {
       db.prepare("DELETE FROM reports WHERE listing_id = ?").run(id);
@@ -72,7 +77,8 @@ app.delete("/api/listings/:id", requireAuth, async (req, res) => {
 
     db.prepare("DELETE FROM listings WHERE id = ?").run(id);
 
-    return res.json({ success: true, cloudinaryResults });
+    // Respond with minimal payload only
+    return res.json({ success: true, deletedAssets: publicIds.length });
   } catch (error) {
     console.error("Delete error:", error);
     return res.status(500).json({ error: "Failed to delete listing" });
