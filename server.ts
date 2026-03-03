@@ -237,7 +237,7 @@ app.get("/api/users/:uid", (req, res) => {
   try {
     const seller = db
       .prepare(
-        "SELECT uid, email, business_name, business_logo, university, bio, is_verified, join_date FROM sellers WHERE uid = ?"
+        "SELECT uid, business_name, business_logo, university, bio, is_verified, join_date FROM sellers WHERE uid = ?"
       )
       .get(uid);
 
