@@ -350,8 +350,17 @@ app.get("/api/users/:uid/listings", (req, res) => {
     return res.status(400).json({ error: "Invalid listing id" });
   }
 
-  const { name, price, description, category, university, photos, whatsapp_number } = req.body;
+  const { name, price, description, category, university, photos, video_url, whatsapp_number } = req.body;
+    const safePhotos = Array.isArray(photos) ? photos.filter((x) => typeof x === "string") : [];
+if (safePhotos.length > 5) {
+  return res.status(400).json({ error: "Max 5 photos allowed" });
+}
 
+const safeVideoUrl =
+  video_url && typeof video_url === "string" && video_url.trim().length > 0
+    ? video_url.trim()
+    : null;
+    
   // Minimal validation
   if (!name || typeof name !== "string") {
     return res.status(400).json({ error: "name is required" });
@@ -389,7 +398,7 @@ app.get("/api/users/:uid/listings", (req, res) => {
 
     db.prepare(`
       UPDATE listings
-      SET name = ?, price = ?, description = ?, category = ?, university = ?, photos = ?, whatsapp_number = ?
+      SET name = ?, price = ?, description = ?, category = ?, university = ?, photos = ?, video_url = ?, whatsapp_number = ?
       WHERE id = ?
     `).run(
       name,
@@ -397,7 +406,8 @@ app.get("/api/users/:uid/listings", (req, res) => {
       description ?? null,
       category,
       university,
-      JSON.stringify(photos ?? []),
+      JSON.stringify(safePhotos),
+      safeVideoUrl,
       whatsapp_number,
       id
     );
@@ -467,7 +477,7 @@ app.delete(
         .get(uid) as { business_logo?: string } | undefined;
 
       const listings = db
-        .prepare("SELECT id, photos FROM listings WHERE seller_uid = ?")
+        .prepare("SELECT id, photos, video_url FROM listings WHERE seller_uid = ?" )
         .all(uid) as { id: number; photos: string | null }[];
 
       const listingIds = listings.map(l => l.id);
@@ -480,6 +490,9 @@ app.delete(
           if (Array.isArray(arr)) photoUrls.push(...arr);
         } catch {}
       }
+      if (l.video_url && typeof l.video_url === "string") {
+  photoUrls.push(l.video_url);
+                      }
 
       if (seller?.business_logo) {
         photoUrls.push(seller.business_logo);
