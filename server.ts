@@ -477,22 +477,25 @@ app.delete(
         .get(uid) as { business_logo?: string } | undefined;
 
       const listings = db
-        .prepare("SELECT id, photos, video_url FROM listings WHERE seller_uid = ?" )
-        .all(uid) as { id: number; photos: string | null }[];
+  .prepare("SELECT id, photos, video_url FROM listings WHERE seller_uid = ?")
+  .all(uid) as { id: number; photos: string | null; video_url?: string | null }[];
 
-      const listingIds = listings.map(l => l.id);
+const listingIds = listings.map((l) => l.id);
 
-      // 2) Collect image URLs
-      const photoUrls: string[] = [];
-      for (const l of listings) {
-        try {
-          const arr = JSON.parse(l.photos || "[]");
-          if (Array.isArray(arr)) photoUrls.push(...arr);
-        } catch {}
-      }
-      if (l.video_url && typeof l.video_url === "string") {
-  photoUrls.push(l.video_url);
-                      }
+// 2) Collect media URLs (photos + video)
+const photoUrls: string[] = [];
+for (const l of listings) {
+  // photos
+  try {
+    const arr = JSON.parse(l.photos || "[]");
+    if (Array.isArray(arr)) photoUrls.push(...arr);
+  } catch {}
+
+  // video
+  if (l.video_url && typeof l.video_url === "string") {
+    photoUrls.push(l.video_url);
+  }
+}
 
       if (seller?.business_logo) {
         photoUrls.push(seller.business_logo);
