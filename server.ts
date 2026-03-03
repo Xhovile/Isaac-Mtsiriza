@@ -100,6 +100,18 @@ db.exec(`
   );
 `);
 
+// ✅ Migration: add video_url column if it doesn't exist
+try {
+  const cols = db.prepare("PRAGMA table_info(listings)").all() as any[];
+  const hasVideo = cols.some((c) => c.name === "video_url");
+  if (!hasVideo) {
+    db.exec("ALTER TABLE listings ADD COLUMN video_url TEXT");
+    console.log("Migration: Added listings.video_url");
+  }
+} catch (e) {
+  console.warn("Migration check failed:", e);
+}
+
 async function startServer() {
   const app = express();
   const PORT = 3000;
