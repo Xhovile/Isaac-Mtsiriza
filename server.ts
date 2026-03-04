@@ -421,6 +421,16 @@ app.get("/api/users/:uid/listings", (req, res) => {
   if (!Number.isInteger(id)) {
     return res.status(400).json({ error: "Invalid listing id" });
   }
+    const v = db
+    .prepare("SELECT is_verified FROM sellers WHERE uid = ?")
+    .get(uid) as { is_verified?: number } | undefined;
+
+  if (!v) {
+    return res.status(404).json({ error: "Seller profile not found" });
+  }
+  if (v.is_verified !== 1) {
+    return res.status(403).json({ error: "Account not verified" });
+  }
 
   const { name, price, description, category, university, photos, video_url, whatsapp_number } = req.body;
     const safePhotos = Array.isArray(photos) ? photos.filter((x) => typeof x === "string") : [];
