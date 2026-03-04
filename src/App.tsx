@@ -860,7 +860,7 @@ await apiFetch("/api/listings", {
     }
   };
 
-  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>, type: 'listing' | 'logo') => {
+  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
@@ -895,12 +895,8 @@ await apiFetch("/api/listings", {
       try {
         if (contentType && contentType.includes("application/json")) {
           const data = JSON.parse(responseText);
-          if (data.url) {
-            if (type === 'listing') {
-              setNewListing({ ...newListing, photos: [data.url] });
-            } else {
-              setAuthForm({ ...authForm, logoUrl: data.url });
-            }
+        if (data.url) {
+         setAuthForm((prev) => ({ ...prev, logoUrl: data.url }));
           }
         } else {
           console.error("Non-JSON response:", responseText);
