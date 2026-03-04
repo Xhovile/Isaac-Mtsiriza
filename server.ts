@@ -218,18 +218,26 @@ async function startServer() {
 
   app.post("/api/sellers", requireAuth, (req, res) => {
     const uid = req.user!.uid; // secure UID from Firebase
-const { email, business_name, business_logo, university, bio } = req.body;
+const { email, business_name, business_logo, university, bio, is_verified } = req.body;
     try {
-  db.prepare(`
-    INSERT INTO sellers (uid, email, business_name, business_logo, university, bio)
-    VALUES (?, ?, ?, ?, ?, ?)
-    ON CONFLICT(uid) DO UPDATE SET
-      email = excluded.email,
-      business_name = excluded.business_name,
-      business_logo = excluded.business_logo,
-      university = excluded.university,
-      bio = excluded.bio
-  `).run(uid, email, business_name, business_logo, university, bio);
+  // Convert incoming boolean to 0/1 safely
+const incomingVerified = is_verified ? 1 : 0;
+
+db.prepare(`
+  INSERT INTO sellers (uid, email, business_name, business_logo, university, bio, is_verified)
+  VALUES (?, ?, ?, ?, ?, ?, ?)
+  ON CONFLICT(uid) DO UPDATE SET
+    email = excluded.email,
+    business_name = excluded.business_name,
+    business_logo = excluded.business_logo,
+    university = excluded.university,
+    bio = excluded.bio,
+    -- important: only allow upgrading to verified, never downgrade
+    is_verified = CASE
+      WHEN excluded.is_verified = 1 THEN 1
+      ELSE sellers.is_verified
+    END
+`).run(uid, email, business_name, business_logo, university, bio, incomingVerified);
 
   res.json({ success: true });
 } catch (error) {
