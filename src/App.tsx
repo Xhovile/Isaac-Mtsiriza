@@ -1709,7 +1709,6 @@ await apiFetch("/api/listings", {
                     onDelete={handleDeleteListing}
                     onEdit={handleEditListing}
                     onOpenProfile={openPublicProfile}
-                    onPlayVideo={openVideo}
                     onOpenDetails={openDetails}
                   />
                 ))}
