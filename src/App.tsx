@@ -191,10 +191,17 @@ const ListingCard = ({
 
   {/* ✅ Photo count badge (works for BOTH video + non-video) */}
   {listing.photos?.length > 1 && (
-    <div className="absolute bottom-4 right-4 bg-white/90 backdrop-blur-md px-3 py-1.5 rounded-xl text-xs font-bold shadow-sm">
-      +{listing.photos.length - 1}
-    </div>
-  )}
+  <button
+    type="button"
+    onClick={(e) => {
+      e.stopPropagation();
+      handleOpenDetails(0);
+    }}
+    className="absolute bottom-4 right-4 bg-white/90 backdrop-blur-md px-3 py-1.5 rounded-xl text-xs font-bold shadow-sm"
+  >
+    +{listing.photos.length - 1}
+  </button>
+)}
 
   {/* Top-left location */}
   <div className="absolute top-4 left-4 flex flex-col gap-2">
@@ -290,8 +297,15 @@ const ListingCard = ({
               </button>
             </div>
           ) : (
-            <ChevronRight className="w-4 h-4 text-zinc-300 group-hover:text-primary group-hover:translate-x-1 transition-all" />
-          )}
+          <button
+             type="button"
+             onClick={() => handleOpenDetails(0)}
+             className="p-2 rounded-xl hover:bg-zinc-100 active:scale-95 transition"
+             aria-label="View details"
+          >
+             <ChevronRight className="w-4 h-4 text-zinc-300 group-hover:text-primary group-hover:translate-x-1 transition-all" />
+        </button>
+      )}
         </div>
       </div>
     </motion.div>
