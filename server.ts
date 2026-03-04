@@ -234,7 +234,16 @@ const { email, business_name, business_logo, university, bio } = req.body;
   app.post("/api/listings", requireAuth, (req, res) => {
   // ✅ seller_uid MUST come from verified token
   const seller_uid = req.user!.uid;
+  const v = db
+    .prepare("SELECT is_verified FROM sellers WHERE uid = ?")
+    .get(seller_uid) as { is_verified?: number } | undefined;
 
+  if (!v) {
+    return res.status(404).json({ error: "Seller profile not found" });
+  }
+  if (v.is_verified !== 1) {
+    return res.status(403).json({ error: "Account not verified" });
+  }
   const { name, price, description, category, university, photos, video_url, whatsapp_number } = req.body;
     // ✅ Validate photos + video
 const safePhotos = Array.isArray(photos) ? photos.filter((x) => typeof x === "string") : [];
