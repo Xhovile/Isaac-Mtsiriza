@@ -1576,41 +1576,38 @@ await apiFetch("/api/listings", {
             </motion.div>
           </div>
         )}
-        {publicProfileOpen && (
+        
+  {publicProfileOpen && (
   <div className="fixed inset-0 z-[70] flex items-center justify-center p-4">
     <div
       className="absolute inset-0 bg-zinc-900/60 backdrop-blur-sm"
       onClick={() => setPublicProfileOpen(false)}
     />
+
     <div className="relative w-full max-w-3xl bg-white rounded-3xl shadow-2xl overflow-hidden max-h-[85vh] flex flex-col">
-  {/* Header stays visible */}
-  <div className="p-6 border-b border-zinc-100 flex items-center justify-between flex-shrink-0">
-    <button
-      onClick={() => setPublicProfileOpen(false)}
-      className="px-3 py-2 rounded-xl bg-zinc-100 hover:bg-zinc-200 text-sm font-bold"
-      type="button"
-    >
-      ← Back
-    </button>
+      {/* Header */}
+      <div className="p-6 border-b border-zinc-100 flex items-center justify-between flex-shrink-0">
+        <button
+          type="button"
+          onClick={() => setPublicProfileOpen(false)}
+          className="px-3 py-2 rounded-xl bg-zinc-100 hover:bg-zinc-200 text-sm font-bold"
+        >
+          ← Back
+        </button>
 
-    <h2 className="text-xl font-bold">Profile</h2>
+        <h2 className="text-xl font-bold">Profile</h2>
 
-    <button
-      onClick={() => setPublicProfileOpen(false)}
-      className="p-2 hover:bg-zinc-100 rounded-full"
-      type="button"
-    >
-      <X className="w-5 h-5" />
-    </button>
-  </div>
+        <button
+          type="button"
+          onClick={() => setPublicProfileOpen(false)}
+          className="p-2 hover:bg-zinc-100 rounded-full"
+        >
+          <X className="w-5 h-5" />
+        </button>
+      </div>
 
-  {/* This part scrolls */}
-  <div className="p-6 overflow-y-auto flex-1">
-    {/* keep your existing content here */}
-  </div>
-</div>
-
-      <div className="p-6">
+      {/* Scrollable body */}
+      <div className="p-6 overflow-y-auto flex-1">
         {publicProfileLoading ? (
           <div className="flex items-center justify-center py-16 gap-2">
             <Loader2 className="w-5 h-5 animate-spin" />
@@ -1671,9 +1668,7 @@ await apiFetch("/api/listings", {
             )}
           </>
         ) : (
-          <div className="py-10 text-center text-zinc-500">
-            Profile not found.
-          </div>
+          <div className="py-10 text-center text-zinc-500">Profile not found.</div>
         )}
       </div>
     </div>
