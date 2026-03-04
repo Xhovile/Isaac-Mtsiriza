@@ -22,9 +22,10 @@ export async function requireAuth(req: Request, res: Response, next: NextFunctio
 
     // Attach verified identity to request (server-trusted)
     req.user = {
-      uid: decoded.uid,
-      email: decoded.email ?? null,
-    };
+  uid: decoded.uid,
+  email: decoded.email ?? null,
+  email_verified: (decoded as any).email_verified === true,
+};
 
     next();
   } catch (err) {
