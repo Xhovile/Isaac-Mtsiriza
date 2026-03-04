@@ -117,6 +117,7 @@ const ListingCard = ({
   onEdit,
   onOpenProfile,
   onPlayVideo,
+  onOpenDetails,
 }: {
   listing: Listing;
   onReport: (id: number) => any;
@@ -125,6 +126,7 @@ const ListingCard = ({
   onEdit?: (listing: Listing) => void;
   onOpenProfile?: (uid: string) => void;
   onPlayVideo?: (url: string) => void;
+  onOpenDetails?: (listing: Listing, startIndex?: number) => void;
 }) => {
   const sellerUid = listing.seller_uid;
   const isOwner = !!currentUid && !!sellerUid && sellerUid === currentUid;
@@ -132,6 +134,9 @@ const ListingCard = ({
   const handleOpenProfile = () => {
     if (sellerUid) onOpenProfile?.(sellerUid);
   };
+  const handleOpenDetails = (startIndex = 0) => {
+  onOpenDetails?.(listing, startIndex);
+ };
 
   return (
     <motion.div
@@ -142,34 +147,47 @@ const ListingCard = ({
       className="bg-white rounded-3xl border border-zinc-100 overflow-hidden card-shadow hover:card-shadow-hover transition-all group"
     >
       <div className="relative aspect-[1/1] overflow-hidden bg-zinc-100">
+      
   {listing.video_url ? (
-    <button
-      type="button"
-      className="w-full h-full cursor-pointer relative focus:outline-none focus-visible:ring-2 focus-visible:ring-white/80"
-      onClick={() => onPlayVideo?.(listing.video_url!)}
-    >
-      <img
-        src={listing.photos[0] || `https://picsum.photos/seed/${listing.id}/600/600`}
-        alt={listing.name}
-        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
-        referrerPolicy="no-referrer"
-      />
-
-      {/* Play overlay */}
-      <div className="absolute inset-0 flex items-center justify-center bg-black/30">
-        <span className="bg-white/90 backdrop-blur-md text-zinc-900 font-bold px-4 py-2 rounded-xl shadow text-sm flex items-center gap-2">
-          ▶ Play
-        </span>
-      </div>
-    </button>
-  ) : (
+  <button
+    type="button"
+    onClick={() => handleOpenDetails(0)} // ✅ opens details
+    className="w-full h-full cursor-pointer relative focus:outline-none focus-visible:ring-2 focus-visible:ring-white/80"
+  >
     <img
       src={listing.photos[0] || `https://picsum.photos/seed/${listing.id}/600/600`}
       alt={listing.name}
       className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
       referrerPolicy="no-referrer"
     />
-  )}
+
+    {/* Play overlay (clicking this plays video, not details) */}
+    <div
+      className="absolute inset-0 flex items-center justify-center bg-black/30"
+      onClick={(e) => {
+        e.stopPropagation();
+        onPlayVideo?.(listing.video_url!);
+      }}
+    >
+      <span className="bg-white/90 backdrop-blur-md text-zinc-900 font-bold px-4 py-2 rounded-xl shadow text-sm flex items-center gap-2">
+        ▶ Play
+      </span>
+    </div>
+  </button>
+) : (
+  <button
+    type="button"
+    onClick={() => handleOpenDetails(0)} // ✅ opens details
+    className="w-full h-full cursor-pointer relative focus:outline-none focus-visible:ring-2 focus-visible:ring-white/80"
+  >
+    <img
+      src={listing.photos[0] || `https://picsum.photos/seed/${listing.id}/600/600`}
+      alt={listing.name}
+      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+      referrerPolicy="no-referrer"
+    />
+  </button>
+)}
 
   {/* ✅ Photo count badge (works for BOTH video + non-video) */}
   {listing.photos?.length > 1 && (
