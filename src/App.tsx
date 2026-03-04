@@ -143,7 +143,8 @@ const ListingCard = ({
     >
       <div className="relative aspect-[1/1] overflow-hidden bg-zinc-100">
         {listing.video_url ? (
-          <div
+          <button
+  type="button"
             className="w-full h-full cursor-pointer relative"
             onClick={() => onPlayVideo?.(listing.video_url!)}
           >
@@ -158,7 +159,7 @@ const ListingCard = ({
                 ▶ Play
               </span>
             </div>
-          </div>
+          </button>
         ) : (
           <img
             src={listing.photos[0] || `https://picsum.photos/seed/${listing.id}/600/600`}
