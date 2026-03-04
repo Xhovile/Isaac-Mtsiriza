@@ -151,6 +151,12 @@ async function startServer() {
         console.log("No file in request after Multer");
         return res.status(400).json({ error: "No file uploaded" });
       }
+      // ✅ MIME type validation (allow only images/videos)
+    const mime = req.file.mimetype || "";
+    const isAllowed = mime.startsWith("image/") || mime.startsWith("video/");
+    if (!isAllowed) {
+      return res.status(400).json({ error: "Unsupported file type" });
+    }
       
       console.log("Cloudinary uploading...");
       const b64 = Buffer.from(req.file.buffer).toString("base64");
