@@ -1795,7 +1795,25 @@ await apiFetch("/api/listings", {
             </div>
           )}
         </div>
-
+        
+        {detailsListing.photos?.length > 1 && (
+  <div className="flex gap-2 overflow-x-auto pb-1">
+    {detailsListing.photos.map((url, idx) => (
+      <button
+        key={idx}
+        type="button"
+        onClick={() => setGalleryIndex(idx)}
+        className={`w-16 h-16 rounded-xl overflow-hidden border flex-shrink-0 ${
+          idx === galleryIndex ? "border-zinc-900" : "border-zinc-200"
+        }`}
+        aria-label={`View photo ${idx + 1}`}
+      >
+        <img src={url} alt="" className="w-full h-full object-cover" />
+      </button>
+     ))}
+   </div>
+  )}
+        
         {detailsListing.video_url ? (
           <div className="rounded-2xl overflow-hidden border bg-black">
             <video src={detailsListing.video_url} controls className="w-full" />
