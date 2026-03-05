@@ -1261,7 +1261,8 @@ await apiFetch("/api/listings", {
             <h3 className="text-lg font-bold text-zinc-900">No listings found</h3>
             <p className="text-zinc-500">Try adjusting your filters or search terms.</p>
           </div>
-        )}
+         );
+       })()}
       </main>
 
       <footer className="mt-20 border-t border-zinc-100 py-12 bg-white">
