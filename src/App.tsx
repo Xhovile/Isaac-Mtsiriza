@@ -180,12 +180,12 @@ const ListingCard = ({
 
   const handleShare = async () => {
     const shareText = `BuyMesho Listing
-    ${listing.name}
-    Price: MK ${Number(listing.price).toLocaleString()}
-    Campus: ${listing.university}
-    WhatsApp: ${listing.whatsapp_number}
-    
-    Open BuyMesho: ${window.location.href}`;
+  ${listing.name}
+  Price: MK ${Number(listing.price).toLocaleString()}
+  Campus: ${listing.university}
+  WhatsApp: ${listing.whatsapp_number}
+
+  Open BuyMesho: ${window.location.href}`;
 
    try {
      if ((navigator as any).share) {
