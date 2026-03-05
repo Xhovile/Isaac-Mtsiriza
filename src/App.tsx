@@ -1166,7 +1166,7 @@ await apiFetch("/api/listings", {
   };
 
   return (
-    <div className="min-h-screen pb-20 bg-gradient-to-b from-zinc-100 via-zinc-100 to-zinc-200/40">
+   <div className="min-h-screen pb-20 bg-gradient-to-b from-sky-50 via-slate-100 to-slate-200/40">
       <Navbar 
         onSearch={setSearch} 
         onAddListing={() => setShowAddModal(true)}
