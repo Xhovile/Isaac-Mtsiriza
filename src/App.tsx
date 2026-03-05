@@ -117,6 +117,8 @@ const ListingCard = ({
   onDelete,
   onEdit,
   onOpenProfile,
+  onHideListing,
+   onHideSeller,
   onOpenDetails,
 }: {
   listing: Listing;
@@ -124,18 +126,101 @@ const ListingCard = ({
   currentUid?: string;
   onDelete?: (id: number) => void;
   onEdit?: (listing: Listing) => void;
+  onHideListing?: (id: number) => void;
+  onHideSeller?: (uid: string) => void;
   onOpenProfile?: (uid: string) => void;
   onOpenDetails?: (listing: Listing, startIndex?: number) => void;
 }) => {
   const sellerUid = listing.seller_uid;
   const isOwner = !!currentUid && !!sellerUid && sellerUid === currentUid;
-
+  const [menuOpen, setMenuOpen] = useState(false);
   const handleOpenProfile = () => {
     if (sellerUid) onOpenProfile?.(sellerUid);
   };
   const handleOpenDetails = (startIndex = 0) => {
   onOpenDetails?.(listing, startIndex);
  };
+ useEffect(() => {
+    if (!menuOpen) return;
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setMenuOpen(false);
+    };
+    const onClick = (e: MouseEvent) => {
+      const target = e.target as HTMLElement | null;
+      if (!target) return;
+      if (target.closest?.(`[data-listing-menu="${listing.id}"]`)) return;
+      setMenuOpen(false);
+    };
+    document.addEventListener("keydown", onKeyDown);
+    document.addEventListener("click", onClick);
+    return () => {
+      document.removeEventListener("keydown", onKeyDown);
+      document.removeEventListener("click", onClick);
+    };
+  }, [menuOpen, listing.id]);
+
+  const safeAlert = (msg: string) => {
+    // keep it simple; later we can replace with a nicer toast
+    alert(msg);
+  };
+
+  const handleCopyWhatsApp = async () => {
+    const text = listing.whatsapp_number || "";
+    if (!text) return safeAlert("No WhatsApp number found.");
+    try {
+      await navigator.clipboard.writeText(text);
+      safeAlert("✅ WhatsApp number copied.");
+    } catch {
+      // Fallback for older browsers
+      prompt("Copy WhatsApp number:", text);
+    } finally {
+      setMenuOpen(false);
+    }
+  };
+
+  const handleShare = async () => {
+    const shareText =
+     `BuyMesho Listing\n` 
+     `${listing.name}\n` 
+     `Price: MK ${Number(listing.price).toLocaleString()}\n` 
+     `Campus: ${listing.university}\n` 
+     `WhatsApp: ${listing.whatsapp_number}\n\n` 
+     `Open BuyMesho: ${window.location.href}`;
+
+   try {
+     if ((navigator as any).share) {
+  await (navigator as any).share({
+         title: `BuyMesho: ${listing.name}`,
+         text: shareText,
+       });
+       return;
+     }
+     // fallback: copy share text
+     await navigator.clipboard.writeText(shareText);
+     safeAlert("✅ Share text copied. Paste it on WhatsApp or anywhere.");
+   } catch {
+     // last fallback
+     prompt("Copy to share:", shareText);
+   } finally {
+     setMenuOpen(false);
+    }
+  };
+
+  const handleReportFromMenu = () => {
+    setMenuOpen(false);
+    onReport(listing.id);
+  };
+
+  const handleHideListing = () => {
+    setMenuOpen(false);
+    onHideListing?.(listing.id);
+  };
+
+ const handleHideSeller = () => {
+   if (!sellerUid) return;
+   setMenuOpen(false);
+    onHideSeller?.(sellerUid);
+  };
 
   return (
     <motion.div
