@@ -460,6 +460,7 @@ Open BuyMesho: ${window.location.href}`;
           {listing.description}
         </p>
       </div>
+     </div>
     </motion.div>
    );
  };
