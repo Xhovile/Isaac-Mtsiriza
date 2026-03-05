@@ -1248,6 +1248,8 @@ await apiFetch("/api/listings", {
                    onOpenProfile={openPublicProfile}
                    onEdit={handleEditListing}
                    onOpenDetails={openDetails}
+                   onHideListing={hideListingLocal}
+                   onHideSeller={hideSellerLocal}
                   />
             ))}
           </div>
