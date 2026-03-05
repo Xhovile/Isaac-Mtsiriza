@@ -396,10 +396,7 @@ const ListingCard = ({
         <>
           <button
             type="button"
-            onClick={() => {
-              setMenuOpen(false);
-              onReport(listing.id);
-            }}
+            onClick={handleReportFromMenu}
             className="block w-full text-left px-4 py-2 hover:bg-zinc-50 text-sm font-semibold"
           >
             Report listing
@@ -407,17 +404,7 @@ const ListingCard = ({
 
           <button
             type="button"
-            onClick={async () => {
-              const num = listing.whatsapp_number || "";
-              setMenuOpen(false);
-              if (!num) return alert("No WhatsApp number found.");
-              try {
-                await navigator.clipboard.writeText(num);
-                alert("✅ WhatsApp number copied.");
-              } catch {
-                prompt("Copy WhatsApp number:", num);
-              }
-            }}
+            onClick={handleCopyWhatsApp}
             className="block w-full text-left px-4 py-2 hover:bg-zinc-50 text-sm font-semibold"
           >
             Copy WhatsApp number
@@ -425,35 +412,29 @@ const ListingCard = ({
 
           <button
             type="button"
-            onClick={async () => {
-              const shareText =
-                `BuyMesho Listing\n` +
-                `${listing.name}\n` +
-                `Price: MK ${Number(listing.price).toLocaleString()}\n` +
-                `Campus: ${listing.university}\n` +
-                `WhatsApp: ${listing.whatsapp_number}\n\n` +
-                `Open BuyMesho: ${window.location.href}`;
-
-              setMenuOpen(false);
-              try {
-                // Best effort native share; fallback to copying text
-                if ((navigator as any).share) {
-                  await (navigator as any).share({
-                    title: `BuyMesho: ${listing.name}`,
-                    text: shareText,
-                  });
-                } else {
-                  await navigator.clipboard.writeText(shareText);
-                  alert("✅ Share text copied. Paste it anywhere.");
-                }
-              } catch {
-                prompt("Copy to share:", shareText);
-              }
-            }}
+            onClick={handleShare}
             className="block w-full text-left px-4 py-2 hover:bg-zinc-50 text-sm font-semibold"
           >
              Share listing
             </button>
+         <div className="h-px bg-zinc-100" />
+
+          <button
+            type="button"
+            onClick={handleHideListing}
+            className="block w-full text-left px-4 py-2 hover:bg-zinc-50 text-sm font-semibold"
+          >
+            Hide this listing
+          </button>
+
+          <button
+            type="button"
+            onClick={handleHideSeller}
+            className="block w-full text-left px-4 py-2 hover:bg-zinc-50 text-sm font-semibold"
+            disabled={!sellerUid}
+          >
+            Hide this seller
+          </button>
           </>
         )}
          </div>
