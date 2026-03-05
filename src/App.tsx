@@ -354,15 +354,15 @@ const ListingCard = ({
             </div>
           </button>
 
-                {/* Actions menu (owner + non-owner) */}
-<div className="relative">
-  <button
-    type="button"
-    onClick={() => setMenuOpen(!menuOpen)}
-    className="p-2 rounded-xl hover:bg-zinc-100 active:scale-95 transition"
-    aria-label="Open actions menu"
-    aria-expanded={menuOpen}
-  >
+            {/* Actions menu (owner + non-owner) */}
+      <div className="relative" data-listing-menu={listing.id}>
+       <button
+        type="button"
+        onClick={() => setMenuOpen(!menuOpen)}
+        className="p-2 rounded-xl hover:bg-zinc-100 active:scale-95 transition"
+        aria-label="Open actions menu"
+        aria-expanded={menuOpen}
+       >
     <MoreVertical className="w-5 h-5 text-zinc-500" />
   </button>
 
