@@ -228,7 +228,7 @@ Open BuyMesho: ${window.location.href}`;
       initial={{ opacity: 0, scale: 0.95 }}
       animate={{ opacity: 1, scale: 1 }}
       whileHover={{ y: -4 }}
-      className="bg-white rounded-3xl border border-zinc-100 overflow-hidden card-shadow hover:card-shadow-hover transition-all group"
+      className="bg-white/90 backdrop-blur rounded-3xl border border-zinc-200/60 overflow-hidden shadow-sm hover:shadow-md transition-all group"
     >
       {/* Seller header (moved ABOVE the post for marketing) */}
 <div className="p-4 flex items-center justify-between">
