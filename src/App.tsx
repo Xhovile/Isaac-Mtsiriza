@@ -614,6 +614,26 @@ const unhideSellerLocal = (uid: string) => {
   });
 };
   
+  const sellerNameMap = React.useMemo(() => {
+  const map: Record<string, string> = {};
+
+  for (const listing of listings) {
+    if (listing.seller_uid && listing.business_name) {
+      map[listing.seller_uid] = listing.business_name;
+    }
+  }
+
+  if (userSeller?.uid && userSeller?.business_name) {
+    map[userSeller.uid] = userSeller.business_name;
+  }
+
+  if (publicProfile?.uid && publicProfile?.business_name) {
+    map[publicProfile.uid] = publicProfile.business_name;
+  }
+
+  return map;
+}, [listings, userSeller, publicProfile]);
+  
 const openDetails = (listing: Listing, startIndex = 0) => {
   setDetailsListing(listing);
   setGalleryIndex(startIndex);
