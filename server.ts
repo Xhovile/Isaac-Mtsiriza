@@ -403,14 +403,6 @@ for (const pid of publicIds) {
   }
 }
 
-      try {
-        const rVid = await cloudinary.uploader.destroy(pid, { resource_type: "video" });
-        cloudinaryResults.push({ public_id: pid, type: "video", result: rVid });
-      } catch (e: any) {
-        cloudinaryResults.push({ public_id: pid, type: "video", error: e?.message || String(e) });
-      }
-    }
-
     // Log Cloudinary results for server-side debugging (do not include in API response)
     if (cloudinaryResults.length > 0) {
       console.info("Cloudinary deletion results for listing", id, cloudinaryResults);
