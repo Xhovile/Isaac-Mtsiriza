@@ -814,10 +814,12 @@ const openSettings = () => {
 const closeSettings = () => {
   setShowSettingsModal(false);
   setSettingsView("menu");
+  setSettingsEntrySource("settings");
 };
 
 const openFooterView = (view: "privacy" | "terms" | "safety" | "report") => {
   setShowProfileModal(false);
+  setSettingsEntrySource("footer");
   setShowSettingsModal(true);
   setSettingsView(view);
 };
