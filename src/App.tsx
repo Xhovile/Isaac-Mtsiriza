@@ -318,13 +318,7 @@ Open BuyMesho: ${window.location.href}`;
             <div className="h-px bg-zinc-100" />
 
             {/* Keep hide options ONCE (fix duplicates) */}
-            <button
-              type="button"
-              onClick={handleHideListing}
-              className="block w-full text-left px-4 py-2 hover:bg-zinc-50 text-sm font-semibold"
-            >
-              Hide this listing
-            </button>
+            
             <button
               type="button"
               onClick={handleHideSeller}
