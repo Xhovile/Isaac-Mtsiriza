@@ -750,15 +750,92 @@ for (const l of listings) {
   }
 );
   
-  app.post("/api/reports", (req, res) => {
-    const { listing_id, reason } = req.body;
-    try {
-      db.prepare(`INSERT INTO reports (listing_id, reason) VALUES (?, ?)`).run(listing_id, reason);
-      res.json({ success: true });
-    } catch (error) {
-      res.status(500).json({ error: "Failed to submit report" });
+  app.post("/api/reports", requireAuth, (req, res) => {
+  const reporter_uid = req.user?.uid || null;
+  const reporter_email = (req.user as any)?.email || null;
+
+  const {
+    type,
+    listing_id,
+    subject,
+    reason,
+    details,
+  } = req.body;
+
+  const safeType = type === "problem" ? "problem" : "listing";
+  const safeListingId =
+    listing_id !== undefined && listing_id !== null && listing_id !== ""
+      ? Number(listing_id)
+      : null;
+
+  const safeSubject =
+    typeof subject === "string" && subject.trim().length > 0
+      ? subject.trim()
+      : null;
+
+  const safeReason =
+    typeof reason === "string" && reason.trim().length > 0
+      ? reason.trim()
+      : null;
+
+  const safeDetails =
+    typeof details === "string" && details.trim().length > 0
+      ? details.trim()
+      : null;
+
+  if (!safeReason) {
+    return res.status(400).json({ error: "reason is required" });
+  }
+
+  if (safeType === "listing") {
+    if (!safeListingId || Number.isNaN(safeListingId)) {
+      return res.status(400).json({ error: "listing_id is required for listing reports" });
     }
-  });
+
+    const listing = db
+      .prepare("SELECT id FROM listings WHERE id = ?")
+      .get(safeListingId);
+
+    if (!listing) {
+      return res.status(404).json({ error: "Listing not found" });
+    }
+  }
+
+  try {
+    const result = db.prepare(`
+      INSERT INTO reports (
+        type,
+        listing_id,
+        subject,
+        reason,
+        details,
+        reporter_uid,
+        reporter_email,
+        status
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, 'open')
+    `).run(
+      safeType,
+      safeListingId,
+      safeSubject,
+      safeReason,
+      safeDetails,
+      reporter_uid,
+      reporter_email
+    );
+
+    res.json({
+      success: true,
+      id: result.lastInsertRowid,
+      message:
+        safeType === "listing"
+          ? "Listing report submitted successfully."
+          : "Problem report submitted successfully.",
+    });
+  } catch (error) {
+    console.error("Submit report error:", error);
+    res.status(500).json({ error: "Failed to submit report" });
+  }
+});
 
   // API 404 Handler
   app.all("/api/*", (req, res) => {
