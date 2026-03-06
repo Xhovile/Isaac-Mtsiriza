@@ -1841,19 +1841,38 @@ await apiFetch("/api/listings", {
                   )}
                  </div>
                  </div>
-                    <div className="flex flex-col gap-3">
-                      <button 
-                        onClick={handleLogout}
-                        className="w-full bg-zinc-100 hover:bg-zinc-200 text-zinc-900 py-3 rounded-xl font-bold transition-colors flex items-center justify-center gap-2"
-                      >
-                        <LogOut className="w-4 h-4" /> Log Out
-                      </button>
-                      <button 
-                        onClick={handleDeleteAccount}
-                        className="text-red-500 text-xs font-bold hover:underline"
-                      >
-                        Delete Account & Profile
-                      </button>
+ <div className="flex flex-col gap-3">
+  <button
+    onClick={() => {
+      if (!userSeller) return;
+      setEditProfileForm({
+        businessName: userSeller.business_name || "",
+        university: userSeller.university || UNIVERSITIES[0],
+        logoUrl: userSeller.business_logo || "",
+        bio: userSeller.bio || "",
+        whatsappNumber: userSeller.whatsapp_number || ""
+      });
+      setAuthView("editProfile");
+    }}
+    className="w-full bg-zinc-900 hover:bg-zinc-800 text-white py-3 rounded-xl font-bold transition-colors"
+  >
+    Edit Profile
+  </button>
+
+  <button 
+    onClick={handleLogout}
+    className="w-full bg-zinc-100 hover:bg-zinc-200 text-zinc-900 py-3 rounded-xl font-bold transition-colors flex items-center justify-center gap-2"
+  >
+    <LogOut className="w-4 h-4" /> Log Out
+  </button>
+
+  <button 
+    onClick={handleDeleteAccount}
+    className="text-red-500 text-xs font-bold hover:underline"
+  >
+    Delete Account & Profile
+  </button>
+</div>
                     </div>
                   </div>
                 )}
