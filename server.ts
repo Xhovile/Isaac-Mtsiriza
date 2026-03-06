@@ -128,6 +128,48 @@ try {
   console.warn("Sellers migration check failed:", e);
 }
 
+try {
+  const cols = db.prepare("PRAGMA table_info(reports)").all() as any[];
+
+  const hasType = cols.some((c) => c.name === "type");
+  if (!hasType) {
+    db.exec("ALTER TABLE reports ADD COLUMN type TEXT NOT NULL DEFAULT 'listing'");
+    console.log("Migration: Added reports.type");
+  }
+
+  const hasSubject = cols.some((c) => c.name === "subject");
+  if (!hasSubject) {
+    db.exec("ALTER TABLE reports ADD COLUMN subject TEXT");
+    console.log("Migration: Added reports.subject");
+  }
+
+  const hasDetails = cols.some((c) => c.name === "details");
+  if (!hasDetails) {
+    db.exec("ALTER TABLE reports ADD COLUMN details TEXT");
+    console.log("Migration: Added reports.details");
+  }
+
+  const hasReporterUid = cols.some((c) => c.name === "reporter_uid");
+  if (!hasReporterUid) {
+    db.exec("ALTER TABLE reports ADD COLUMN reporter_uid TEXT");
+    console.log("Migration: Added reports.reporter_uid");
+  }
+
+  const hasReporterEmail = cols.some((c) => c.name === "reporter_email");
+  if (!hasReporterEmail) {
+    db.exec("ALTER TABLE reports ADD COLUMN reporter_email TEXT");
+    console.log("Migration: Added reports.reporter_email");
+  }
+
+  const hasStatus = cols.some((c) => c.name === "status");
+  if (!hasStatus) {
+    db.exec("ALTER TABLE reports ADD COLUMN status TEXT NOT NULL DEFAULT 'open'");
+    console.log("Migration: Added reports.status");
+  }
+} catch (e) {
+  console.warn("Reports migration check failed:", e);
+}
+
 async function startServer() {
   const app = express();
   const PORT = 3000;
