@@ -1918,7 +1918,6 @@ await apiFetch("/api/listings", {
                     onEdit={handleEditListing}
                     onOpenProfile={openPublicProfile}
                     onOpenDetails={openDetails}
-                    onHideListing={hideListingLocal}
                     onHideSeller={hideSellerLocal}
                   />
                 ))}
