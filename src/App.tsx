@@ -1794,15 +1794,25 @@ await apiFetch("/api/listings", {
                       </p>
                     )}
                     <div className="bg-zinc-50 rounded-2xl p-4 text-left mb-6 space-y-3">
-                      <div>
-                        <p className="text-xs font-bold text-zinc-400 uppercase mb-1">Email</p>
-                        <p className="text-zinc-700 font-medium">{userSeller.email}</p>
-                      </div>
-                      <div>
-                        <p className="text-xs font-bold text-zinc-400 uppercase mb-1">Member Since</p>
-                        <p className="text-zinc-700 font-medium">{new Date(userSeller.join_date).toLocaleDateString()}</p>
-                      </div>
-                    </div>
+  <div>
+    <p className="text-xs font-bold text-zinc-400 uppercase mb-1">Email</p>
+    <p className="text-zinc-700 font-medium">{userSeller.email}</p>
+  </div>
+
+  <div>
+    <p className="text-xs font-bold text-zinc-400 uppercase mb-1">WhatsApp</p>
+    <p className="text-zinc-700 font-medium">
+      {userSeller.whatsapp_number || "Not added"}
+    </p>
+  </div>
+
+  <div>
+    <p className="text-xs font-bold text-zinc-400 uppercase mb-1">Member Since</p>
+    <p className="text-zinc-700 font-medium">
+      {new Date(userSeller.join_date).toLocaleDateString()}
+    </p>
+  </div>
+</div>
                     <div className="bg-zinc-50 rounded-2xl p-4 text-left mb-6 space-y-4">
                    
                   <div>
