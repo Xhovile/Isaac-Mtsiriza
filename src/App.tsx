@@ -629,7 +629,14 @@ const closeDetails = () => {
   bio: "",
   whatsappNumber: ""
 });
-
+const [editProfileForm, setEditProfileForm] = useState({
+  businessName: "",
+  university: UNIVERSITIES[0] as University,
+  logoUrl: "",
+  bio: "",
+  whatsappNumber: ""
+});
+  
   useEffect(() => {
   if (authLoading) return; // wait until Firebase finishes checking
 
