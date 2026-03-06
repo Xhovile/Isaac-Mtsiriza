@@ -258,6 +258,51 @@ db.prepare(`
 }
   });
 
+  app.put("/api/profile", requireAuth, (req, res) => {
+  const uid = req.user!.uid;
+  const { business_name, business_logo, university, bio, whatsapp_number } = req.body;
+
+  if (!business_name || typeof business_name !== "string") {
+    return res.status(400).json({ error: "business_name is required" });
+  }
+
+  if (!business_logo || typeof business_logo !== "string") {
+    return res.status(400).json({ error: "business_logo is required" });
+  }
+
+  if (!university || typeof university !== "string") {
+    return res.status(400).json({ error: "university is required" });
+  }
+
+  try {
+    const existing = db
+      .prepare("SELECT uid FROM sellers WHERE uid = ?")
+      .get(uid) as { uid: string } | undefined;
+
+    if (!existing) {
+      return res.status(404).json({ error: "Seller profile not found" });
+    }
+
+    db.prepare(`
+      UPDATE sellers
+      SET business_name = ?, business_logo = ?, university = ?, bio = ?, whatsapp_number = ?
+      WHERE uid = ?
+    `).run(
+      business_name,
+      business_logo,
+      university,
+      bio ?? null,
+      whatsapp_number ?? null,
+      uid
+    );
+
+    res.json({ success: true });
+  } catch (error) {
+    console.error("Profile update error:", error);
+    res.status(500).json({ error: "Failed to update profile" });
+  }
+});
+
   app.post("/api/listings", requireAuth, (req, res) => {
   // ✅ seller_uid MUST come from verified token
   const seller_uid = req.user!.uid;
