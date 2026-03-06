@@ -72,6 +72,7 @@ db.exec(`
     business_logo TEXT NOT NULL,
     university TEXT NOT NULL,
     bio TEXT,
+    whatsapp_number TEXT,
     is_verified INTEGER DEFAULT 0,
     join_date DATETIME DEFAULT CURRENT_TIMESTAMP
   );
