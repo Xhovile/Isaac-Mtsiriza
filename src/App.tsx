@@ -1210,7 +1210,6 @@ await apiFetch("/api/listings", {
         ) : (() => {
           const visibleListings = listings.filter(
             (l) =>
-              !hiddenListingIds.includes(l.id) &&
               !hiddenSellerUids.includes(l.seller_uid)
           );
           return visibleListings.length > 0 ? (
@@ -1792,25 +1791,7 @@ await apiFetch("/api/listings", {
                       </div>
                     </div>
                     <div className="bg-zinc-50 rounded-2xl p-4 text-left mb-6 space-y-4">
-                   <div>
-                     <p className="text-xs font-bold text-zinc-400 uppercase mb-2">Hidden Listings</p>
-                      {hiddenListingIds.length ? (
-                        <div className="space-y-2">
-                          {hiddenListingIds.map((id) => (
-                           <button
-                             key={id}
-                              onClick={() => unhideListingLocal(id)}
-                              className="w-full text-left px-3 py-2 bg-white border border-zinc-200 rounded-xl text-sm font-medium hover:bg-zinc-100"
-                            >
-                           Unhide listing #{id}
-                         </button>
-                       ))}
-                   </div>
-                   ) : (
-                    <p className="text-sm text-zinc-500">No hidden listings.</p>
-                   )}
-                  </div>
-
+                   
                   <div>
                     <p className="text-xs font-bold text-zinc-400 uppercase mb-2">Hidden Sellers</p>
                       {hiddenSellerUids.length ? (
