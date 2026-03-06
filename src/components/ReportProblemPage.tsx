@@ -1,12 +1,13 @@
 import React, { useState } from "react";
-import { HelpCircle, Loader2 } from "lucide-react";
+import { HelpCircle, Loader2, X } from "lucide-react";
 import { apiFetch } from "../lib/api";
 
 type Props = {
   onBack: () => void;
+  onClose: () => void;
 };
 
-export default function ReportProblemPage({ onBack }: Props) {
+export default function ReportProblemPage({ onBack, onClose }: Props) {
   const [subject, setSubject] = useState("");
   const [details, setDetails] = useState("");
   const [sending, setSending] = useState(false);
@@ -43,12 +44,22 @@ export default function ReportProblemPage({ onBack }: Props) {
 
   return (
     <div className="p-6 overflow-y-auto flex-1">
-      <button
-        onClick={onBack}
-        className="mb-6 px-4 py-2 rounded-xl bg-zinc-100 hover:bg-zinc-200 text-sm font-bold"
-      >
-        ← Back to Settings
-      </button>
+      <div className="flex items-center justify-between mb-6">
+        <button
+          onClick={onBack}
+          className="px-4 py-2 rounded-xl bg-zinc-100 hover:bg-zinc-200 text-sm font-bold"
+        >
+          ← Back to Settings
+        </button>
+
+        <button
+          onClick={onClose}
+          className="p-2 rounded-full bg-zinc-100 hover:bg-zinc-200 transition-colors"
+          aria-label="Close"
+        >
+          <X className="w-5 h-5" />
+        </button>
+      </div>
 
       <div className="max-w-3xl mx-auto space-y-6">
         <div className="flex items-center gap-3">
@@ -95,5 +106,4 @@ export default function ReportProblemPage({ onBack }: Props) {
       </div>
     </div>
   );
-            }
-
+}
