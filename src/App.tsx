@@ -254,19 +254,10 @@ Open BuyMesho: ${window.location.href}`;
     </div>
 
     <div className="flex flex-col">
-      <span className="text-xs font-bold text-zinc-800 hover:underline inline-flex items-center gap-1.5">
-        {listing.business_name}
-        {UNIVERSITY_LOGOS[listing.university] ? (
-          <img
-            src={UNIVERSITY_LOGOS[listing.university]}
-            alt={listing.university}
-            className="w-4 h-4 rounded-sm object-contain"
-            loading="lazy"
-            referrerPolicy="no-referrer"
-          />
-        ) : null}
+      <span className="text-xs font-bold text-zinc-800 hover:underline">
+         {listing.business_name}
       </span>
-      <span className="text-[10px] text-zinc-400 font-medium">View profile</span>
+       <span className="text-[10px] text-zinc-400 font-medium">View profile</span>
     </div>
   </button>
 
