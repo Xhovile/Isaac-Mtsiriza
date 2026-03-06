@@ -1906,7 +1906,6 @@ await apiFetch("/api/listings", {
                 {publicProfileListings
                   .filter(
                     (l) =>
-                      !hiddenListingIds.includes(l.id) &&
                       !hiddenSellerUids.includes(l.seller_uid)
                   )
                   .map((l) => (
