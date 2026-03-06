@@ -621,13 +621,14 @@ const closeDetails = () => {
   });
 
   const [authForm, setAuthForm] = useState({
-    email: "",
-    password: "",
-    businessName: "",
-    university: UNIVERSITIES[0] as University,
-    logoUrl: "",
-    bio: ""
-  });
+  email: "",
+  password: "",
+  businessName: "",
+  university: UNIVERSITIES[0] as University,
+  logoUrl: "",
+  bio: "",
+  whatsappNumber: ""
+});
 
   useEffect(() => {
   if (authLoading) return; // wait until Firebase finishes checking
