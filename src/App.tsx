@@ -1797,6 +1797,98 @@ await apiFetch("/api/listings", {
                   </form>
                 )}
 
+ {isFirebaseConfigured && !firestoreError && authView === 'editProfile' && userSeller && (
+  <form onSubmit={handleSaveProfile} className="p-8 space-y-4">
+    <div>
+      <label className="block text-xs font-bold text-zinc-400 uppercase mb-1">Business Name</label>
+      <input
+        required
+        type="text"
+        className="w-full px-4 py-3 bg-zinc-50 border border-zinc-200 rounded-xl focus:ring-2 focus:ring-primary/20 outline-none"
+        value={editProfileForm.businessName}
+        onChange={e => setEditProfileForm({ ...editProfileForm, businessName: e.target.value })}
+      />
+    </div>
+
+    <div>
+      <label className="block text-xs font-bold text-zinc-400 uppercase mb-1">University</label>
+      <select
+        className="w-full px-4 py-3 bg-zinc-50 border border-zinc-200 rounded-xl focus:ring-2 focus:ring-primary/20 outline-none"
+        value={editProfileForm.university}
+        onChange={e => setEditProfileForm({ ...editProfileForm, university: e.target.value as University })}
+      >
+        {UNIVERSITIES.map(u => <option key={u} value={u}>{u}</option>)}
+      </select>
+    </div>
+
+    <div>
+      <label className="block text-xs font-bold text-zinc-400 uppercase mb-1">WhatsApp Number</label>
+      <input
+        type="text"
+        placeholder="265..."
+        className="w-full px-4 py-3 bg-zinc-50 border border-zinc-200 rounded-xl focus:ring-2 focus:ring-primary/20 outline-none"
+        value={editProfileForm.whatsappNumber}
+        onChange={e => setEditProfileForm({ ...editProfileForm, whatsappNumber: e.target.value })}
+      />
+    </div>
+
+    <div>
+      <label className="block text-xs font-bold text-zinc-400 uppercase mb-1">Business Logo</label>
+      <div className="flex items-center gap-4">
+        <div className="w-16 h-16 rounded-full bg-zinc-100 border border-zinc-200 overflow-hidden flex-shrink-0">
+          {editProfileForm.logoUrl ? (
+            <img src={editProfileForm.logoUrl} alt="Logo" className="w-full h-full object-cover" />
+          ) : (
+            <div className="w-full h-full flex items-center justify-center text-zinc-400">
+              <Camera className="w-6 h-6" />
+            </div>
+          )}
+        </div>
+        <div className="flex-1">
+          <input
+            type="file"
+            accept="image/*"
+            onChange={handleFileUpload}
+            className="hidden"
+            id="edit-logo-upload"
+          />
+          <label
+            htmlFor="edit-logo-upload"
+            className="inline-block px-4 py-2 bg-zinc-100 hover:bg-zinc-200 rounded-lg text-sm font-bold cursor-pointer transition-colors"
+          >
+            {uploading ? "Uploading..." : "Upload Logo"}
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <label className="block text-xs font-bold text-zinc-400 uppercase mb-1">Short Bio</label>
+      <textarea
+        className="w-full px-4 py-3 bg-zinc-50 border border-zinc-200 rounded-xl focus:ring-2 focus:ring-primary/20 outline-none h-20 resize-none"
+        value={editProfileForm.bio}
+        onChange={e => setEditProfileForm({ ...editProfileForm, bio: e.target.value })}
+      />
+    </div>
+
+    <button
+      type="submit"
+      disabled={uploading}
+      className="w-full bg-zinc-900 text-white py-4 rounded-xl font-bold hover:bg-zinc-800 transition-colors"
+    >
+      Save Changes
+    </button>
+
+    <button
+      type="button"
+      onClick={() => setAuthView("profile")}
+      className="w-full text-sm font-bold text-zinc-500 hover:underline"
+    >
+      Back to Profile
+    </button>
+  </form>
+)}
+
                 {isFirebaseConfigured && !firestoreError && authView === 'profile' && userSeller && (
                   <div className="p-8 text-center">
                     <div className="relative w-24 h-24 mx-auto mb-4">
