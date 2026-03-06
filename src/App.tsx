@@ -1202,10 +1202,16 @@ await apiFetch("/api/listings", {
    <div className="min-h-screen pb-20 bg-zinc-100">
       <Navbar 
         onSearch={setSearch} 
-        onAddListing={() => setShowAddModal(true)}
-        onProfileClick={() => setShowProfileModal(true)}
-        userSeller={userSeller}
-        firebaseUser={firebaseUser}
+        onAddListing={() => {
+          setNewListing((prev) => ({
+            ...prev,
+          whatsapp_number: userSeller?.whatsapp_number || ""
+         }));
+          setShowAddModal(true);
+       }}
+          onProfileClick={() => setShowProfileModal(true)}
+          userSeller={userSeller}
+          firebaseUser={firebaseUser}
       />
 
       <main className="max-w-7xl mx-auto px-4">
