@@ -242,6 +242,7 @@ db.prepare(`
     business_name = excluded.business_name,
     business_logo = excluded.business_logo,
     university = excluded.university,
+    whatsapp_number = excluded.whatsapp_number,
     bio = excluded.bio,
     -- important: only allow upgrading to verified, never downgrade
     is_verified = CASE
