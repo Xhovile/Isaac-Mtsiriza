@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { HelpCircle, Loader2 } from "lucide-react";
+import { apiFetch } from "../lib/api";
 
 type Props = {
   onBack: () => void;
@@ -20,8 +21,17 @@ export default function ReportProblemPage({ onBack }: Props) {
 
     setSending(true);
     try {
-      // Placeholder until backend support is added
-      alert("Problem report captured. Backend submission can be connected next.");
+      await apiFetch("/api/reports", {
+        method: "POST",
+        body: JSON.stringify({
+          type: "problem",
+          subject: subject.trim(),
+          reason: subject.trim(),
+          details: details.trim(),
+        }),
+      });
+
+      alert("Problem report submitted successfully.");
       setSubject("");
       setDetails("");
     } catch (err: any) {
@@ -85,4 +95,4 @@ export default function ReportProblemPage({ onBack }: Props) {
       </div>
     </div>
   );
-    }
+            }
