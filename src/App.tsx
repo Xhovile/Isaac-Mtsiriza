@@ -1858,14 +1858,14 @@ await apiFetch("/api/listings", {
                       {hiddenSellerUids.length ? (
                        <div className="space-y-2">
                         {hiddenSellerUids.map((uid) => (
-                        <button
-                          key={uid}
-                          onClick={() => unhideSellerLocal(uid)}
-                          className="w-full text-left px-3 py-2 bg-white border border-zinc-200 rounded-xl text-sm font-medium hover:bg-zinc-100"
-                         >
-                       Unhide seller
-                     </button>
-                   ))}
+                       <button
+                         key={uid}
+                         onClick={() => unhideSellerLocal(uid)}
+                         className="w-full text-left px-3 py-2 bg-white border border-zinc-200 rounded-xl text-sm font-medium hover:bg-zinc-100"
+                       >
+                     Unhide seller{sellerNameMap[uid] ? `: ${sellerNameMap[uid]}` : ""}
+                 </button>
+               ))}
                  </div>
                   ) : (
                     <p className="text-sm text-zinc-500">No hidden sellers.</p>
