@@ -229,7 +229,7 @@ async function startServer() {
 
   app.post("/api/sellers", requireAuth, (req, res) => {
     const uid = req.user!.uid; // secure UID from Firebase
-const { email, business_name, business_logo, university, bio, is_verified } = req.body;
+const { email, business_name, business_logo, university, bio, whatsapp_number, is_verified } = req.body;
     try {
   // Convert incoming boolean to 0/1 safely
 const incomingVerified = (req.user as any).email_verified || is_verified ? 1 : 0;
