@@ -2507,7 +2507,10 @@ await apiFetch("/api/listings", {
   <div className="fixed inset-0 z-[76] flex items-center justify-center p-4">
     <div className="absolute inset-0 bg-zinc-900/60 backdrop-blur-sm" onClick={closeSettings} />
     <div className="relative w-full max-w-4xl bg-white rounded-3xl shadow-2xl overflow-hidden max-h-[90vh] flex flex-col">
-      <PrivacyPolicyPage onBack={() => setSettingsView("menu")} />
+      <PrivacyPolicyPage
+        onBack={() => setSettingsView("menu")}
+        onClose={closeSettings}
+      />
     </div>
   </div>
 )}
@@ -2516,16 +2519,23 @@ await apiFetch("/api/listings", {
   <div className="fixed inset-0 z-[76] flex items-center justify-center p-4">
     <div className="absolute inset-0 bg-zinc-900/60 backdrop-blur-sm" onClick={closeSettings} />
     <div className="relative w-full max-w-4xl bg-white rounded-3xl shadow-2xl overflow-hidden max-h-[90vh] flex flex-col">
-      <TermsPage onBack={() => setSettingsView("menu")} />
+      <TermsPage
+        onBack={() => setSettingsView("menu")}
+        onClose={closeSettings}
+      />
     </div>
   </div>
 )}
 
 {showSettingsModal && settingsView === "safety" && (
+{showSettingsModal && settingsView === "safety" && (
   <div className="fixed inset-0 z-[76] flex items-center justify-center p-4">
     <div className="absolute inset-0 bg-zinc-900/60 backdrop-blur-sm" onClick={closeSettings} />
     <div className="relative w-full max-w-4xl bg-white rounded-3xl shadow-2xl overflow-hidden max-h-[90vh] flex flex-col">
-      <SafetyTipsPage onBack={() => setSettingsView("menu")} />
+      <SafetyTipsPage
+        onBack={() => setSettingsView("menu")}
+        onClose={closeSettings}
+      />
     </div>
   </div>
 )}
@@ -2534,11 +2544,14 @@ await apiFetch("/api/listings", {
   <div className="fixed inset-0 z-[76] flex items-center justify-center p-4">
     <div className="absolute inset-0 bg-zinc-900/60 backdrop-blur-sm" onClick={closeSettings} />
     <div className="relative w-full max-w-4xl bg-white rounded-3xl shadow-2xl overflow-hidden max-h-[90vh] flex flex-col">
-      <ReportProblemPage onBack={() => setSettingsView("menu")} />
+      <ReportProblemPage
+        onBack={() => setSettingsView("menu")}
+        onClose={closeSettings}
+      />
     </div>
   </div>
 )}
-
+        
 {showChangePasswordModal && firebaseUser && (
   <ChangePasswordModal
     user={firebaseUser}
