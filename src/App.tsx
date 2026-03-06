@@ -2506,6 +2506,7 @@ await apiFetch("/api/listings", {
       <PrivacyPolicyPage
         onBack={() => setSettingsView("menu")}
         onClose={closeSettings}
+        showBackButton={settingsEntrySource === "settings"}
       />
     </div>
   </div>
@@ -2518,11 +2519,12 @@ await apiFetch("/api/listings", {
       <TermsPage
         onBack={() => setSettingsView("menu")}
         onClose={closeSettings}
+        showBackButton={settingsEntrySource === "settings"}
       />
     </div>
   </div>
 )}
-
+        
 {showSettingsModal && settingsView === "safety" && (
   <div className="fixed inset-0 z-[76] flex items-center justify-center p-4">
     <div className="absolute inset-0 bg-zinc-900/60 backdrop-blur-sm" onClick={closeSettings} />
@@ -2530,11 +2532,12 @@ await apiFetch("/api/listings", {
       <SafetyTipsPage
         onBack={() => setSettingsView("menu")}
         onClose={closeSettings}
+        showBackButton={settingsEntrySource === "settings"}
       />
     </div>
   </div>
 )}
-
+        
 {showSettingsModal && settingsView === "report" && (
   <div className="fixed inset-0 z-[76] flex items-center justify-center p-4">
     <div className="absolute inset-0 bg-zinc-900/60 backdrop-blur-sm" onClick={closeSettings} />
@@ -2542,6 +2545,7 @@ await apiFetch("/api/listings", {
       <ReportProblemPage
         onBack={() => setSettingsView("menu")}
         onClose={closeSettings}
+        showBackButton={settingsEntrySource === "settings"}
       />
     </div>
   </div>
