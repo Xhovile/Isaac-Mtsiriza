@@ -77,6 +77,9 @@ export default function EditListingModal({
             onChange={(e) => setForm({ ...form, whatsapp_number: e.target.value })}
             placeholder="WhatsApp number"
           />
+          <p style={{ fontSize: 12, color: "#71717a", margin: "2px 0 0" }}>
+             Media can’t be edited yet. Create a new listing to change photos/video.
+         </p>
         </div>
 
         <div style={{ display: "flex", gap: 10, marginTop: 14 }}>
