@@ -1176,8 +1176,12 @@ await apiFetch("/api/listings", {
         if (contentType && contentType.includes("application/json")) {
           const data = JSON.parse(responseText);
         if (data.url) {
+           if (authView === "editProfile") {
+               setEditProfileForm((prev) => ({ ...prev, logoUrl: data.url }));
+        } else {
          setAuthForm((prev) => ({ ...prev, logoUrl: data.url }));
-          }
+         }
+       }
         } else {
           console.error("Non-JSON response:", responseText);
           throw new Error(`Server returned non-JSON response: ${responseText.substring(0, 50)}...`);
