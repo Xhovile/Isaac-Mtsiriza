@@ -529,7 +529,7 @@ export default function App() {
   const [showProfileModal, setShowProfileModal] = useState(false);
   const [userSeller, setUserSeller] = useState<Seller | null>(null);
   const [uploading, setUploading] = useState(false);
-  const [authView, setAuthView] = useState<'login' | 'signup' | 'forgot' | 'profile'>('login');
+  const [authView, setAuthView] = useState<'login' | 'signup' | 'forgot' | 'profile' | 'editProfile'>('login');
   const [showPassword, setShowPassword] = useState(false);
   const [firestoreError, setFirestoreError] = useState<string | null>(null);
   const [profileLoading, setProfileLoading] = useState(true);
