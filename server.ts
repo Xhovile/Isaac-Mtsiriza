@@ -104,6 +104,7 @@ db.exec(`
   status TEXT NOT NULL DEFAULT 'open',
   created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
   FOREIGN KEY (listing_id) REFERENCES listings(id)
+  );
 `); 
 
 // ✅ Migration: add video_url column if it doesn't exist
