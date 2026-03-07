@@ -561,25 +561,44 @@ const FilterSection = ({
   sortBy: string,
   setSortBy: (v: string) => void
 }) => {
+  const sortOptions = [
+    { value: "newest", label: "Newest First" },
+    { value: "price_asc", label: "Price: Low to High" },
+    { value: "price_desc", label: "Price: High to Low" },
+  ];
+
+  const chipBase =
+    "shrink-0 px-4 py-2.5 rounded-2xl text-sm font-bold border transition-all whitespace-nowrap";
+  const activeChip =
+    "bg-zinc-900 text-white border-zinc-900 shadow-sm";
+  const inactiveChip =
+    "bg-white text-zinc-700 border-zinc-200 hover:bg-zinc-50";
+
   return (
-    <div className="py-6 grid grid-cols-1 sm:grid-cols-3 gap-4">
+    <div className="py-6 space-y-5">
       <div className="space-y-2">
         <label className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-zinc-400 flex items-center gap-2">
           <MapPin className="w-3.5 h-3.5 text-primary" /> Select Campus
         </label>
-        <div className="relative">
-          <select 
-            value={selectedUniv}
-            onChange={(e) => setSelectedUniv(e.target.value)}
-            className="w-full appearance-none bg-white border border-zinc-200 rounded-2xl px-4 py-3 text-sm font-bold text-zinc-700 outline-none focus:ring-4 focus:ring-primary/5 focus:border-primary/20 transition-all cursor-pointer"
-          >
-            <option value="">All Campuses</option>
-            {UNIVERSITIES.map(u => (
-              <option key={u} value={u}>{u}</option>
+        <div className="overflow-x-auto">
+          <div className="flex gap-2 min-w-max pb-1">
+            <button
+              type="button"
+              onClick={() => setSelectedUniv("")}
+              className={`${chipBase} ${selectedUniv === "" ? activeChip : inactiveChip}`}
+            >
+              All Campuses
+            </button>
+            {UNIVERSITIES.map((u) => (
+              <button
+                key={u}
+                type="button"
+                onClick={() => setSelectedUniv(u)}
+                className={`${chipBase} ${selectedUniv === u ? activeChip : inactiveChip}`}
+              >
+                {u}
+              </button>
             ))}
-          </select>
-          <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none">
-            <ChevronRight className="w-4 h-4 text-zinc-400 rotate-90" />
           </div>
         </div>
       </div>
@@ -588,19 +607,25 @@ const FilterSection = ({
         <label className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-zinc-400 flex items-center gap-2">
           <Tag className="w-3.5 h-3.5 text-primary" /> Select Category
         </label>
-        <div className="relative">
-          <select 
-            value={selectedCat}
-            onChange={(e) => setSelectedCat(e.target.value)}
-            className="w-full appearance-none bg-white border border-zinc-200 rounded-2xl px-4 py-3 text-sm font-bold text-zinc-700 outline-none focus:ring-4 focus:ring-primary/5 focus:border-primary/20 transition-all cursor-pointer"
-          >
-            <option value="">All Categories</option>
-            {CATEGORIES.map(c => (
-              <option key={c} value={c}>{c}</option>
+        <div className="overflow-x-auto">
+          <div className="flex gap-2 min-w-max pb-1">
+            <button
+              type="button"
+              onClick={() => setSelectedCat("")}
+              className={`${chipBase} ${selectedCat === "" ? activeChip : inactiveChip}`}
+            >
+              All Categories
+            </button>
+            {CATEGORIES.map((c) => (
+              <button
+                key={c}
+                type="button"
+                onClick={() => setSelectedCat(c)}
+                className={`${chipBase} ${selectedCat === c ? activeChip : inactiveChip}`}
+              >
+                {c}
+              </button>
             ))}
-          </select>
-          <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none">
-            <ChevronRight className="w-4 h-4 text-zinc-400 rotate-90" />
           </div>
         </div>
       </div>
@@ -609,18 +634,18 @@ const FilterSection = ({
         <label className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-zinc-400 flex items-center gap-2">
           <RefreshCw className="w-3.5 h-3.5 text-primary" /> Sort By
         </label>
-        <div className="relative">
-          <select 
-            value={sortBy}
-            onChange={(e) => setSortBy(e.target.value)}
-            className="w-full appearance-none bg-white border border-zinc-200 rounded-2xl px-4 py-3 text-sm font-bold text-zinc-700 outline-none focus:ring-4 focus:ring-primary/5 focus:border-primary/20 transition-all cursor-pointer"
-          >
-            <option value="newest">Newest First</option>
-            <option value="price_asc">Price: Low to High</option>
-            <option value="price_desc">Price: High to Low</option>
-          </select>
-          <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none">
-            <ChevronRight className="w-4 h-4 text-zinc-400 rotate-90" />
+        <div className="overflow-x-auto">
+          <div className="flex gap-2 min-w-max pb-1">
+            {sortOptions.map((option) => (
+              <button
+                key={option.value}
+                type="button"
+                onClick={() => setSortBy(option.value)}
+                className={`${chipBase} ${sortBy === option.value ? activeChip : inactiveChip}`}
+              >
+                {option.label}
+              </button>
+            ))}
           </div>
         </div>
       </div>
