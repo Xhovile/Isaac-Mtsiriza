@@ -1,20 +1,25 @@
-const Navbar = ({ 
-  onSearch, 
-  onAddListing, 
+import { Search, Plus, User } from "lucide-react";
+import type { User as FirebaseUser } from "firebase/auth";
+import type { Seller } from "../types";
+
+type HeaderProps = {
+  onSearch: (val: string) => void;
+  onAddListing: () => void;
+  onProfileClick: () => void;
+  userSeller: Seller | null;
+  firebaseUser: FirebaseUser | null;
+};
+
+export default function Header({
+  onSearch,
+  onAddListing,
   onProfileClick,
   userSeller,
-  firebaseUser
-}: { 
-  onSearch: (val: string) => void, 
-  onAddListing: () => void,
-  onProfileClick: () => void,
-  userSeller: Seller | null,
-  firebaseUser: FirebaseUser | null
-}) => {
+  firebaseUser,
+}: HeaderProps) {
   return (
     <nav className="sticky top-0 z-50 glass px-4 py-3">
       <div className="max-w-7xl mx-auto flex flex-col gap-3">
-        {/* Top row */}
         <div className="flex items-center justify-between gap-4">
           <div
             className="flex items-center gap-2.5 cursor-pointer group min-w-0"
@@ -33,30 +38,32 @@ const Navbar = ({
             <button
               onClick={onAddListing}
               className="flex items-center gap-2 bg-zinc-900 hover:bg-zinc-800 text-white px-4 sm:px-5 py-2.5 rounded-2xl text-sm font-bold transition-all hover:shadow-lg hover:shadow-zinc-200 active:scale-95"
-             >
-          <Plus className="w-4 h-4" />
-         <span className="hidden sm:inline">List Item</span>
-        </button>
+            >
+              <Plus className="w-4 h-4" />
+              <span className="hidden sm:inline">List Item</span>
+            </button>
 
             <button
               onClick={onProfileClick}
               className="w-11 h-11 rounded-2xl border border-zinc-200 flex items-center justify-center hover:bg-white hover:border-primary/20 hover:shadow-md transition-all overflow-hidden active:scale-95 bg-white"
             >
               {userSeller ? (
-                <img src={userSeller.business_logo} alt="Profile" className="w-full h-full object-cover" />
+                <img
+                  src={userSeller.business_logo}
+                  alt="Profile"
+                  className="w-full h-full object-cover"
+                />
               ) : firebaseUser ? (
                 <div className="w-full h-full bg-primary/5 flex items-center justify-center text-primary font-bold">
                   {firebaseUser.email?.charAt(0).toUpperCase()}
                 </div>
               ) : (
-              
                 <User className="w-5 h-5 text-zinc-600" />
               )}
             </button>
           </div>
         </div>
 
-        {/* Full-width search row */}
         <div className="relative group">
           <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-zinc-500 group-focus-within:text-red-900 transition-colors" />
           <input
@@ -69,4 +76,4 @@ const Navbar = ({
       </div>
     </nav>
   );
-};
+}
