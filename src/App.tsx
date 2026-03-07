@@ -2563,7 +2563,6 @@ await apiFetch("/api/listings", {
   <ReportListingModal
     listingId={reportListingId}
     onClose={() => setReportListingId(null)}
-    onSuccess={() => setReportListingId(null)}
   />
 )}
 
