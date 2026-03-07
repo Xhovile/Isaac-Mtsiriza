@@ -209,3 +209,125 @@ Open this listing: ${shareUrl}`;
             </button>
           </>
         ) : (
+        <>
+            <button
+              type="button"
+              onClick={() => {
+                setMenuOpen(false);
+                onToggleSave?.(listing.id);
+              }}
+              className="block w-full text-left px-4 py-2 hover:bg-zinc-50 text-sm font-semibold"
+            >
+              {isSaved ? "Remove from Saved" : "Save Item"}
+            </button>
+            <button
+              type="button"
+              onClick={handleReportFromMenu}
+              className="block w-full text-left px-4 py-2 hover:bg-zinc-50 text-sm font-semibold"
+            >
+              Report listing
+            </button>
+            <button
+              type="button"
+              onClick={handleCopyWhatsApp}
+              className="block w-full text-left px-4 py-2 hover:bg-zinc-50 text-sm font-semibold"
+            >
+              Copy WhatsApp number
+            </button>
+            <button
+              type="button"
+              onClick={handleShare}
+              className="block w-full text-left px-4 py-2 hover:bg-zinc-50 text-sm font-semibold"
+            >
+              Share listing
+            </button>
+
+            <div className="h-px bg-zinc-100" />
+
+            {/* Keep hide options ONCE (fix duplicates) */}
+            
+            <button
+              type="button"
+              onClick={handleHideSeller}
+              className="block w-full text-left px-4 py-2 hover:bg-zinc-50 text-sm font-semibold"
+              disabled={!sellerUid}
+            >
+              Hide this seller
+            </button>
+          </>
+        )}
+      </div>
+    )}
+  </div>
+</div>
+      <div className="relative aspect-[1/1] overflow-hidden bg-zinc-100">
+      
+  {listing.video_url ? (
+  <button
+    type="button"
+    onClick={() => handleOpenDetails(0)} // ✅ opens details
+    className="w-full h-full cursor-pointer relative focus:outline-none focus-visible:ring-2 focus-visible:ring-white/80"
+  >
+    <img
+      src={listing.photos[0] || `https://picsum.photos/seed/${listing.id}/600/600`}
+      alt={listing.name}
+      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+      referrerPolicy="no-referrer"
+    />
+
+    {/* Play overlay (clicking this plays video, not details) */}
+    <div
+      className="absolute inset-0 flex items-center justify-center bg-black/30"
+     onClick={(e) => {
+      e.stopPropagation();
+     handleOpenDetails(0);
+   }}
+    >
+      <span className="bg-white/90 backdrop-blur-md text-zinc-900 font-bold px-4 py-2 rounded-xl shadow text-sm flex items-center gap-2">
+        ▶ Play
+      </span>
+    </div>
+  </button>
+) : (
+  <button
+    type="button"
+    onClick={() => handleOpenDetails(0)} // ✅ opens details
+    className="w-full h-full cursor-pointer relative focus:outline-none focus-visible:ring-2 focus-visible:ring-white/80"
+  >
+    <img
+      src={listing.photos[0] || `https://picsum.photos/seed/${listing.id}/600/600`}
+      alt={listing.name}
+      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+      referrerPolicy="no-referrer"
+    />
+  </button>
+)}
+
+  {listing.status === "sold" && (
+    <div className="absolute inset-0 bg-black/30 pointer-events-none" />
+  )}
+
+  {listing.status === "sold" && (
+    <div className="absolute top-4 right-4">
+      <span className="bg-red-900 text-white px-3 py-1.5 rounded-xl text-[10px] font-extrabold uppercase tracking-wider shadow-sm">
+        Sold
+      </span>
+    </div>
+  )}
+
+  {!isOwner && (
+    <button
+      type="button"
+      onClick={(e) => {
+        e.stopPropagation();
+        onToggleSave?.(listing.id);
+      }}
+      className="absolute top-4 right-4 z-10 bg-white/90 backdrop-blur-md p-2 rounded-xl shadow-sm hover:bg-white transition"
+      aria-label={isSaved ? "Remove from saved" : "Save item"}
+    >
+      <Bookmark
+        className={`w-4 h-4 ${isSaved ? "fill-zinc-900 text-zinc-900" : "text-zinc-700"}`}
+      />
+    </button>
+  )}
+
