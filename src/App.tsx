@@ -113,7 +113,13 @@ const clearListingParamFromUrl = () => {
 
           <div className="flex items-center gap-3 flex-shrink-0">
             <button
-              onClick={onAddListing}
+              onClick={() => {
+               setNewListing((prev) => ({
+                 ...prev,
+                 whatsapp_number: userSeller?.whatsapp_number || ""
+               }));
+              setShowAddModal(true);
+             }}
               className="flex items-center gap-2 bg-zinc-900 hover:bg-zinc-800 text-white px-4 sm:px-5 py-2.5 rounded-2xl text-sm font-bold transition-all hover:shadow-lg hover:shadow-zinc-200 active:scale-95"
             >
               <Plus className="w-4 h-4" />
