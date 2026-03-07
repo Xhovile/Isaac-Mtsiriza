@@ -35,6 +35,7 @@ import {
   clearListingParamFromUrl,
 } from "./lib/listingUrl";
 import { auth, db as firestore } from './firebase';
+import Header from "./components/Header";
 import { 
   createUserWithEmailAndPassword, 
   signInWithEmailAndPassword, 
