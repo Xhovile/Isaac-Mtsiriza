@@ -12,7 +12,8 @@ import {
   Eye,
   EyeOff,
   RefreshCw, 
-  Package,
+  Package, 
+  Loader2,
   Settings,
   Bookmark
 } from 'lucide-react';
