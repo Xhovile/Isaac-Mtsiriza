@@ -330,4 +330,76 @@ Open this listing: ${shareUrl}`;
       />
     </button>
   )}
+        
+       {/* ✅ Photo count badge (works for BOTH video + non-video) */}
+  {listing.photos?.length > 1 && (
+  <button
+    type="button"
+    onClick={(e) => {
+      e.stopPropagation();
+      handleOpenDetails(0);
+    }}
+    className="absolute bottom-4 right-4 bg-white/90 backdrop-blur-md px-3 py-1.5 rounded-xl text-xs font-bold shadow-sm"
+  >
+    +{listing.photos.length - 1}
+  </button>
+)}
 
+  {/* Top-left location */}
+  <div className="absolute top-4 left-4 flex flex-col gap-2">
+    <span className="bg-white/90 backdrop-blur-md px-3 py-1.5 rounded-xl text-[10px] font-bold uppercase tracking-wider text-zinc-800 flex items-center gap-1.5 shadow-sm">
+      <MapPin className="w-3 h-3 text-primary" /> {listing.university}
+    </span>
+  </div>
+
+  {/* Price */}
+  <div className="absolute bottom-4 left-4">
+    <div className="bg-white/90 backdrop-blur-md text-zinc-900 px-3 py-1.5 rounded-xl font-bold text-sm shadow-sm border border-white/20">
+      MK {listing.price.toLocaleString()}
+    </div>
+  </div>
+</div>
+
+      <div className="p-5">
+        <div className="flex items-center justify-between mb-2">
+          <span className="text-[10px] font-extrabold text-primary bg-primary/5 px-2 py-0.5 rounded-md uppercase tracking-wider">
+            {listing.category}
+          </span>
+
+          {listing.status === "sold" ? (
+            <span className="flex items-center gap-1.5 bg-zinc-200 text-zinc-500 px-3 py-1.5 rounded-xl text-[10px] font-extrabold uppercase tracking-wider cursor-not-allowed">
+              Sold Out
+            </span>
+          ) : isLoggedIn ? (
+            <a
+              href={`https://wa.me/${listing.whatsapp_number}?text=Hi, I'm interested in your ${listing.name} on BuyMesho.`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-1.5 bg-[#25D366] hover:bg-[#128C7E] text-white px-3 py-1.5 rounded-xl text-[10px] font-extrabold uppercase tracking-wider transition-all hover:shadow-lg hover:shadow-[#25D366]/20 active:scale-95"
+            >
+              <MessageCircle className="w-3.5 h-3.5" />
+              Contact
+            </a>
+          ) : (
+            <button
+              type="button"
+              onClick={requireLoginForContact}
+              className="flex items-center gap-1.5 bg-zinc-900 hover:bg-zinc-800 text-white px-3 py-1.5 rounded-xl text-[10px] font-extrabold uppercase tracking-wider transition-all active:scale-95"
+            >
+              <Lock className="w-3.5 h-3.5" />
+              Log in to Contact
+            </button>
+          )}
+        </div>
+
+        <h3 className="text-lg font-bold text-zinc-900 mb-1 line-clamp-1 group-hover:text-primary transition-colors">
+          {listing.name}
+        </h3>
+        <p className="text-sm text-zinc-500 line-clamp-2 mb-5 h-10 leading-relaxed">
+          {listing.description}
+        </p>
+      </div>
+     </div>
+    </motion.div>
+   );
+ };
