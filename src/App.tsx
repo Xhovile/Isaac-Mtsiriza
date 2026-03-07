@@ -612,7 +612,7 @@ const FilterSection = ({
           <span>{selectedUniv || "All Universities"}</span>
           <ChevronRight
             className={`w-4 h-4 text-zinc-400 transition-transform ${
-              openDropdown === "university" ? "rotate-90" : "rotate-90"
+              openDropdown === "university" ? "rotate-90" : "rotate-0"
             }`}
           />
         </button>
@@ -663,7 +663,7 @@ const FilterSection = ({
           <span>{selectedCat || "All Categories"}</span>
           <ChevronRight
             className={`w-4 h-4 text-zinc-400 transition-transform ${
-              openDropdown === "category" ? "rotate-90" : "rotate-90"
+              openDropdown === "category" ? "rotate-90" : "rotate-0"
             }`}
           />
         </button>
@@ -716,7 +716,7 @@ const FilterSection = ({
           </span>
           <ChevronRight
             className={`w-4 h-4 text-zinc-400 transition-transform ${
-              openDropdown === "sort" ? "rotate-90" : "rotate-90"
+              openDropdown === "sort" ? "rotate-90" : "rotate-0"
             }`}
           />
         </button>
