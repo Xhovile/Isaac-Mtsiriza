@@ -9,8 +9,6 @@ type Props = {
 };
 
 export default function ReportListingModal({ listingId, onClose }: Props) {
-
-export default function ReportListingModal({ listingId, onClose, onSuccess }: Props) {
   const [reason, setReason] = useState("");
   const [details, setDetails] = useState("");
   const [sending, setSending] = useState(false);
@@ -75,7 +73,10 @@ export default function ReportListingModal({ listingId, onClose, onSuccess }: Pr
             </div>
           </div>
 
-          <button onClick={onClose} className="p-2 hover:bg-zinc-100 rounded-full transition-colors">
+          <button
+            onClick={onClose}
+            className="p-2 hover:bg-zinc-100 rounded-full transition-colors"
+          >
             <X className="w-5 h-5" />
           </button>
         </div>
@@ -132,4 +133,4 @@ export default function ReportListingModal({ listingId, onClose, onSuccess }: Pr
       </motion.div>
     </div>
   );
-    } 
+}
