@@ -28,6 +28,7 @@ import {
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Listing, Seller, University, Category } from './types';
+import HeroSection from "./sections/HeroSection";
 import { UNIVERSITIES, CATEGORIES } from './constants';
 import {
   getListingIdFromUrl,
