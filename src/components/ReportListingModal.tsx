@@ -104,43 +104,45 @@ export default function ReportListingModal({ listingId, onClose }: Props) {
   </div>
 )}
 
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div>
-              <label className="block text-xs font-bold text-zinc-400 uppercase mb-1">
-                Reason
-              </label>
-              <input
-                type="text"
-                value={reason}
-                onChange={(e) => setReason(e.target.value)}
-                placeholder="e.g. Scam, fake item, abusive content"
-                className="w-full px-4 py-3 bg-zinc-50 border border-zinc-200 rounded-xl focus:ring-2 focus:ring-primary/20 outline-none"
-                required
-                disabled={sending}
-              />
-            </div>
+          {!successMessage && (
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <div>
+                <label className="block text-xs font-bold text-zinc-400 uppercase mb-1">
+                  Reason
+                </label>
+                <input
+                  type="text"
+                  value={reason}
+                  onChange={(e) => setReason(e.target.value)}
+                  placeholder="e.g. Scam, fake item, abusive content"
+                  className="w-full px-4 py-3 bg-zinc-50 border border-zinc-200 rounded-xl focus:ring-2 focus:ring-primary/20 outline-none"
+                  required
+                  disabled={sending}
+                />
+              </div>
 
-            <div>
-              <label className="block text-xs font-bold text-zinc-400 uppercase mb-1">
-                Extra Details (Optional)
-              </label>
-              <textarea
-                value={details}
-                onChange={(e) => setDetails(e.target.value)}
-                placeholder="Describe the issue clearly..."
-                className="w-full px-4 py-3 bg-zinc-50 border border-zinc-200 rounded-xl focus:ring-2 focus:ring-primary/20 outline-none h-28 resize-none"
-                disabled={sending}
-              />
-            </div>
+              <div>
+                <label className="block text-xs font-bold text-zinc-400 uppercase mb-1">
+                  Extra Details (Optional)
+                </label>
+                <textarea
+                  value={details}
+                  onChange={(e) => setDetails(e.target.value)}
+                  placeholder="Describe the issue clearly..."
+                  className="w-full px-4 py-3 bg-zinc-50 border border-zinc-200 rounded-xl focus:ring-2 focus:ring-primary/20 outline-none h-28 resize-none"
+                  disabled={sending}
+                />
+              </div>
 
-            <button
-              type="submit"
-              disabled={sending}
-              className="w-full bg-zinc-900 text-white py-3 rounded-xl font-bold hover:bg-zinc-800 transition-colors flex items-center justify-center gap-2 disabled:bg-zinc-300 disabled:hover:bg-zinc-300 disabled:cursor-not-allowed"
-            >
-              {sending ? <Loader2 className="w-4 h-4 animate-spin" /> : "Submit Report"}
-            </button>
-          </form>
+              <button
+                type="submit"
+                disabled={sending}
+                className="w-full bg-zinc-900 text-white py-3 rounded-xl font-bold hover:bg-zinc-800 transition-colors flex items-center justify-center gap-2 disabled:bg-zinc-300 disabled:hover:bg-zinc-300 disabled:cursor-not-allowed"
+              >
+                {sending ? <Loader2 className="w-4 h-4 animate-spin" /> : "Submit Report"}
+              </button>
+            </form>
+          )}
         </div>
       </motion.div>
     </div>
