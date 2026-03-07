@@ -985,7 +985,7 @@ await apiFetch("/api/listings", {
 
   return (
    <div className="min-h-screen pb-20 bg-zinc-100">
-      <Navbar 
+      <Header 
         onSearch={setSearch} 
         onAddListing={() => {
           setNewListing((prev) => ({
