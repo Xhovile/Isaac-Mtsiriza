@@ -2645,7 +2645,7 @@ await apiFetch("/api/listings", {
                     onOpenDetails={openDetails}
                     onHideSeller={hideSellerLocal}
                    onToggleStatus={handleToggleListingStatus}
-                   isSaved={savedListingIds.includes(listing.id)}
+                   isSaved={savedListingIds.includes(l.id)}
                    onToggleSave={toggleSavedListing}
                   />
                 ))}
