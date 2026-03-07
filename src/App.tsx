@@ -96,8 +96,9 @@ const clearListingParamFromUrl = () => {
   return (
     <nav className="sticky top-0 z-50 glass px-4 py-3">
       <div className="max-w-7xl mx-auto flex flex-col gap-3">
-        {/* Top row */}
-        <div className="flex items-center justify-between gap-4">
+        {/* Top section */}
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+          {/* Logo */}
           <div
             className="flex items-center gap-2.5 cursor-pointer group min-w-0"
             onClick={() => window.location.reload()}
@@ -111,24 +112,19 @@ const clearListingParamFromUrl = () => {
             </h1>
           </div>
 
-          <div className="flex items-center gap-3 flex-shrink-0">
+          {/* Actions */}
+          <div className="flex items-center justify-between sm:justify-end gap-3">
             <button
-              onClick={() => {
-               setNewListing((prev) => ({
-                 ...prev,
-                 whatsapp_number: userSeller?.whatsapp_number || ""
-               }));
-              setShowAddModal(true);
-             }}
-              className="flex items-center gap-2 bg-zinc-900 hover:bg-zinc-800 text-white px-4 sm:px-5 py-2.5 rounded-2xl text-sm font-bold transition-all hover:shadow-lg hover:shadow-zinc-200 active:scale-95"
+              onClick={onAddListing}
+              className="flex-1 sm:flex-none flex items-center justify-center gap-2 bg-zinc-900 hover:bg-zinc-800 text-white px-4 sm:px-5 py-2.5 rounded-2xl text-sm font-bold transition-all hover:shadow-lg hover:shadow-zinc-200 active:scale-95"
             >
               <Plus className="w-4 h-4" />
-              <span className="hidden sm:inline">List Item</span>
+              <span>List Item</span>
             </button>
 
             <button
               onClick={onProfileClick}
-              className="w-11 h-11 rounded-2xl border border-zinc-200 flex items-center justify-center hover:bg-white hover:border-primary/20 hover:shadow-md transition-all overflow-hidden active:scale-95 bg-white"
+              className="w-11 h-11 rounded-2xl border border-zinc-200 flex items-center justify-center hover:bg-white hover:border-primary/20 hover:shadow-md transition-all overflow-hidden active:scale-95 bg-white flex-shrink-0"
             >
               {userSeller ? (
                 <img src={userSeller.business_logo} alt="Profile" className="w-full h-full object-cover" />
@@ -143,7 +139,7 @@ const clearListingParamFromUrl = () => {
           </div>
         </div>
 
-        {/* Full-width search row */}
+        {/* Search */}
         <div className="relative group">
           <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-zinc-500 group-focus-within:text-red-900 transition-colors" />
           <input
@@ -157,7 +153,7 @@ const clearListingParamFromUrl = () => {
     </nav>
   );
 };
-
+              
 const ListingCard = ({
   listing,
   onReport,
