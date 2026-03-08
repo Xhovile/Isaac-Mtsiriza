@@ -17,17 +17,21 @@ export type Category =
 
 export type ListingStatus = "available" | "sold";
 
-export interface Seller {
+export interface UserProfile {
   uid: string;
   email: string;
-  business_name: string;
   is_seller: boolean;
-  business_logo: string;
-  university: University;
-  bio?: string;
-  whatsapp_number?: string;
   is_verified: boolean;
   join_date: string;
+
+  // general user fields
+  university?: University;
+
+  // seller-only fields
+  business_name?: string;
+  business_logo?: string;
+  bio?: string;
+  whatsapp_number?: string;
 }
 
 export interface Listing {
