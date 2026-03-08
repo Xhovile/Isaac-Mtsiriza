@@ -22,6 +22,7 @@ type ReportRow = {
 
 type Props = {
   onClose: () => void;
+  onOpenUser: (uid: string) => void;
 };
 
 export default function AdminReportsModal({ onClose }: Props) {
