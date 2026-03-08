@@ -36,7 +36,9 @@ import {
   signOut, 
   sendEmailVerification, 
   sendPasswordResetEmail,
-  deleteUser
+  deleteUser,
+  EmailAuthProvider,
+  reauthenticateWithCredential
 } from 'firebase/auth';
 import { 
   doc, 
@@ -749,35 +751,62 @@ const handleToggleListingStatus = async (listing: Listing) => {
   }
 };
 
+  const reauthenticateCurrentUser = async (email: string) => {
+  const password = window.prompt(
+    "For security, please enter your password to delete your account."
+  );
+
+  if (!password) {
+    throw new Error("Reauthentication cancelled.");
+  }
+
+  const credential = EmailAuthProvider.credential(email, password);
+  await reauthenticateWithCredential(auth.currentUser!, credential);
+};
+
   const handleDeleteAccount = async () => {
   if (!firebaseUser) return;
-  if (
-    !confirm(
-      "Are you sure you want to delete your account? This will permanently remove your profile and all your listings."
-    )
-  )
-    return;
+
+  const confirmed = window.confirm(
+    "Are you sure you want to delete your account? This will permanently remove your profile and all your listings."
+  );
+
+  if (!confirmed) return;
 
   try {
-    // ✅ 1) Delete from SQLite backend first (needs auth token)
-    await apiFetch("/api/profile", { method: "DELETE" });
+    if (!firebaseUser.email) {
+      throw new Error("No email found for this account.");
+    }
 
-    // 2) Delete from Firestore
-    await deleteDoc(doc(firestore, "users", firebaseUser.uid));
+    try {
+      await deleteUser(firebaseUser);
+    } catch (authErr: any) {
+      if (authErr?.code === "auth/requires-recent-login") {
+        await reauthenticateCurrentUser(firebaseUser.email);
+        await deleteUser(auth.currentUser!);
+      } else {
+        throw authErr;
+      }
+    }
 
-    // 3) Delete from Firebase Auth
-    await deleteUser(firebaseUser);
+    try {
+      await apiFetch("/api/profile", { method: "DELETE" });
+    } catch (apiErr) {
+      console.warn("Backend profile deletion failed:", apiErr);
+    }
+
+    try {
+      await deleteDoc(doc(firestore, "users", firebaseUser.uid));
+    } catch (firestoreErr) {
+      console.warn("Firestore profile deletion failed:", firestoreErr);
+    }
 
     alert("Account deleted.");
   } catch (err: any) {
-    alert(
-      "Error deleting account: " +
-        (err?.message || String(err)) +
-        ". You may need to re-authenticate to perform this action."
-    );
+    alert(err?.message || "Failed to delete account.");
   }
 };
-
+  
   const handleSaveProfile = async (e: React.FormEvent) => {
   e.preventDefault();
   if (!firebaseUser || !userSeller) return;
