@@ -55,6 +55,7 @@ import SafetyTipsPage from "./components/SafetyTipsPage";
 import ReportProblemPage from "./components/ReportProblemPage";
 import ChangePasswordModal from "./components/ChangePasswordModal";
 import ReportListingModal from "./components/ReportListingModal";
+import AdminReportsModal from "./components/AdminReportsModal";
                 
 // --- Main App ---
 
@@ -100,7 +101,8 @@ const [galleryIndex, setGalleryIndex] = useState(0);
   const [reportListingId, setReportListingId] = useState<number | null>(null);
 const [savedListingIds, setSavedListingIds] = useState<number[]>([]);
 const [showSavedModal, setShowSavedModal] = useState(false);
-
+const [showAdminReportsModal, setShowAdminReportsModal] = useState(false);
+  
 // Local-only hides (no backend needed)
 
 const [hiddenSellerUids, setHiddenSellerUids] = useState<string[]>(() => {
