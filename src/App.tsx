@@ -145,8 +145,8 @@ const unhideSellerLocal = (uid: string) => {
     }
   }
 
-  if (userSeller?.uid && userSeller?.business_name) {
-    map[userSeller.uid] = userSeller.business_name;
+  if (userProfile?.uid && userProfile?.business_name) {
+    map[userProfile.uid] = userProfile.business_name;
   }
 
   if (publicProfile?.uid && publicProfile?.business_name) {
@@ -154,7 +154,7 @@ const unhideSellerLocal = (uid: string) => {
   }
 
   return map;
-}, [listings, userSeller, publicProfile]);
+}, [listings, userProfile, publicProfile]);
   
 const openDetails = (listing: Listing, startIndex = 0) => {
   setDetailsListing(listing);
@@ -245,7 +245,7 @@ const [editProfileForm, setEditProfileForm] = useState({
           if (docSnap.exists()) {
             const profile = docSnap.data() as Seller;
             console.log("Firestore: Profile found", profile.business_name);
-            setUserSeller(profile);
+            setUserProfile(profile);
 
             // Sync with SQLite backend
             try {
@@ -264,7 +264,7 @@ const [editProfileForm, setEditProfileForm] = useState({
             setAuthView("profile");
           } else {
             console.warn("Firestore: No profile document found for UID:", firebaseUser.uid);
-            setUserSeller(null);
+            setUserProfile(null);
             setAuthView("signup");
           }
         } catch (firestoreErr: any) {
@@ -272,7 +272,7 @@ const [editProfileForm, setEditProfileForm] = useState({
           setFirestoreError(firestoreErr.message || "Unknown Firestore error");
         }
       } else {
-        setUserSeller(null);
+        setUserProfile(null);
         setAuthView((prev) => (prev === "signup" || prev === "forgot" ? prev : "login"));
       }
     } finally {
