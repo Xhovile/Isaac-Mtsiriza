@@ -2341,6 +2341,11 @@ await apiFetch("/api/listings", {
     onClose={() => setReportListingId(null)}
   />
 )}
+        
+  {showAdminReportsModal && isAdminUser && (
+   <AdminReportsModal onClose={() => setShowAdminReportsModal(false)}
+ />
+)}
 
       </AnimatePresence>
       {editingListing && (
