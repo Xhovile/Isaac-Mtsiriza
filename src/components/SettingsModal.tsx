@@ -72,13 +72,15 @@ export default function SettingsModal({
             </div>
 
             <div className="bg-zinc-50 rounded-2xl border border-zinc-100 overflow-hidden">
+              {isSellerAccount && (
               <button
-                onClick={onOpenEditProfile}
-                className="w-full flex items-center justify-between px-4 py-4 hover:bg-white transition-colors text-left"
+                 onClick={onOpenEditProfile}
+                 className="w-full flex items-center justify-between px-4 py-4 hover:bg-white transition-colors text-left"
               >
-                <span className="font-medium text-zinc-900">Edit Profile</span>
-                <ChevronRight className="w-4 h-4 text-zinc-400" />
+                 <span className="font-medium text-zinc-900">Edit Profile</span>
+                 <ChevronRight className="w-4 h-4 text-zinc-400" />
               </button>
+            )}
 
               <button
                 onClick={onOpenChangePassword}
