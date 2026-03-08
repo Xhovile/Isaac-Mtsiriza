@@ -156,7 +156,7 @@ export default function AdminReportsModal({ onClose }: Props) {
             </div>
           </div>
 
-          <div className="sticky top-0 z-10 bg-white/95 backdrop-blur border-y border-zinc-100 px-4 sm:px-5 py-3">
+          <div className="sticky top-0 z-10 bg-white/95 backdrop-blur border-y border-zinc-100 px-4 sm:px-5 py-2.5"
             <div className="flex flex-col sm:flex-row gap-3">
               <select
                 value={statusFilter}
