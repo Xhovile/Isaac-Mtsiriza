@@ -153,6 +153,17 @@ try {
 }
 
 try {
+  const cols = db.prepare("PRAGMA table_info(sellers)").all() as any[];
+  const hasIsSeller = cols.some((c) => c.name === "is_seller");
+  if (!hasIsSeller) {
+    db.exec("ALTER TABLE sellers ADD COLUMN is_seller INTEGER NOT NULL DEFAULT 1");
+    console.log("Migration: Added sellers.is_seller");
+  }
+} catch (e) {
+  console.warn("Sellers is_seller migration check failed:", e);
+}
+
+try {
   const cols = db.prepare("PRAGMA table_info(reports)").all() as any[];
 
   const hasType = cols.some((c) => c.name === "type");
@@ -318,7 +329,16 @@ async function startServer() {
 
   app.post("/api/sellers", requireAuth, (req, res) => {
     const uid = req.user!.uid; // secure UID from Firebase
-const { email, business_name, business_logo, university, bio, whatsapp_number, is_verified } = req.body;
+const {
+  email,
+  business_name,
+  business_logo,
+  university,
+  bio,
+  whatsapp_number,
+  is_verified,
+  is_seller
+} = req.body;
     try {
   // Convert incoming boolean to 0/1 safely
 const incomingVerified = (req.user as any).email_verified || is_verified ? 1 : 0;
