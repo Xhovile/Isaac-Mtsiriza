@@ -234,7 +234,16 @@ export default function AdminReportsModal({ onClose }: Props) {
                           {report.subject || report.reason}
                         </h3>
                         <p className="text-sm text-zinc-500 mt-1">
-                          Submitted {new Date(report.created_at).toLocaleString()}
+                          {new Date(report.created_at).toLocaleDateString(undefined, {
+                            day: "numeric",
+                            month: "short",
+                            year: "numeric",
+                          })}{" "}
+                          •{" "}
+                          {new Date(report.created_at).toLocaleTimeString([], {
+                            hour: "2-digit",
+                            minute: "2-digit",
+                          })}
                         </p>
                       </div>
 
