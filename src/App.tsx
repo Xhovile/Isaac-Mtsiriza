@@ -916,6 +916,11 @@ const handleVideoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
 
   if (!userSeller || !firebaseUser) return;
 
+if (!isSellerAccount) {
+  alert("You need a seller account to post listings.");
+  return;
+}
+    
   if (!isSellerAccount) {
     alert("You need a seller account to post listings.");
     return;
