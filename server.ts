@@ -342,23 +342,25 @@ const {
     try {
   // Convert incoming boolean to 0/1 safely
 const incomingVerified = (req.user as any).email_verified || is_verified ? 1 : 0;
+const incomingSeller = is_seller === false || is_seller === 0 ? 0 : 1;
 
 db.prepare(`
-  INSERT INTO sellers (uid, email, business_name, business_logo, university, bio, whatsapp_number, is_verified)
-  VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+  INSERT INTO sellers (uid, email, business_name, business_logo, university, bio, whatsapp_number, is_verified, is_seller)
+VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
   ON CONFLICT(uid) DO UPDATE SET
     email = excluded.email,
     business_name = excluded.business_name,
     business_logo = excluded.business_logo,
     university = excluded.university,
     whatsapp_number = excluded.whatsapp_number,
+    is_seller = excluded.is_seller,
     bio = excluded.bio,
     -- important: only allow upgrading to verified, never downgrade
     is_verified = CASE
       WHEN excluded.is_verified = 1 THEN 1
       ELSE sellers.is_verified
     END
-`).run(uid, email, business_name, business_logo, university, bio, whatsapp_number, incomingVerified);
+`).run(uid, email, business_name, business_logo, university, bio, whatsapp_number, incomingVerifiedincomingVerified, incomingSeller);
 
   res.json({ success: true });
 } catch (error) {
