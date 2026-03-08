@@ -21,6 +21,7 @@ export interface Seller {
   uid: string;
   email: string;
   business_name: string;
+  is_seller: boolean;
   business_logo: string;
   university: University;
   bio?: string;
