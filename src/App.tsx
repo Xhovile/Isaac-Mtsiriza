@@ -191,6 +191,9 @@ useEffect(() => {
   const isAdminUser =
   !!firebaseUser?.email &&
   firebaseUser.email.toLowerCase() === "isaacmtsiriza310@gmail.com";
+  const isAdminUser =
+  !!firebaseUser?.email &&
+  firebaseUser.email.toLowerCase() === "isaacmtsiriza310@gmail.com";
   
   // Form states
   const [newListing, setNewListing] = useState({
