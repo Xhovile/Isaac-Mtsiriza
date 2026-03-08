@@ -2344,6 +2344,13 @@ await apiFetch("/api/listings", {
     onClose={() => setShowChangePasswordModal(false)}
   />
 )}
+
+ {showAdminReportsModal && isAdminUser && (
+  <AdminReportsModal
+    onClose={() => setShowAdminReportsModal(false)}
+    onOpenUser={openPublicProfile}
+  />
+)}       
         
 {reportListingId !== null && (
   <ReportListingModal
