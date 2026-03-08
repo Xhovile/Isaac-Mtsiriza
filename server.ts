@@ -201,6 +201,16 @@ try {
   console.warn("Seller ratings index setup failed:", e);
 }
 
+const ADMIN_EMAILS = (process.env.ADMIN_EMAILS || "isaacmtsiriza310@gmail.com")
+  .split(",")
+  .map((email) => email.trim().toLowerCase())
+  .filter(Boolean);
+
+function isAdminEmail(email?: string | null) {
+  if (!email) return false;
+  return ADMIN_EMAILS.includes(String(email).toLowerCase());
+}
+
 async function startServer() {
   const app = express();
   const PORT = 3000;
@@ -1010,6 +1020,94 @@ for (const l of listings) {
   } catch (error) {
     console.error("Submit report error:", error);
     res.status(500).json({ error: "Failed to submit report" });
+  }
+});
+
+  app.get("/api/admin/reports", requireAuth, (req, res) => {
+  const requesterEmail = (req.user as any)?.email || null;
+
+  if (!isAdminEmail(requesterEmail)) {
+    return res.status(403).json({ error: "Forbidden: admin access required" });
+  }
+
+  const { status, type } = req.query;
+
+  let query = `
+    SELECT
+      r.id,
+      r.type,
+      r.listing_id,
+      r.subject,
+      r.reason,
+      r.details,
+      r.reporter_uid,
+      r.reporter_email,
+      r.status,
+      r.created_at,
+      l.name AS listing_name,
+      l.category AS listing_category,
+      l.university AS listing_university,
+      s.business_name AS seller_business_name
+    FROM reports r
+    LEFT JOIN listings l ON r.listing_id = l.id
+    LEFT JOIN sellers s ON l.seller_uid = s.uid
+    WHERE 1=1
+  `;
+
+  const params: any[] = [];
+
+  if (status && typeof status === "string") {
+    query += " AND r.status = ?";
+    params.push(status);
+  }
+
+  if (type && typeof type === "string") {
+    query += " AND r.type = ?";
+    params.push(type);
+  }
+
+  query += " ORDER BY r.created_at DESC";
+
+  try {
+    const rows = db.prepare(query).all(...params);
+    res.json(rows);
+  } catch (error) {
+    console.error("Admin reports fetch error:", error);
+    res.status(500).json({ error: "Failed to load reports" });
+  }
+});
+
+app.patch("/api/admin/reports/:id/status", requireAuth, (req, res) => {
+  const requesterEmail = (req.user as any)?.email || null;
+
+  if (!isAdminEmail(requesterEmail)) {
+    return res.status(403).json({ error: "Forbidden: admin access required" });
+  }
+
+  const id = Number(req.params.id);
+  const { status } = req.body;
+
+  if (!Number.isInteger(id)) {
+    return res.status(400).json({ error: "Invalid report id" });
+  }
+
+  const allowedStatuses = ["open", "reviewed", "resolved"];
+  if (!allowedStatuses.includes(status)) {
+    return res.status(400).json({ error: "Invalid status" });
+  }
+
+  try {
+    const existing = db.prepare("SELECT id FROM reports WHERE id = ?").get(id);
+    if (!existing) {
+      return res.status(404).json({ error: "Report not found" });
+    }
+
+    db.prepare("UPDATE reports SET status = ? WHERE id = ?").run(status, id);
+
+    res.json({ success: true });
+  } catch (error) {
+    console.error("Admin report status update error:", error);
+    res.status(500).json({ error: "Failed to update report status" });
   }
 });
 
