@@ -25,7 +25,7 @@ type Props = {
   onOpenUser: (uid: string) => void;
 };
 
-export default function AdminReportsModal({ onClose }: Props) {
+export default function AdminReportsModal({ onClose, onOpenUser }: Props) {
   const [reports, setReports] = useState<ReportRow[]>([]);
   const [loading, setLoading] = useState(true);
   const [updatingId, setUpdatingId] = useState<number | null>(null);
