@@ -324,6 +324,17 @@ export default function AdminReportsModal({ onClose }: Props) {
                           ? "Updating..."
                           : "Mark Resolved"}
                       </button>
+                      {report.reporter_uid && (
+                     <button
+                       onClick={() => {
+                        onClose();
+                        onOpenUser(report.reporter_uid!);
+                      }}
+                       className="px-4 py-2 rounded-xl bg-zinc-100 hover:bg-zinc-200 text-zinc-800 text-sm font-bold"
+                     >
+                       View User
+                    </button>
+                    )}
                     </div>
                   </div>
                 </div>
