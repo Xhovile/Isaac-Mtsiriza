@@ -9,12 +9,12 @@ import {
   FileText,
   HelpCircle,
 } from "lucide-react";
-import { userProfile, University } from "../types";
+import { UserProfile, University } from "../types";
 
 type SettingsView = "menu" | "privacy" | "terms" | "safety" | "report";
 
 type Props = {
-  userProfile: userProfile;
+  userProfile: UserProfile;
   firebaseUser: any;
   isSellerAccount: boolean;
   onClose: () => void;
@@ -168,7 +168,6 @@ export default function SettingsModal({
               </div>
             </div>
           </section>
-        )} 
 
           <section>
             <div className="flex items-center gap-2 mb-4">
