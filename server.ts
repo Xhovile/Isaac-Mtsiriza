@@ -344,7 +344,6 @@ const {
     try {
   // Convert incoming boolean to 0/1 safely
 const incomingVerified = (req.user as any).email_verified || is_verified ? 1 : 0;
-const incomingSeller = is_seller === false || is_seller === 0 ? 0 : 1;
 const incomingSeller = is_seller === true || is_seller === 1 ? 1 : 0;
 
 const safeBusinessName = typeof business_name === "string" && business_name.trim() ? business_name.trim() : null;
@@ -826,7 +825,7 @@ for (const pid of publicIds) {
   if (!Number.isInteger(id)) {
     return res.status(400).json({ error: "Invalid listing id" });
   }
-    const v = db
+    
   const v = db
   .prepare("SELECT is_verified, is_seller FROM sellers WHERE uid = ?")
   .get(uid) as { is_verified?: number; is_seller?: number } | undefined;
