@@ -168,7 +168,7 @@ export default function SettingsModal({
               </div>
             </div>
           </section>
-
+       )} 
           <section>
             <div className="flex items-center gap-2 mb-4">
               <FileText className="w-4 h-4 text-zinc-500" />
