@@ -527,18 +527,17 @@ const safeStatus = status === "sold" ? "sold" : "available";
     const info = db.prepare(`
       INSERT INTO listings (seller_uid, name, price, description, category, university, photos, video_url, whatsapp_number, status)
          VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-    `).run(
-      seller_uid,
-      name,
-      price,
-      description,
-      category,
-      university,
-      JSON.stringify(safePhotos),
-      safeVideoUrl,
-      whatsapp_number,
-      safeStatus
-    );
+`).run(
+  uid,
+  email,
+  safeBusinessName,
+  safeBusinessLogo,
+  safeUniversity,
+  safeBio,
+  safeWhatsapp,
+  incomingVerified,
+  incomingSeller
+);
 
     res.json({ id: info.lastInsertRowid });
   } catch (error) {
