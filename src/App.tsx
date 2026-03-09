@@ -100,16 +100,17 @@ const [publicProfileLoading, setPublicProfileLoading] = useState(false);
 const [ratingSummary, setRatingSummary] = useState<SellerRatingSummary | null>(null);
 const [ratingLoading, setRatingLoading] = useState(false);
 const [ratingSubmitting, setRatingSubmitting] = useState(false);
-  const [detailsOpen, setDetailsOpen] = useState(false);
+const [detailsOpen, setDetailsOpen] = useState(false);
 const [detailsListing, setDetailsListing] = useState<Listing | null>(null);
-const [galleryIndex, setGalleryIndex] = useState(0);
-  const [reportListingId, setReportListingId] = useState<number | null>(null);
+const [galleryIndex, setGalleryIndex] = useState(0); 
+const [reportListingId, setReportListingId] = useState<number | null>(null);
 const [savedListingIds, setSavedListingIds] = useState<number[]>([]);
 const [showSavedModal, setShowSavedModal] = useState(false);
 const [showAdminReportsModal, setShowAdminReportsModal] = useState(false);
 const [passwordPromptOpen, setPasswordPromptOpen] = useState(false);
 const [reauthPassword, setReauthPassword] = useState("");
 const [pendingDeleteAfterReauth, setPendingDeleteAfterReauth] = useState(false);
+const [authDecisionPending, setAuthDecisionPending] = useState(false);
    
   
 // Local-only hides (no backend needed)
@@ -789,13 +790,26 @@ const handleToggleListingStatus = async (listing: Listing) => {
       console.error("Auth: Signup failed", err);
       let message = err.message;
 
-      if (err.code === 'auth/email-already-in-use') {
-        message = "This email is already registered. Would you like to log in instead?";
-        if (window.confirm(message)) {
-          setAuthView('login');
-          return;
-        }
-      }
+ if (err.code === 'auth/email-already-in-use') {
+  setAuthDecisionPending(true);
+
+  askConfirm({
+    title: "Account already exists",
+    message: "This email is already registered. Would you like to log in instead?",
+    confirmText: "Go to login",
+    cancelText: "Stay here",
+    danger: false,
+    onConfirm: () => {
+      closeConfirm();
+      setAuthDecisionPending(false);
+      setAuthView("login");
+      setLoading(false);
+    },
+  });
+
+  setLoading(false);
+  return;
+ }
       if (err.code === 'auth/invalid-email') message = "Please enter a valid email address.";
       if (err.code === 'auth/weak-password') message = "Password should be at least 6 characters.";
       if (err.message && err.message.includes("blocked")) message = "API Connection Error. Please check your Firebase configuration.";
