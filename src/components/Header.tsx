@@ -1,12 +1,12 @@
 import { Search, Plus, User } from "lucide-react";
 import type { User as FirebaseUser } from "firebase/auth";
-import type { Seller } from "../types";
+import type { UserProfile } from "../types";
 
 type HeaderProps = {
   onSearch: (val: string) => void;
   onAddListing: () => void;
   onProfileClick: () => void;
-  userSeller: Seller | null;
+  userProfile: UserProfile | null;
   firebaseUser: FirebaseUser | null;
 };
 
@@ -14,9 +14,14 @@ export default function Header({
   onSearch,
   onAddListing,
   onProfileClick,
-  userSeller,
+  userProfile,
   firebaseUser,
 }: HeaderProps) {
+  const profileImage = userProfile?.avatar_url || userProfile?.business_logo;
+  const fallbackLetter = (userProfile?.email || firebaseUser?.email || "?")
+    .charAt(0)
+    .toUpperCase();
+
   return (
     <nav className="sticky top-0 z-50 glass px-4 py-3">
       <div className="max-w-7xl mx-auto flex flex-col gap-3">
@@ -47,15 +52,15 @@ export default function Header({
               onClick={onProfileClick}
               className="w-11 h-11 rounded-2xl border border-zinc-200 flex items-center justify-center hover:bg-white hover:border-primary/20 hover:shadow-md transition-all overflow-hidden active:scale-95 bg-white"
             >
-              {userSeller ? (
+              {profileImage ? (
                 <img
-                  src={userSeller.business_logo}
+                  src={profileImage}
                   alt="Profile"
                   className="w-full h-full object-cover"
                 />
               ) : firebaseUser ? (
                 <div className="w-full h-full bg-primary/5 flex items-center justify-center text-primary font-bold">
-                  {firebaseUser.email?.charAt(0).toUpperCase()}
+                  {fallbackLetter}
                 </div>
               ) : (
                 <User className="w-5 h-5 text-zinc-600" />
