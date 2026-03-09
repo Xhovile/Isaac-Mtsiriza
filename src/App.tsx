@@ -2722,6 +2722,15 @@ const handleVideoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     onSave={(updated) => handleUpdateListing(editingListing.id, updated)}
   />
 )}
+     {feedback && (
+  <FeedbackModal
+    open={feedback.open}
+    type={feedback.type}
+    title={feedback.title}
+    message={feedback.message}
+    onClose={closeFeedback}
+  />
+)}
     </div>
  );
 }
