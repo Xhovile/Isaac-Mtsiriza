@@ -9,7 +9,7 @@ import {
   FileText,
   HelpCircle,
 } from "lucide-react";
-import { UserProfile, University } from "../types";
+import { UserProfile} from "../types";
 
 type SettingsView = "menu" | "privacy" | "terms" | "safety" | "report";
 
