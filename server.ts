@@ -369,11 +369,11 @@ VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
 `).run(
   uid,
   email,
-  business_name,
-  business_logo,
-  university,
-  bio,
-  whatsapp_number,
+  safeBusinessName,
+  safeBusinessLogo,
+  safeUniversity,
+  safeBio,
+  safeWhatsapp,
   incomingVerified,
   incomingSeller
 );
@@ -528,15 +528,16 @@ const safeStatus = status === "sold" ? "sold" : "available";
       INSERT INTO listings (seller_uid, name, price, description, category, university, photos, video_url, whatsapp_number, status)
          VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
 `).run(
-  uid,
-  email,
-  safeBusinessName,
-  safeBusinessLogo,
-  safeUniversity,
-  safeBio,
-  safeWhatsapp,
-  incomingVerified,
-  incomingSeller
+  seller_uid,
+  name,
+  price,
+  description,
+  category,
+  university,
+  JSON.stringify(safePhotos),
+  safeVideoUrl,
+  whatsapp_number,
+  safeStatus
 );
 
     res.json({ id: info.lastInsertRowid });
