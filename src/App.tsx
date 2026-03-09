@@ -845,12 +845,27 @@ const handleToggleListingStatus = async (listing: Listing) => {
       console.error("Auth: Login failed", err);
       let message = "Invalid email or password. Please try again.";
       
-      if (err.code === 'auth/invalid-credential') {
-        message = "Invalid email or password. If you've forgotten your password, you can reset it.";
-        if (window.confirm(message + "\n\nWould you like to reset your password now?")) {
-          setAuthView('forgot');
-          return;
-        }
+      if (err.code === "auth/invalid-credential") {
+  setAuthDecisionPending(true);
+
+  askConfirm({
+    title: "Login failed",
+    message:
+      "Invalid email or password. If you've forgotten your password, would you like to reset it now?",
+    confirmText: "Reset password",
+    cancelText: "Try again",
+    danger: false,
+    onConfirm: () => {
+      closeConfirm();
+      setAuthDecisionPending(false);
+      setAuthView("forgot");
+      setLoading(false);
+    },
+  });
+
+  setLoading(false);
+  return;
+ }
       } else if (err.code === 'auth/user-not-found') {
         message = "No account found with this email. Please sign up first.";
       } else if (err.code === 'auth/wrong-password') {
