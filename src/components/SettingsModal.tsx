@@ -82,6 +82,7 @@ export default function SettingsModal({
                  <span className="font-medium text-zinc-900">Edit Profile</span>
                  <ChevronRight className="w-4 h-4 text-zinc-400" />
               </button>
+            )} 
 
               <button
                 onClick={onOpenChangePassword}
