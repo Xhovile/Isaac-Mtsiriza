@@ -904,7 +904,11 @@ const handleToggleListingStatus = async (listing: Listing) => {
 
     setUserProfile(updatedProfile);
     setAuthView("profile");
-    alert("Account updated successfully.");
+    showFeedback(
+     "success",
+     "Account updated",
+     "Your account details were saved successfully."
+   );
   } catch (err: any) {
     alert(err?.message || "Failed to update account");
   }
@@ -945,7 +949,11 @@ const handleToggleListingStatus = async (listing: Listing) => {
 
     setUserProfile(updatedProfile);
     setAuthView("profile");
-    alert("Profile updated successfully.");
+    showFeedback(
+     "success",
+     "Profile updated",
+     "Your seller profile was saved successfully."
+   );
   } catch (err: any) {
     alert(err?.message || "Failed to update profile");
   }
