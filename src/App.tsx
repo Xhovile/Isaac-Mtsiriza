@@ -249,7 +249,6 @@ const [editProfileForm, setEditProfileForm] = useState({
 
       if (docSnap.exists()) {
          const profile = docSnap.data() as UserProfile;
-            setUserProfile(profile);
             console.log("Firestore: Profile found", profile.business_name);
             setUserProfile(profile);
 
@@ -813,7 +812,7 @@ const handleToggleListingStatus = async (listing: Listing) => {
   e.preventDefault();
   if (!firebaseUser || !userProfile) return;
 
-  const updatedProfile: Seller = {
+  const updatedProfile: UserProfile = {
     ...userProfile,
     business_name: editProfileForm.businessName,
     business_logo: editProfileForm.logoUrl,
