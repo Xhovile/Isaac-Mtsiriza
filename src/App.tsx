@@ -1031,7 +1031,11 @@ const handleToggleListingStatus = async (listing: Listing) => {
       photos: [...prev.photos, ...uploadedUrls].slice(0, 5),
     }));
   } catch (err: any) {
-    alert(err?.message || "Failed to upload images");
+    showFeedback(
+  "error",
+  "Image upload failed",
+  err?.message || "We could not upload the images."
+);
   } finally {
     setUploading(false);
     e.target.value = "";
@@ -1055,7 +1059,11 @@ const handleVideoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
 
     setNewListing((prev) => ({ ...prev, video_url: data.url }));
   } catch (err: any) {
-    alert(err?.message || "Failed to upload video");
+    showFeedback(
+  "error",
+  "Video upload failed",
+  err?.message || "We could not upload the video."
+);
   } finally {
     setUploading(false);
     e.target.value = "";
