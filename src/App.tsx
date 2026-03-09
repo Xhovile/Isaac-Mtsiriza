@@ -2000,6 +2000,20 @@ const handleVideoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
                           }}
                           className="w-full bg-zinc-900 hover:bg-zinc-800 text-white py-3 rounded-xl font-bold transition-colors"
                         >
+                          {!isSellerAccount && (
+                           <button
+                             onClick={() => {
+                               setEditAccountForm({
+                                 university: userProfile?.university || UNIVERSITIES[0],
+                                 avatarUrl: userProfile?.avatar_url || "",
+                               });
+                               setAuthView("editAccount");
+                              }}
+                               className="w-full bg-white border border-zinc-200 hover:bg-zinc-50 text-zinc-900 py-3 rounded-xl font-bold transition-colors"
+                             >
+                               Edit Account
+                            </button>
+                          )}
                           Become a Seller
                         </button>
                       )}
