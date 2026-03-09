@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import ConfirmModal from "./components/ConfirmModal";
+import PasswordPromptModal from "./components/PasswordPromptModal";
 import {  
   User, 
   ShieldCheck, 
@@ -105,6 +107,10 @@ const [galleryIndex, setGalleryIndex] = useState(0);
 const [savedListingIds, setSavedListingIds] = useState<number[]>([]);
 const [showSavedModal, setShowSavedModal] = useState(false);
 const [showAdminReportsModal, setShowAdminReportsModal] = useState(false);
+const [passwordPromptOpen, setPasswordPromptOpen] = useState(false);
+const [reauthPassword, setReauthPassword] = useState("");
+const [pendingDeleteAfterReauth, setPendingDeleteAfterReauth] = useState(false);
+   
   
 // Local-only hides (no backend needed)
 
@@ -117,6 +123,15 @@ const [hiddenSellerUids, setHiddenSellerUids] = useState<string[]>(() => {
     return [];
   }
 });
+const [confirmState, setConfirmState] = useState<{
+  open: boolean;
+  title: string;
+  message: string;
+  confirmText?: string;
+  cancelText?: string;
+  danger?: boolean;
+  onConfirm: (() => void) | null;
+} | null>(null);
 
 const [feedback, setFeedback] = useState<{
   open: boolean;
