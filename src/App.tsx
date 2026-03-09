@@ -755,7 +755,11 @@ const handleToggleListingStatus = async (listing: Listing) => {
     if (!authForm.email) return alert("Please enter your email");
     try {
       await sendPasswordResetEmail(auth, authForm.email);
-      alert("Password reset email sent!");
+      showFeedback(
+        "success",
+        "Reset email sent",
+        "Check your inbox for the password reset link."
+     );
       setAuthView('login');
     } catch (err: any) {
       alert(err.message);
