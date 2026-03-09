@@ -827,8 +827,9 @@ for (const pid of publicIds) {
     return res.status(400).json({ error: "Invalid listing id" });
   }
     const v = db
+  const v = db
   .prepare("SELECT is_verified, is_seller FROM sellers WHERE uid = ?")
-  .get(seller_uid) as { is_verified?: number; is_seller?: number } | undefined;
+  .get(uid) as { is_verified?: number; is_seller?: number } | undefined;
 
 if (!v) {
   return res.status(404).json({ error: "Seller profile not found" });
