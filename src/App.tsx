@@ -199,6 +199,7 @@ useEffect(() => {
   const isAdminUser =
     !!firebaseUser?.email &&
     firebaseUser.email.toLowerCase() === "isaacmtsiriza310@gmail.com";
+  const isSellerAccount = !!userProfile?.is_seller;
 
   const SELLER_REQUIRED_MESSAGE =
   "Unable to post item. Upgrade to Seller to post your products.";
