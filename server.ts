@@ -109,15 +109,16 @@ db.exec(`
     FOREIGN KEY (listing_id) REFERENCES listings(id)
   );
 
-  CREATE TABLE IF NOT EXISTS seller_ratings (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    seller_uid TEXT NOT NULL,
-    rater_uid TEXT NOT NULL,
-    stars INTEGER NOT NULL CHECK (stars >= 1 AND stars <= 5),
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (seller_uid) REFERENCES sellers(uid)
-  );
+ CREATE TABLE IF NOT EXISTS seller_ratings (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  seller_uid TEXT NOT NULL,
+  rater_uid TEXT NOT NULL,
+  stars INTEGER NOT NULL CHECK (stars >= 1 AND stars <= 5),
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+  updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+  UNIQUE (seller_uid, rater_uid),
+  FOREIGN KEY (seller_uid) REFERENCES sellers(uid)
+);
 `); 
 
 // ✅ Migration: add video_url column if it doesn't exist
