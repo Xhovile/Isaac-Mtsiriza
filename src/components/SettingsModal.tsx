@@ -66,7 +66,6 @@ export default function SettingsModal({
 
         <div className="p-6 overflow-y-auto flex-1 space-y-8">
 
-          {isSellerAccount && (
           <section>
             <div className="flex items-center gap-2 mb-4">
               <User className="w-4 h-4 text-zinc-500" />
@@ -74,6 +73,7 @@ export default function SettingsModal({
             </div>
 
             <div className="bg-zinc-50 rounded-2xl border border-zinc-100 overflow-hidden">
+              
               {isSellerAccount && (
               <button
                  onClick={onOpenEditProfile}
