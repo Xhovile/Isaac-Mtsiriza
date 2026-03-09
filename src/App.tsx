@@ -758,7 +758,7 @@ const handleToggleListingStatus = async (listing: Listing) => {
       showFeedback(
         "success",
         "Reset email sent",
-        "Check your inbox for the password reset link."
+        "Check your Email inbox for the password reset link."
      );
       setAuthView('login');
     } catch (err: any) {
