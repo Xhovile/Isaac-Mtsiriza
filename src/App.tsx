@@ -2024,9 +2024,6 @@ const handleVideoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
   </button>
 )}
 
-</form>
-)}
-
 {isFirebaseConfigured && !firestoreError && authView === 'editAccount' && userProfile && (
   <form onSubmit={handleSaveAccount} className="p-8 space-y-4">
     <div>
@@ -2087,8 +2084,6 @@ const handleVideoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     </button>
   </form>
 )}
-                      {isFirebaseConfigured && !firestoreError && authView === 'profile' && userProfile && (
-                      {isSellerAccount && (
                         <button
                           onClick={() => {
                             if (!userProfile) return;
