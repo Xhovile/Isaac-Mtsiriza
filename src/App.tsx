@@ -1168,7 +1168,11 @@ const handleVideoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
       }
     } catch (err) {
       console.error("Upload failed", err);
-      alert(err instanceof Error ? err.message : "Image upload failed. Please try again.");
+      showFeedback(
+       "error",
+       "Upload failed",
+       err instanceof Error ? err.message : "Image upload failed. Please try again."
+     );
     } finally {
       setUploading(false);
     }
