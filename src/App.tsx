@@ -20,6 +20,7 @@ import {
 import { motion, AnimatePresence } from 'motion/react';
 import { Listing, UserProfile, University, Category } from './types';
 import HeroSection from "./sections/HeroSection";
+import FeedbackModal from "./components/FeedbackModal";
 import { UNIVERSITIES, CATEGORIES } from './constants';
 import {
   getListingIdFromUrl,
@@ -117,11 +118,34 @@ const [hiddenSellerUids, setHiddenSellerUids] = useState<string[]>(() => {
   }
 });
 
+const [feedback, setFeedback] = useState<{
+  open: boolean;
+  type: "success" | "error" | "info";
+  title: string;
+  message: string;
+} | null>(null);
+  
   const [editAccountForm, setEditAccountForm] = useState({
   university: UNIVERSITIES[0] as University,
   avatarUrl: "",
 });
 
+const showFeedback = (
+  type: "success" | "error" | "info",
+  title: string,
+  message: string
+) => {
+  setFeedback({
+    open: true,
+    type,
+    title,
+    message,
+  });
+};
+  const closeFeedback = () => {
+  setFeedback(null);
+};
+  
 const hideSellerLocal = (uid: string) => {
   if (!uid || typeof uid !== "string") return;
 
