@@ -1357,7 +1357,11 @@ const handleVideoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
                       onClick={async () => {
                         if (firebaseUser) {
                           await sendEmailVerification(firebaseUser);
-                          alert("Verification email resent!");
+                         showFeedback(
+                           "success",
+                           "Verification email resent",
+                           "Check your inbox for the new verification email."
+                         );
                         }
                       }}
                       className="text-primary text-sm font-bold hover:underline"
@@ -1975,7 +1979,11 @@ const handleVideoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
                               if (firebaseUser) {
                                 try {
                                   await sendEmailVerification(firebaseUser);
-                                  alert("Verification email resent!");
+                                  showFeedback(
+                                   "success",
+                                   "Verification email resent",
+                                   "Check your inbox for the new verification email."
+                                 );
                                 } catch (e: any) {
                                   alert(e.message);
                                 }
