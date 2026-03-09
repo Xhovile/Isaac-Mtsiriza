@@ -1012,9 +1012,9 @@ const handleVideoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     return;
   }
 
-  if (!firebaseUser.emailVerified) {
-    alert("Please verify your email before posting a listing.");
-    return;
+  if (!isSellerAccount) {
+  promptSellerUpgrade();
+  return;
   }
 
   try {
