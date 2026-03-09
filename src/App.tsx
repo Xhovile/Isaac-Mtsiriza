@@ -386,9 +386,31 @@ const openFooterView = (view: "privacy" | "terms" | "safety" | "report") => {
 };
 
 const promptSellerUpgrade = () => {
-  alert(SELLER_REQUIRED_MESSAGE);
-  setShowProfileModal(true);
-  setAuthView("profile");
+  setShowAddModal(false);
+
+  if (!firebaseUser) {
+    setShowProfileModal(true);
+    setAuthView("signup");
+    return;
+  }
+
+  if (!userProfile) {
+    setShowProfileModal(true);
+    setAuthView("signup");
+    return;
+  }
+
+  if (!userProfile.is_seller) {
+    setShowProfileModal(true);
+    setAuthView("profile");
+    return;
+  }
+
+  setNewListing((prev) => ({
+    ...prev,
+    whatsapp_number: userProfile?.whatsapp_number || "",
+  }));
+  setShowAddModal(true);
 };
 
 const openEditProfileFromSettings = () => {
