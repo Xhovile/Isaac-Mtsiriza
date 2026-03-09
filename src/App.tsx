@@ -493,7 +493,11 @@ const handleRateSeller = async (sellerUid: string, stars: number) => {
     });
     setRatingSummary(summary);
   } catch (e: any) {
-    alert(e?.message || "Failed to save rating");
+    showFeedback(
+      "error",
+      "Rating failed",
+      e?.message || "We could not save your rating."
+    );
   } finally {
     setRatingSubmitting(false);
   }
@@ -513,7 +517,11 @@ const handleRemoveSellerRating = async (sellerUid: string) => {
     });
     setRatingSummary(summary);
   } catch (e: any) {
-    alert(e?.message || "Failed to remove rating");
+    showFeedback(
+      "error",
+      "Remove rating failed",
+      e?.message || "We could not remove your rating."
+    );
   } finally {
     setRatingSubmitting(false);
   }
