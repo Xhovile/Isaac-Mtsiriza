@@ -1498,110 +1498,57 @@ if (!isSellerAccount) {
                   </form>
                 )}
 
-                {isFirebaseConfigured && !firestoreError && authView === 'signup' && (
-                  <form onSubmit={handleSignUp} className="p-8 space-y-4">
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                      <div>
-                        <label className="block text-xs font-bold text-zinc-400 uppercase mb-1">Business Name</label>
-                        <input 
-                          required
-                          type="text" 
-                          className="w-full px-4 py-3 bg-zinc-50 border border-zinc-200 rounded-xl focus:ring-2 focus:ring-primary/20 outline-none"
-                          value={authForm.businessName}
-                          onChange={e => setAuthForm({...authForm, businessName: e.target.value})}
-                        />
-                      </div>
-                      <div>
-                        <label className="block text-xs font-bold text-zinc-400 uppercase mb-1">University</label>
-                        <select 
-                          className="w-full px-4 py-3 bg-zinc-50 border border-zinc-200 rounded-xl focus:ring-2 focus:ring-primary/20 outline-none"
-                          value={authForm.university}
-                          onChange={e => setAuthForm({...authForm, university: e.target.value as University})}
-                        >
-                          {UNIVERSITIES.map(u => <option key={u} value={u}>{u}</option>)}
-                        </select>
-                      </div>
-                    </div>
-                    <div>
-                      <label className="block text-xs font-bold text-zinc-400 uppercase mb-1">Email Address</label>
-                      <input 
-                        required
-                        type="email" 
-                        className="w-full px-4 py-3 bg-zinc-50 border border-zinc-200 rounded-xl focus:ring-2 focus:ring-primary/20 outline-none"
-                        value={authForm.email}
-                        onChange={e => setAuthForm({...authForm, email: e.target.value})}
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-xs font-bold text-zinc-400 uppercase mb-1">Password</label>
-                      <input 
-                        required
-                        type="password" 
-                        className="w-full px-4 py-3 bg-zinc-50 border border-zinc-200 rounded-xl focus:ring-2 focus:ring-primary/20 outline-none"
-                        value={authForm.password}
-                        onChange={e => setAuthForm({...authForm, password: e.target.value})}
-                      />
-                    </div>
-                    <div>
-                     <label className="block text-xs font-bold text-zinc-400 uppercase mb-1">WhatsApp Number</label>
-                      <input 
-                        type="text" 
-                        placeholder="265..."
-                        className="w-full px-4 py-3 bg-zinc-50 border border-zinc-200 rounded-xl focus:ring-2 focus:ring-primary/20 outline-none"
-                        value={authForm.whatsappNumber}
-                        onChange={e => setAuthForm({ ...authForm, whatsappNumber: e.target.value })}
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-xs font-bold text-zinc-400 uppercase mb-1">Business Logo</label>
-                      <div className="flex items-center gap-4">
-                        <div className="w-16 h-16 rounded-full bg-zinc-100 border border-zinc-200 overflow-hidden flex-shrink-0">
-                          {authForm.logoUrl ? (
-                            <img src={authForm.logoUrl} alt="Logo" className="w-full h-full object-cover" />
-                          ) : (
-                            <div className="w-full h-full flex items-center justify-center text-zinc-400">
-                              <Camera className="w-6 h-6" />
-                            </div>
-                          )}
-                        </div>
-                        <div className="flex-1">
-                          <input 
-                            type="file" 
-                            accept="image/*"
-                            onChange={handleFileUpload}
-                            className="hidden"
-                            id="logo-upload"
-                          />
-                          <label 
-                            htmlFor="logo-upload"
-                            className="inline-block px-4 py-2 bg-zinc-100 hover:bg-zinc-200 rounded-lg text-sm font-bold cursor-pointer transition-colors"
-                          >
-                            {uploading ? "Uploading..." : "Upload Logo"}
-                          </label>
-                        </div>
-                      </div>
-                    </div>
-                    <div>
-                      <label className="block text-xs font-bold text-zinc-400 uppercase mb-1">Short Bio (Optional)</label>
-                      <textarea 
-                        className="w-full px-4 py-3 bg-zinc-50 border border-zinc-200 rounded-xl focus:ring-2 focus:ring-primary/20 outline-none h-20 resize-none"
-                        value={authForm.bio}
-                        onChange={e => setAuthForm({...authForm, bio: e.target.value})}
-                      />
-                    </div>
-                    <button 
-                      type="submit"
-                      disabled={loading || uploading}
-                      className="w-full bg-primary text-white py-4 rounded-xl font-bold hover:bg-primary-dark transition-colors flex items-center justify-center gap-2"
-                    >
-                      {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : "Create Account"}
-                    </button>
-                    <p className="text-center text-sm text-zinc-500">
-                      Already have an account?{" "}
-                      <button type="button" onClick={() => setAuthView('login')} className="text-primary font-bold hover:underline">Log In</button>
-                    </p>
-                  </form>
-                )}
+ {isFirebaseConfigured && !firestoreError && authView === 'signup' && (
+  <form onSubmit={handleSignUp} className="p-8 space-y-4">
+  <div>
+    <label className="block text-xs font-bold text-zinc-400 uppercase mb-1">University</label>
+    <select
+      className="w-full px-4 py-3 bg-zinc-50 border border-zinc-200 rounded-xl focus:ring-2 focus:ring-primary/20 outline-none"
+      value={authForm.university}
+      onChange={e => setAuthForm({ ...authForm, university: e.target.value as University })}
+    >
+      {UNIVERSITIES.map(u => <option key={u} value={u}>{u}</option>)}
+    </select>
+  </div>
+
+  <div>
+    <label className="block text-xs font-bold text-zinc-400 uppercase mb-1">Email Address</label>
+    <input
+      required
+      type="email"
+      className="w-full px-4 py-3 bg-zinc-50 border border-zinc-200 rounded-xl focus:ring-2 focus:ring-primary/20 outline-none"
+      value={authForm.email}
+      onChange={e => setAuthForm({ ...authForm, email: e.target.value })}
+    />
+  </div>
+
+  <div>
+    <label className="block text-xs font-bold text-zinc-400 uppercase mb-1">Password</label>
+    <input
+      required
+      type="password"
+      className="w-full px-4 py-3 bg-zinc-50 border border-zinc-200 rounded-xl focus:ring-2 focus:ring-primary/20 outline-none"
+      value={authForm.password}
+      onChange={e => setAuthForm({ ...authForm, password: e.target.value })}
+    />
+  </div>
+
+  <button
+    type="submit"
+    disabled={loading}
+    className="w-full bg-primary text-white py-4 rounded-xl font-bold hover:bg-primary-dark transition-colors flex items-center justify-center gap-2"
+  >
+    {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : "Create Account"}
+  </button>
+
+  <p className="text-center text-sm text-zinc-500">
+    Already have an account?{" "}
+    <button type="button" onClick={() => setAuthView('login')} className="text-primary font-bold hover:underline">
+       Log In
+      </button>
+    </p>
+  </form> 
+)}
 
                 {isFirebaseConfigured && !firestoreError && authView === 'forgot' && (
                   <form onSubmit={handleForgotPassword} className="p-8 space-y-4">
