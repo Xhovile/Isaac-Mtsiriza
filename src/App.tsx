@@ -368,7 +368,11 @@ const fetchMyListings = async () => {
     const data = await apiFetch(`/api/users/${firebaseUser.uid}/listings`);
     setMyListings(Array.isArray(data) ? data : []);
   } catch (err: any) {
-    alert(err?.message || "Failed to load your listings");
+    showFeedback(
+  "error",
+  "Could not load listings",
+  err?.message || "We could not load your listings."
+);
   } finally {
     setMyListingsLoading(false);
   }
@@ -1122,7 +1126,11 @@ const handleVideoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
 
     fetchListings();
   } catch (err: any) {
-    alert(err?.message || "Failed to create listing");
+    showFeedback(
+     "error",
+     "Listing creation failed",
+     err?.message || "We could not create your listing."
+   );
   }
 };
   
