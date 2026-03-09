@@ -545,7 +545,11 @@ const openPublicProfile = async (uid: string) => {
       setRatingSummary(null);
     }
   } catch (e: any) {
-    alert(e?.message || "Failed to load profile");
+    showFeedback(
+     "error",
+     "Profile load failed",
+     e?.message || "We could not load this profile."
+   );
     setPublicProfileOpen(false);
   } finally {
     setPublicProfileLoading(false);
