@@ -65,17 +65,18 @@ try {
 
 // Initialize database
 db.exec(`
-  CREATE TABLE IF NOT EXISTS sellers (
-    uid TEXT PRIMARY KEY,
-    email TEXT NOT NULL,
-    business_name TEXT NOT NULL,
-    business_logo TEXT NOT NULL,
-    university TEXT NOT NULL,
-    bio TEXT,
-    whatsapp_number TEXT,
-    is_verified INTEGER DEFAULT 0,
-    join_date DATETIME DEFAULT CURRENT_TIMESTAMP
-  );
+CREATE TABLE IF NOT EXISTS sellers (
+  uid TEXT PRIMARY KEY,
+  email TEXT NOT NULL,
+  business_name TEXT,
+  business_logo TEXT,
+  university TEXT,
+  bio TEXT,
+  whatsapp_number TEXT,
+  is_verified INTEGER DEFAULT 0,
+  is_seller INTEGER NOT NULL DEFAULT 0,
+  join_date DATETIME DEFAULT CURRENT_TIMESTAMP
+);
 
   CREATE TABLE IF NOT EXISTS listings (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
