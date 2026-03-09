@@ -810,7 +810,11 @@ const handleToggleListingStatus = async (listing: Listing) => {
   }),
 });
 
-    alert("✅ Verified! You can now create listings.");
+    showFeedback(
+  "success",
+  "Email verified",
+  "Your account is now verified. You can start selling."
+);
   } catch (e: any) {
     console.error(e);
     alert(e?.message || "Failed to refresh verification status.");
