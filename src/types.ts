@@ -26,6 +26,7 @@ export interface UserProfile {
 
   // general user fields
   university?: University;
+  avatar_url?: string;
 
   // seller-only fields
   business_name?: string;
