@@ -2077,24 +2077,25 @@ const handleVideoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     Become a Seller
   </button>
 )}
-
-                        <button
-                          onClick={() => {
-                            if (!userProfile) return;
-                            setEditProfileForm({
-                              businessName: userProfile.business_name || "",
-                              university: userProfile.university || UNIVERSITIES[0],
-                              logoUrl: userProfile.business_logo || "",
-                              bio: userProfile.bio || "",
-                              whatsappNumber: userProfile.whatsapp_number || ""
-                            });
-                            setAuthView("editProfile");
-                          }}
-                          className="w-full bg-zinc-900 hover:bg-zinc-800 text-white py-3 rounded-xl font-bold transition-colors"
-                        >
-                          Edit Profile
-                        </button>
-                      )}
+                      
+{isSellerAccount && (
+  <button
+    onClick={() => {
+      if (!userProfile) return;
+      setEditProfileForm({
+        businessName: userProfile.business_name || "",
+        university: userProfile.university || UNIVERSITIES[0],
+        logoUrl: userProfile.business_logo || "",
+        bio: userProfile.bio || "",
+        whatsappNumber: userProfile.whatsapp_number || ""
+      });
+      setAuthView("editProfile");
+    }}
+    className="w-full bg-zinc-900 hover:bg-zinc-800 text-white py-3 rounded-xl font-bold transition-colors"
+  >
+    Edit Profile
+  </button>
+)}
 
                       <button
                         onClick={openSettings}
