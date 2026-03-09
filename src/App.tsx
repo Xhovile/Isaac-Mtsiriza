@@ -785,45 +785,47 @@ const handleToggleListingStatus = async (listing: Listing) => {
         "Account created",
         "Please check your email and verify your account."
      );
-    
       setAuthView('profile');
-    } catch (err: any) {
-      console.error("Auth: Signup failed", err);
-      let message = err.message;
-
- if (err.code === 'auth/email-already-in-use') {
-  setAuthDecisionPending(true);
-
-  askConfirm({
-    title: "Account already exists",
-    message: "This email is already registered. Would you like to log in instead?",
-    confirmText: "Go to login",
-    cancelText: "Stay here",
-    danger: false,
-    onConfirm: () => {
-      closeConfirm();
-      setAuthDecisionPending(false);
-      setAuthView("login");
-      setLoading(false);
-    },
-  });
-
-  setLoading(false);
-  return;
- }
-      if (err.code === 'auth/invalid-email') message = "Please enter a valid email address.";
-      if (err.code === 'auth/weak-password') message = "Password should be at least 6 characters.";
-      if (err.message && err.message.includes("blocked")) message = "API Connection Error. Please check your Firebase configuration.";
       
-      showFeedback(
-        "error",
-        "Signup failed",
-        message
-      );
-    } finally {
-      setLoading(false);
+    catch (err: any) {
+  console.error("Auth: Signup failed", err);
+  let message = err.message;
+
+  if (err.code === "auth/email-already-in-use") {
+    askConfirm({
+      title: "Account already exists",
+      message: "This email is already registered. Would you like to log in instead?",
+      confirmText: "Go to login",
+      cancelText: "Stay here",
+      danger: false,
+      onConfirm: () => {
+        closeConfirm();
+        setAuthView("login");
+      },
+    });
+
+    setLoading(false);
+    return;
+  }
+
+  if (err.code === "auth/invalid-email") {
+    message = "Please enter a valid email address.";
+  }
+
+  if (err.code === "auth/weak-password") {
+    message = "Password should be at least 6 characters.";
+  }
+
+  if (err.message && err.message.includes("blocked")) {
+    message = "API Connection Error. Please check your Firebase configuration.";
+  }
+
+  showFeedback(
+    "error",
+    "Signup failed",
+    message
+  );
     }
-  };
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
