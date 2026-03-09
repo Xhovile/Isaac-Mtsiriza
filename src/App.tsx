@@ -247,8 +247,9 @@ const [editProfileForm, setEditProfileForm] = useState({
           const docRef = doc(firestore, "users", firebaseUser.uid);
           const docSnap = await getDoc(docRef);
 
-          if (docSnap.exists()) {
-            const profile = docSnap.data() as Seller;
+      if (docSnap.exists()) {
+         const profile = docSnap.data() as UserProfile;
+            setUserProfile(profile);
             console.log("Firestore: Profile found", profile.business_name);
             setUserProfile(profile);
 
