@@ -1000,10 +1000,18 @@ const handleToggleListingStatus = async (listing: Listing) => {
       is_seller: true,
     });
 
-    alert("Seller account activated successfully.");
+    showFeedback(
+      "success",
+      "Seller account activated",
+      "Your seller profile is now active."
+    );
     setAuthView("profile");
   } catch (err: any) {
-    alert(err?.message || "Failed to become a seller");
+    showFeedback(
+     "error",
+     "Seller upgrade failed",
+     err?.message || "We could not activate your seller account."
+   );
   }
 };
   
