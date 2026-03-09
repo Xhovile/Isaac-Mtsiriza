@@ -1911,9 +1911,13 @@ const handleVideoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
                       </>
                     ) : (
                       <>
-                        <div className="w-24 h-24 mx-auto mb-4 rounded-full bg-zinc-100 flex items-center justify-center">
+                       <div className="w-24 h-24 mx-auto mb-4 rounded-full bg-zinc-100 flex items-center justify-center overflow-hidden">
+                       {userProfile.avatar_url ? (
+                          <img src={userProfile.avatar_url} alt="Profile" className="w-full h-full object-cover" />
+                        ) : (
                           <User className="w-10 h-10 text-zinc-400" />
-                        </div>
+                        )}
+                      </div>
                         <h3 className="text-2xl font-display mb-1">My Account</h3>
                         <p className="text-zinc-500 text-sm mb-4 flex items-center justify-center gap-1">
                           <MapPin className="w-4 h-4" /> {userProfile.university || "University not set"}
