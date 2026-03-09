@@ -213,12 +213,17 @@ useEffect(() => {
   const [authForm, setAuthForm] = useState({
   email: "",
   password: "",
+  university: UNIVERSITIES[0] as University,
+});
+  
+  const [sellerUpgradeForm, setSellerUpgradeForm] = useState({
   businessName: "",
   university: UNIVERSITIES[0] as University,
   logoUrl: "",
   bio: "",
   whatsappNumber: ""
 });
+  
 const [editProfileForm, setEditProfileForm] = useState({
   businessName: "",
   university: UNIVERSITIES[0] as University,
