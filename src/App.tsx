@@ -1135,17 +1135,17 @@ const handleVideoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
       <main className="max-w-7xl mx-auto px-4">
         <HeroSection
     onStartSelling={() => {
-      if (!isSellerAccount) {
-        alert("You need a seller account to post listings.");
-        return;
-      }
+  if (!isSellerAccount) {
+    promptSellerUpgrade();
+    return;
+  }
 
-      setNewListing((prev) => ({
-        ...prev,
-        whatsapp_number: userProfile?.whatsapp_number || "",
-      }));
-      setShowAddModal(true);
-    }}
+  setNewListing((prev) => ({
+    ...prev,
+    whatsapp_number: userProfile?.whatsapp_number || "",
+  }));
+  setShowAddModal(true);
+}}
   />     
         <MarketSection
   loading={loading}
