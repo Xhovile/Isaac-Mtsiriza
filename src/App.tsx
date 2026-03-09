@@ -684,7 +684,11 @@ const handleToggleListingStatus = async (listing: Listing) => {
 }
 
       setUserProfile(profile);
-      alert("Account created! Please check your email for verification.");
+      showFeedback(
+  "success",
+  "Account created",
+  "Please check your email and verify your account."
+);
       setAuthView('profile');
     } catch (err: any) {
       console.error("Auth: Signup failed", err);
