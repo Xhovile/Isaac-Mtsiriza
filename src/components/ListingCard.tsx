@@ -81,6 +81,17 @@ export default function ListingCard({
     alert(msg);
   };
 
+  const trackWhatsappClick = async () => {
+  try {
+    await fetch(`/api/listings/${listing.id}/whatsapp-click`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+    });
+  } catch (e) {
+    console.error("Failed to track WhatsApp click", e);
+  }
+};
+
   const handleCopyWhatsApp = async () => {
     if (!isLoggedIn) {
       setMenuOpen(false);
