@@ -693,6 +693,7 @@ const savedListings = React.useMemo(() => {
     if (showMyListingsModal && firebaseUser) {
       fetchMyListings();
     }
+    void fetchSellerDashboard();
 
     showFeedback(
       "success",
@@ -763,6 +764,7 @@ const handleUpdateListing = async (listingId: number, updated: Partial<Listing>)
     if (showMyListingsModal && firebaseUser) {
       fetchMyListings();
     }
+    void fetchSellerDashboard();
 
     setEditingListing(null);
   } catch (err: any) {
