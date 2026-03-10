@@ -179,20 +179,8 @@ Open this listing: ${shareUrl}`;
             </div>
           </button>
 
-          <div className="relative" data-listing-menu={listing.id}>
-            <button
-              type="button"
-              onClick={() => setMenuOpen(!menuOpen)}
-              className="p-2 rounded-xl hover:bg-zinc-100 active:scale-95 transition"
-              aria-label="Open actions menu"
-              aria-expanded={menuOpen}
-            >
-              <MoreVertical className="w-5 h-5 text-zinc-500" />
-            </button>
-
-            {menuOpen && (
-              <div className="flex items-center gap-3">
-  <span className="text-[11px] font-semibold text-zinc-500">
+   <div className="flex items-center gap-3">
+  <span className="max-w-[90px] truncate text-[11px] font-semibold text-zinc-500">
     {listing.university}
   </span>
 
