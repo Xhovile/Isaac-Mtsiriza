@@ -1896,16 +1896,14 @@ const handleVideoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
 
  {isFirebaseConfigured && !firestoreError && authView === 'signup' && (
   <form onSubmit={handleSignUp} className="p-8 space-y-4">
-  <div>
-    <label className="block text-xs font-bold text-zinc-400 uppercase mb-1">University</label>
-    <select
-      className="w-full px-4 py-3 bg-zinc-50 border border-zinc-200 rounded-xl focus:ring-2 focus:ring-primary/20 outline-none"
-      value={authForm.university}
-      onChange={e => setAuthForm({ ...authForm, university: e.target.value as University })}
-    >
-      {UNIVERSITIES.map(u => <option key={u} value={u}>{u}</option>)}
-    </select>
-  </div>
+ <FormDropdown
+  label="University"
+  value={authForm.university}
+  options={UNIVERSITIES}
+  onChange={(value) =>
+    setAuthForm({ ...authForm, university: value as University })
+  }
+/>
 
   <div>
     <label className="block text-xs font-bold text-zinc-400 uppercase mb-1">Email Address</label>
