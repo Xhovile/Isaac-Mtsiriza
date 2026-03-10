@@ -48,11 +48,42 @@ export interface Listing {
   whatsapp_number: string;
   status: ListingStatus;
   created_at: string;
-  // Joined fields
+  views_count?: number;
+  whatsapp_clicks?: number;
+  is_hidden?: number;
   business_name: string;
   business_logo: string;
   is_verified: boolean;
 }
+
+export interface SellerDashboardData {
+  seller: {
+    uid: string;
+    business_name: string | null;
+    profile_views: number;
+  };
+  stats: {
+    total_listings: number;
+    active_listings: number;
+    sold_listings: number;
+    total_views: number;
+    total_whatsapp_clicks: number;
+    repeat_seller_activity: boolean;
+  };
+  byCampus: {
+    university: string;
+    count: number;
+  }[];
+  top_listing: {
+    id: number;
+    name: string;
+    views_count: number;
+    whatsapp_clicks: number;
+    status: string;
+    created_at: string;
+  } | null;
+}
+
 export interface RatingSummary {
   averageRating: number;
   ratingCount: number;
