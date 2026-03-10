@@ -406,6 +406,17 @@ const [editProfileForm, setEditProfileForm] = useState({
     }
   };
 
+  const trackListingView = async (listingId: number) => {
+  try {
+    await fetch(`/api/listings/${listingId}/view`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+    });
+  } catch (e) {
+    console.error("Failed to track listing view", e);
+  }
+};
+
 const fetchMyListings = async () => {
   if (!firebaseUser) return;
 
