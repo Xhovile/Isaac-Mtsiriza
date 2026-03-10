@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { ChevronRight, MapPin, RefreshCw, Tag } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
+import { ChevronRight, MapPin, RefreshCw, Search, Tag } from "lucide-react";
 import { UNIVERSITIES, CATEGORIES } from "../constants";
 
 type FilterSectionProps = {
@@ -20,6 +20,7 @@ export default function FilterSection({
   setSortBy,
 }: FilterSectionProps) {
   const [openDropdown, setOpenDropdown] = useState<"university" | "category" | "sort" | null>(null);
+  const [universityQuery, setUniversityQuery] = useState("");
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
@@ -42,6 +43,22 @@ export default function FilterSection({
     };
   }, []);
 
+  useEffect(() => {
+    if (openDropdown !== "university") {
+      setUniversityQuery("");
+    }
+  }, [openDropdown]);
+
+  const filteredUniversities = useMemo(() => {
+    const trimmed = universityQuery.trim().toLowerCase();
+
+    if (!trimmed) return UNIVERSITIES;
+
+    return UNIVERSITIES.filter((u) =>
+      u.toLowerCase().includes(trimmed)
+    );
+  }, [universityQuery]);
+
   const sortOptions = [
     { value: "newest", label: "Newest First" },
     { value: "price_asc", label: "Price: Low to High" },
@@ -50,12 +67,16 @@ export default function FilterSection({
 
   const triggerBase =
     "w-full flex items-center justify-between gap-3 bg-white border border-zinc-200 rounded-2xl px-4 py-3 text-sm font-bold text-zinc-700 hover:border-zinc-300 hover:bg-zinc-50 transition-all";
-  const menuBase =
-    "absolute top-[calc(100%+0.5rem)] left-0 w-full bg-white border border-zinc-200 rounded-2xl shadow-xl z-30 max-h-64 overflow-y-auto p-2";
+  const menuShell =
+    "absolute top-[calc(100%+0.5rem)] left-0 w-full bg-white border border-zinc-200 rounded-2xl shadow-xl z-30 overflow-hidden";
+  const menuBase = "max-h-64 overflow-y-auto p-2";
   const itemBase =
     "w-full text-left px-3 py-2.5 rounded-xl text-sm font-semibold transition-colors";
   const activeItem = "bg-zinc-900 text-white";
   const inactiveItem = "text-zinc-700 hover:bg-zinc-100";
+  const searchWrap = "p-2 border-b border-zinc-100 bg-white";
+  const searchInput =
+    "w-full pl-10 pr-4 py-2.5 bg-zinc-50 border border-zinc-200 rounded-xl text-sm text-zinc-700 placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-zinc-300";
 
   return (
     <div className="py-6 grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -66,10 +87,14 @@ export default function FilterSection({
 
         <button
           type="button"
-          onClick={() => setOpenDropdown(openDropdown === "university" ? null : "university")}
+          onClick={() =>
+            setOpenDropdown(openDropdown === "university" ? null : "university")
+          }
           className={triggerBase}
         >
-          <span>{selectedUniv || "All Universities"}</span>
+          <span className="truncate text-left">
+            {selectedUniv || "All Universities"}
+          </span>
           <ChevronRight
             className={`w-4 h-4 text-zinc-400 transition-transform ${
               openDropdown === "university" ? "rotate-90" : "rotate-0"
@@ -78,31 +103,54 @@ export default function FilterSection({
         </button>
 
         {openDropdown === "university" && (
-          <div className={menuBase}>
-            <button
-              type="button"
-              onClick={() => {
-                setSelectedUniv("");
-                setOpenDropdown(null);
-              }}
-              className={`${itemBase} ${selectedUniv === "" ? activeItem : inactiveItem}`}
-            >
-              All Universities
-            </button>
+          <div className={menuShell}>
+            <div className={searchWrap}>
+              <div className="relative">
+                <Search className="w-4 h-4 text-zinc-400 absolute left-3 top-1/2 -translate-y-1/2" />
+                <input
+                  type="text"
+                  value={universityQuery}
+                  onChange={(e) => setUniversityQuery(e.target.value)}
+                  placeholder="Search university..."
+                  className={searchInput}
+                />
+              </div>
+            </div>
 
-            {UNIVERSITIES.map((u) => (
+            <div className={menuBase}>
               <button
-                key={u}
                 type="button"
                 onClick={() => {
-                  setSelectedUniv(u);
+                  setSelectedUniv("");
                   setOpenDropdown(null);
+                  setUniversityQuery("");
                 }}
-                className={`${itemBase} ${selectedUniv === u ? activeItem : inactiveItem}`}
+                className={`${itemBase} ${selectedUniv === "" ? activeItem : inactiveItem}`}
               >
-                {u}
+                All Universities
               </button>
-            ))}
+
+              {filteredUniversities.length > 0 ? (
+                filteredUniversities.map((u) => (
+                  <button
+                    key={u}
+                    type="button"
+                    onClick={() => {
+                      setSelectedUniv(u);
+                      setOpenDropdown(null);
+                      setUniversityQuery("");
+                    }}
+                    className={`${itemBase} ${selectedUniv === u ? activeItem : inactiveItem}`}
+                  >
+                    {u}
+                  </button>
+                ))
+              ) : (
+                <div className="px-3 py-3 text-sm text-zinc-500">
+                  No universities found.
+                </div>
+              )}
+            </div>
           </div>
         )}
       </div>
@@ -114,10 +162,14 @@ export default function FilterSection({
 
         <button
           type="button"
-          onClick={() => setOpenDropdown(openDropdown === "category" ? null : "category")}
+          onClick={() =>
+            setOpenDropdown(openDropdown === "category" ? null : "category")
+          }
           className={triggerBase}
         >
-          <span>{selectedCat || "All Categories"}</span>
+          <span className="truncate text-left">
+            {selectedCat || "All Categories"}
+          </span>
           <ChevronRight
             className={`w-4 h-4 text-zinc-400 transition-transform ${
               openDropdown === "category" ? "rotate-90" : "rotate-0"
@@ -126,31 +178,33 @@ export default function FilterSection({
         </button>
 
         {openDropdown === "category" && (
-          <div className={menuBase}>
-            <button
-              type="button"
-              onClick={() => {
-                setSelectedCat("");
-                setOpenDropdown(null);
-              }}
-              className={`${itemBase} ${selectedCat === "" ? activeItem : inactiveItem}`}
-            >
-              All Categories
-            </button>
-
-            {CATEGORIES.map((c) => (
+          <div className={menuShell}>
+            <div className={menuBase}>
               <button
-                key={c}
                 type="button"
                 onClick={() => {
-                  setSelectedCat(c);
+                  setSelectedCat("");
                   setOpenDropdown(null);
                 }}
-                className={`${itemBase} ${selectedCat === c ? activeItem : inactiveItem}`}
+                className={`${itemBase} ${selectedCat === "" ? activeItem : inactiveItem}`}
               >
-                {c}
+                All Categories
               </button>
-            ))}
+
+              {CATEGORIES.map((c) => (
+                <button
+                  key={c}
+                  type="button"
+                  onClick={() => {
+                    setSelectedCat(c);
+                    setOpenDropdown(null);
+                  }}
+                  className={`${itemBase} ${selectedCat === c ? activeItem : inactiveItem}`}
+                >
+                  {c}
+                </button>
+              ))}
+            </div>
           </div>
         )}
       </div>
@@ -165,7 +219,9 @@ export default function FilterSection({
           onClick={() => setOpenDropdown(openDropdown === "sort" ? null : "sort")}
           className={triggerBase}
         >
-          <span>{sortOptions.find((option) => option.value === sortBy)?.label || "Newest First"}</span>
+          <span className="truncate text-left">
+            {sortOptions.find((option) => option.value === sortBy)?.label || "Newest First"}
+          </span>
           <ChevronRight
             className={`w-4 h-4 text-zinc-400 transition-transform ${
               openDropdown === "sort" ? "rotate-90" : "rotate-0"
@@ -174,23 +230,25 @@ export default function FilterSection({
         </button>
 
         {openDropdown === "sort" && (
-          <div className={menuBase}>
-            {sortOptions.map((option) => (
-              <button
-                key={option.value}
-                type="button"
-                onClick={() => {
-                  setSortBy(option.value);
-                  setOpenDropdown(null);
-                }}
-                className={`${itemBase} ${sortBy === option.value ? activeItem : inactiveItem}`}
-              >
-                {option.label}
-              </button>
-            ))}
+          <div className={menuShell}>
+            <div className={menuBase}>
+              {sortOptions.map((option) => (
+                <button
+                  key={option.value}
+                  type="button"
+                  onClick={() => {
+                    setSortBy(option.value);
+                    setOpenDropdown(null);
+                  }}
+                  className={`${itemBase} ${sortBy === option.value ? activeItem : inactiveItem}`}
+                >
+                  {option.label}
+                </button>
+              ))}
+            </div>
           </div>
         )}
       </div>
     </div>
   );
-  }
+ } 
