@@ -236,6 +236,7 @@ const openDetails = (listing: Listing, startIndex = 0) => {
   setGalleryIndex(startIndex);
   setDetailsOpen(true);
   syncListingParamInUrl(listing.id);
+  void trackListingView(listing.id);
 };
 
 const closeDetails = () => {
