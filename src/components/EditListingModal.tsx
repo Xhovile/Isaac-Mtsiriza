@@ -1,5 +1,8 @@
 import { useEffect, useState } from "react";
-import { Listing } from "../types";
+import { X } from "lucide-react";
+import { Listing, Category, University } from "../types";
+import { CATEGORIES, UNIVERSITIES } from "../constants";
+import FormDropdown from "./FormDropdown";
 
 export default function EditListingModal({
   listing,
@@ -20,7 +23,6 @@ export default function EditListingModal({
   });
 
   useEffect(() => {
-    // If user clicks Edit on another listing without closing, sync the form.
     setForm({
       name: listing.name || "",
       price: String(listing.price ?? ""),
@@ -31,85 +33,159 @@ export default function EditListingModal({
     });
   }, [listing]);
 
+  const handleSave = () => {
+    const priceNum = Number(form.price);
+
+    if (Number.isNaN(priceNum)) {
+      alert("Price must be a number.");
+      return;
+    }
+
+    onSave({
+      name: form.name,
+      price: priceNum,
+      description: form.description,
+      category: form.category,
+      university: form.university,
+      whatsapp_number: form.whatsapp_number,
+    });
+  };
+
   return (
-    <div style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.55)", zIndex: 9999 }}>
-      <div style={{ maxWidth: 560, margin: "8% auto", background: "#fff", padding: 18, borderRadius: 14 }}>
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
-          <h3 style={{ fontWeight: 800 }}>Edit Listing</h3>
-          <button onClick={onClose}>✕</button>
+    <div className="fixed inset-0 z-[90] flex items-center justify-center p-4">
+      <div
+        className="absolute inset-0 bg-zinc-900/60 backdrop-blur-sm"
+        onClick={onClose}
+      />
+
+      <div className="relative w-full max-w-lg bg-white rounded-3xl overflow-hidden shadow-2xl max-h-[90vh] flex flex-col">
+        <div className="p-6 border-b border-zinc-100 flex items-center justify-between bg-zinc-50/60">
+          <div>
+            <h2 className="text-2xl font-extrabold text-zinc-900 tracking-tight">
+              Edit Listing
+            </h2>
+            <p className="text-xs font-bold text-zinc-400 uppercase tracking-widest mt-1">
+              Update your listing details
+            </p>
+          </div>
+
+          <button
+            onClick={onClose}
+            className="p-2.5 hover:bg-white hover:shadow-md rounded-2xl transition-all border border-transparent hover:border-zinc-100"
+            aria-label="Close edit listing modal"
+          >
+            <X className="w-5 h-5 text-zinc-400" />
+          </button>
         </div>
 
-        <div style={{ display: "grid", gap: 10 }}>
-          <input
-            value={form.name}
-            onChange={(e) => setForm({ ...form, name: e.target.value })}
-            placeholder="Name"
-          />
+        <div className="p-6 space-y-4 overflow-y-auto">
+          <div>
+            <label className="block text-xs font-bold text-zinc-400 uppercase mb-1">
+              Product Name
+            </label>
+            <input
+              type="text"
+              value={form.name}
+              onChange={(e) => setForm({ ...form, name: e.target.value })}
+              placeholder="Product name"
+              className="w-full px-4 py-3 bg-zinc-50 border border-zinc-200 rounded-xl focus:ring-2 focus:ring-primary/20 outline-none"
+            />
+          </div>
 
-          <input
-            type="number"
-            value={form.price}
-            onChange={(e) => setForm({ ...form, price: e.target.value })}
-            placeholder="Price"
-          />
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-xs font-bold text-zinc-400 uppercase mb-1">
+                Price (MK)
+              </label>
+              <input
+                type="number"
+                value={form.price}
+                onChange={(e) => setForm({ ...form, price: e.target.value })}
+                placeholder="Price"
+                className="w-full px-4 py-3 bg-zinc-50 border border-zinc-200 rounded-xl focus:ring-2 focus:ring-primary/20 outline-none"
+              />
+            </div>
 
-          <textarea
-            value={form.description}
-            onChange={(e) => setForm({ ...form, description: e.target.value })}
-            placeholder="Description"
-            rows={3}
-          />
+            <div>
+              <label className="block text-xs font-bold text-zinc-400 uppercase mb-1">
+                WhatsApp Number
+              </label>
+              <input
+                type="text"
+                value={form.whatsapp_number}
+                onChange={(e) =>
+                  setForm({ ...form, whatsapp_number: e.target.value })
+                }
+                placeholder="265..."
+                className="w-full px-4 py-3 bg-zinc-50 border border-zinc-200 rounded-xl focus:ring-2 focus:ring-primary/20 outline-none"
+              />
+            </div>
+          </div>
 
-          <input
-            value={form.category}
-            onChange={(e) => setForm({ ...form, category: e.target.value })}
-            placeholder="Category"
-          />
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <FormDropdown
+              label="Category"
+              value={form.category}
+              options={CATEGORIES}
+              searchPlaceholder="Search category..."
+              onChange={(value) =>
+                setForm({ ...form, category: value as Category })
+              }
+            />
 
-          <input
-            value={form.university}
-            onChange={(e) => setForm({ ...form, university: e.target.value })}
-            placeholder="University"
-          />
+            <FormDropdown
+              label="University"
+              value={form.university}
+              options={UNIVERSITIES}
+              searchPlaceholder="Search university..."
+              onChange={(value) =>
+                setForm({ ...form, university: value as University })
+              }
+            />
+          </div>
 
-          <input
-            value={form.whatsapp_number}
-            onChange={(e) => setForm({ ...form, whatsapp_number: e.target.value })}
-            placeholder="WhatsApp number"
-          />
-          <p style={{ fontSize: 12, color: "#71717a", margin: "2px 0 0" }}>
-             Media can’t be edited yet. Create a new listing to change photos/video.
-         </p>
+          <div>
+            <label className="block text-xs font-bold text-zinc-400 uppercase mb-1">
+              Description
+            </label>
+            <textarea
+              value={form.description}
+              onChange={(e) =>
+                setForm({ ...form, description: e.target.value })
+              }
+              placeholder="Describe your item"
+              rows={4}
+              className="w-full px-4 py-3 bg-zinc-50 border border-zinc-200 rounded-xl focus:ring-2 focus:ring-primary/20 outline-none resize-none"
+            />
+          </div>
+
+          <div className="rounded-2xl border border-zinc-200 bg-zinc-50 px-4 py-3">
+            <p className="text-xs font-bold text-zinc-500 uppercase tracking-wider mb-1">
+              Note
+            </p>
+            <p className="text-sm text-zinc-600">
+              Media cannot be edited here yet. Create a new listing if you want
+              to change photos or video.
+            </p>
+          </div>
         </div>
 
-        <div style={{ display: "flex", gap: 10, marginTop: 14 }}>
-          <button onClick={onClose} style={{ flex: 1 }}>
+        <div className="p-6 border-t border-zinc-100 bg-white flex gap-3">
+          <button
+            onClick={onClose}
+            className="flex-1 bg-zinc-100 hover:bg-zinc-200 text-zinc-900 py-3 rounded-xl font-bold transition-colors"
+          >
             Cancel
           </button>
 
           <button
-            onClick={() => {
-              const priceNum = Number(form.price);
-              if (Number.isNaN(priceNum)) {
-                alert("Price must be a number");
-                return;
-              }
-              onSave({
-                name: form.name,
-                price: priceNum,
-                description: form.description,
-                category: form.category,
-                university: form.university,
-                whatsapp_number: form.whatsapp_number,
-                // photos are not edited here; we keep existing photos in App.tsx
-              });
-            }}
-            style={{ flex: 1, fontWeight: 800 }}
+            onClick={handleSave}
+            className="flex-1 bg-zinc-900 hover:bg-zinc-800 text-white py-3 rounded-xl font-bold transition-colors"
           >
-            Save
+            Save Changes
           </button>
         </div>
       </div>
     </div>
   );
-            }
+ }
