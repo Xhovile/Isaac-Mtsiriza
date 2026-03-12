@@ -284,7 +284,8 @@ useEffect(() => {
     photos: [] as string[],
     video_url: "",
     whatsapp_number: "",
-    status: "available" as "available" | "sold"
+    status: "available" as "available" | "sold",
+    condition: "used" as "new" | "used" | "refurbished"
   });
 
   const [authForm, setAuthForm] = useState({
