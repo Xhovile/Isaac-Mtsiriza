@@ -438,6 +438,49 @@ const [editProfileForm, setEditProfileForm] = useState({
   }
 }; 
 
+const loadDetailsExtras = async (listing: Listing) => {
+  setDetailsLoadingExtra(true);
+
+  try {
+    const [sellerProfile, allListings] = await Promise.all([
+      apiFetch(`/api/users/${listing.seller_uid}`),
+      apiFetch("/api/listings"),
+    ]);
+
+    setDetailsSellerProfile(sellerProfile || null);
+
+    if (firebaseUser) {
+      try {
+        const summary = await apiFetch(`/api/users/${listing.seller_uid}/rating-summary`);
+        setDetailsRatingSummary(summary || null);
+      } catch {
+        setDetailsRatingSummary(null);
+      }
+    } else {
+      setDetailsRatingSummary(null);
+    }
+
+    const related = Array.isArray(allListings)
+      ? allListings
+          .filter((item: Listing) =>
+            item.id !== listing.id &&
+            item.category === listing.category &&
+            item.university === listing.university
+          )
+          .slice(0, 6)
+      : [];
+
+    setRelatedListings(related);
+  } catch (e) {
+    console.error("Failed to load detail extras", e);
+    setDetailsSellerProfile(null);
+    setDetailsRatingSummary(null);
+    setRelatedListings([]);
+  } finally {
+    setDetailsLoadingExtra(false);
+  }
+};
+
 const fetchSellerDashboard = async () => {
   if (!firebaseUser || !userProfile?.is_seller) {
     setSellerDashboard(null);
