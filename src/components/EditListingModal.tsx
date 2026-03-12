@@ -19,6 +19,7 @@ export default function EditListingModal({
     description: listing.description || "",
     category: listing.category || "",
     university: listing.university || "",
+    condition: listing.condition || "used",
     whatsapp_number: listing.whatsapp_number || "",
   });
 
@@ -32,6 +33,18 @@ export default function EditListingModal({
       whatsapp_number: listing.whatsapp_number || "",
     });
   }, [listing]);
+
+<FormDropdown
+  label="Condition"
+  value={form.condition}
+  options={["new", "used", "refurbished"]}
+  onChange={(value) =>
+    setForm({
+      ...form,
+      condition: value as "new" | "used" | "refurbished",
+    })
+  }
+/>
 
   const handleSave = () => {
     const priceNum = Number(form.price);
@@ -48,6 +61,7 @@ export default function EditListingModal({
       category: form.category,
       university: form.university,
       whatsapp_number: form.whatsapp_number,
+      condition: form.condition as "new" | "used" | "refurbished",
     });
   };
 
