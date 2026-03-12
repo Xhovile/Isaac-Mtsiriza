@@ -113,7 +113,10 @@ const [reauthPassword, setReauthPassword] = useState("");
 const [pendingDeleteAfterReauth, setPendingDeleteAfterReauth] = useState(false);
 const [sellerDashboard, setSellerDashboard] = useState<SellerDashboardData | null>(null);
 const [sellerDashboardLoading, setSellerDashboardLoading] = useState(false);
-   
+const [detailsSellerProfile, setDetailsSellerProfile] = useState<any | null>(null);
+const [detailsRatingSummary, setDetailsRatingSummary] = useState<SellerRatingSummary | null>(null);
+const [relatedListings, setRelatedListings] = useState<Listing[]>([]);
+const [detailsLoadingExtra, setDetailsLoadingExtra] = useState(false);  
   
 // Local-only hides (no backend needed)
 
@@ -142,7 +145,7 @@ const [feedback, setFeedback] = useState<{
   title: string;
   message: string;
 } | null>(null);
-  
+
   const [editAccountForm, setEditAccountForm] = useState({
   university: UNIVERSITIES[0] as University,
   avatarUrl: "",
