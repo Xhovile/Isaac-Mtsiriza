@@ -865,7 +865,10 @@ const handleToggleListingStatus = async (listing: Listing) => {
   const message = encodeURIComponent(
     `Hi, I'm interested in your "${listing.name}" on BuyMesho. Is it still available?`
   );
-
+ if (!firebaseUser) {
+  requireLoginForContact();
+  return;
+ }
   window.open(`https://wa.me/${listing.whatsapp_number}?text=${message}`, "_blank", "noopener,noreferrer");
 };
   
