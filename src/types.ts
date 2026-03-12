@@ -16,6 +16,7 @@ export type Category =
   | "Beauty & Personal Care";
 
 export type ListingStatus = "available" | "sold";
+export type ListingCondition = "new" | "used" | "refurbished";
 
 export interface UserProfile {
   uid: string;
@@ -47,6 +48,8 @@ export interface Listing {
   video_url?: string | null;
   whatsapp_number: string;
   status: ListingStatus;
+  condition?: ListingCondition;
+  created_at: string;
   created_at: string;
   views_count?: number;
   whatsapp_clicks?: number;
