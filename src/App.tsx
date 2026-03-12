@@ -274,6 +274,7 @@ useEffect(() => {
     setDetailsListing(foundListing);
     setGalleryIndex(0);
     setDetailsOpen(true);
+    void loadDetailsExtras(foundListing);
   }
 }, [listings]);
 
