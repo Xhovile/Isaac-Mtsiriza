@@ -34,18 +34,6 @@ export default function EditListingModal({
     });
   }, [listing]);
 
-<FormDropdown
-  label="Condition"
-  value={form.condition}
-  options={["new", "used", "refurbished"]}
-  onChange={(value) =>
-    setForm({
-      ...form,
-      condition: value as "new" | "used" | "refurbished",
-    })
-  }
-/>
-
   const handleSave = () => {
     const priceNum = Number(form.price);
 
@@ -157,6 +145,19 @@ export default function EditListingModal({
               }
             />
           </div>
+
+           <FormDropdown
+             label="Condition"
+             value={form.condition}
+             options={["new", "used", "refurbished"]}
+             onChange={(value) =>
+               setForm({
+                 ...form,
+                 condition: value as "new" | "used" | "refurbished",
+               })
+              }
+            />
+
 
           <div>
             <label className="block text-xs font-bold text-zinc-400 uppercase mb-1">
