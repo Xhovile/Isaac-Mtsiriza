@@ -522,8 +522,7 @@ const loadDetailsExtras = async (listing: Listing) => {
             item.category === listing.category &&
             item.university === listing.university
           )
-          .slice(0, 6)
-      : [];
+          .slice(0, 6);
 
     setRelatedListings(related);
   } catch (e) {
