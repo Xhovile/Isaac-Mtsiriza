@@ -395,8 +395,8 @@ Open this listing: ${shareUrl}`;
             ) : isLoggedIn ? (
              <a
                 href={`https://wa.me/${listing.whatsapp_number}?text=${encodeURIComponent(
-                  `Hi, I'm interested in your "${listing.name}" on BuyMesho. Is it still available?`
-                 )}`}
+                `Hi, I'm interested in your "${listing.name}" on BuyMesho. Is it still available?\n\nListing: ${buildListingShareUrl(listing.id, 0)}`
+                )}`}
                  target="_blank"
                  rel="noopener noreferrer"
                  onClick={() => {
