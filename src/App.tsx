@@ -432,24 +432,38 @@ const [editProfileForm, setEditProfileForm] = useState({
 ]);
 
   const fetchListings = async () => {
-    setLoading(true);
-    try {
-      const params = new URLSearchParams();
-      if (selectedUniv) params.append("university", selectedUniv);
-      if (selectedCat) params.append("category", selectedCat);
-      if (search) params.append("search", search);
-      if (sortBy) params.append("sortBy", sortBy);
-      
-      const res = await fetch(`/api/listings?${params.toString()}`);
-      if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
-      const data = await res.json();
-      setListings(data);
-    } catch (err) {
-      console.error("Fetch listings error:", err);
-    } finally {
-      setLoading(false);
-    }
-  };
+  setLoading(true);
+  try {
+    const params = new URLSearchParams();
+
+    if (selectedUniv) params.append("university", selectedUniv);
+    if (selectedCat) params.append("category", selectedCat);
+    if (selectedCondition) params.append("condition", selectedCondition);
+    if (minPrice) params.append("minPrice", minPrice);
+    if (maxPrice) params.append("maxPrice", maxPrice);
+    if (search) params.append("search", search);
+    if (sortBy) params.append("sortBy", sortBy);
+
+    params.append("page", String(currentPage));
+    params.append("pageSize", String(pageSize));
+
+    const res = await fetch(`/api/listings?${params.toString()}`);
+    if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+
+    const data = await res.json();
+
+    setListings(Array.isArray(data.items) ? data.items : []);
+    setTotalResults(Number(data.total || 0));
+    setTotalPages(Number(data.totalPages || 1));
+  } catch (err) {
+    console.error("Fetch listings error:", err);
+    setListings([]);
+    setTotalResults(0);
+    setTotalPages(1);
+  } finally {
+    setLoading(false);
+  }
+};
 
   const trackListingView = async (listingId: number) => {
   try {
