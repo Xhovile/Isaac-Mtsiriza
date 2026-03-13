@@ -27,6 +27,7 @@ import FeedbackModal from "./components/FeedbackModal";
 import { UNIVERSITIES, CATEGORIES } from './constants';
 import {
   getListingParamsFromUrl,
+  buildListingShareUrl,
   syncListingParamsInUrl,
   clearListingParamFromUrl
 } from "./lib/listingUrl";
@@ -859,6 +860,11 @@ const handleToggleListingStatus = async (listing: Listing) => {
 };
 
   const handleDetailWhatsappClick = async (listing: Listing) => {
+  if (!firebaseUser) {
+    requireLoginForContact();
+    return;
+  }
+
   try {
     await fetch(`/api/listings/${listing.id}/whatsapp-click`, {
       method: "POST",
@@ -868,14 +874,17 @@ const handleToggleListingStatus = async (listing: Listing) => {
     console.error("Failed to track detail WhatsApp click", e);
   }
 
+  const shareUrl = buildListingShareUrl(listing.id, galleryIndex);
+
   const message = encodeURIComponent(
-    `Hi, I'm interested in your "${listing.name}" on BuyMesho. Is it still available?`
+    `Hi, I'm interested in your "${listing.name}" on BuyMesho. Is it still available?\n\nListing: ${shareUrl}`
   );
- if (!firebaseUser) {
-  requireLoginForContact();
-  return;
- }
-  window.open(`https://wa.me/${listing.whatsapp_number}?text=${message}`, "_blank", "noopener,noreferrer");
+
+  window.open(
+    `https://wa.me/${listing.whatsapp_number}?text=${message}`,
+    "_blank",
+    "noopener,noreferrer"
+  );
 };
   
   const handleSignUp = async (e: React.FormEvent) => {
