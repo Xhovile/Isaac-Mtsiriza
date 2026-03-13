@@ -512,9 +512,12 @@ const loadDetailsExtras = async (listing: Listing) => {
       setDetailsRatingSummary(null);
     }
 
-    const related = Array.isArray(allListings)
-      ? allListings
-          .filter((item: Listing) =>
+    const allListings = Array.isArray(listingsResponse?.items)
+     ? listingsResponse.items
+     : [];
+
+      const related = allListings
+        .filter((item: Listing) =>
             item.id !== listing.id &&
             item.category === listing.category &&
             item.university === listing.university
