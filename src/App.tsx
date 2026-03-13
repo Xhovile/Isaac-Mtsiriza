@@ -1661,6 +1661,26 @@ const handleVideoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
   onToggleStatus={handleToggleListingStatus}
   onToggleSave={toggleSavedListing}
   requireLoginForContact={requireLoginForContact}
+  selectedCondition={selectedCondition}
+setSelectedCondition={setSelectedCondition}
+minPrice={minPrice}
+setMinPrice={setMinPrice}
+maxPrice={maxPrice}
+setMaxPrice={setMaxPrice}
+totalResults={totalResults}
+currentPage={currentPage}
+totalPages={totalPages}
+setCurrentPage={setCurrentPage}
+onResetFilters={() => {
+  setSelectedUniv("");
+  setSelectedCat("");
+  setSelectedCondition("");
+  setMinPrice("");
+  setMaxPrice("");
+  setSearch("");
+  setSortBy("newest");
+  setCurrentPage(1);
+}}
 />
       </main>
 
