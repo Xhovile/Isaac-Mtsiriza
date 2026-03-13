@@ -3064,7 +3064,13 @@ const handleVideoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
             <div className="absolute inset-0 flex items-center justify-between px-2">
               <button
                 type="button"
-                onClick={() => setGalleryIndex((i) => Math.max(0, i - 1))}
+                onClick={() => {
+                  const nextIndex = Math.max(0, galleryIndex - 1);
+                  setGalleryIndex(nextIndex);
+                  if (detailsListing) {
+                    syncListingParamsInUrl(detailsListing.id, nextIndex);
+                  }
+                }}
                 className="p-2 bg-white/80 hover:bg-white rounded-full"
                 disabled={galleryIndex === 0}
               >
@@ -3072,11 +3078,13 @@ const handleVideoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
               </button>
               <button
                 type="button"
-                onClick={() =>
-                  setGalleryIndex((i) =>
-                    Math.min(detailsListing.photos.length - 1, i + 1)
-                  )
-                }
+                onClick={() => {
+                  const nextIndex = Math.min(detailsListing.photos.length - 1, galleryIndex + 1);
+                  setGalleryIndex(nextIndex);
+                  if (detailsListing) {
+                    syncListingParamsInUrl(detailsListing.id, nextIndex);
+                  }
+                }}
                 className="p-2 bg-white/80 hover:bg-white rounded-full"
                 disabled={galleryIndex === detailsListing.photos.length - 1}
               >
