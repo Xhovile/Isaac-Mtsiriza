@@ -402,7 +402,7 @@ async function startServer() {
   } else if (sortBy === "price_desc") {
     orderBy = " ORDER BY l.price DESC";
   } else if (sortBy === "popular") {
-    orderBy = " ORDER BY l.views_count DESC, l.created_at DESC";
+    ORDER BY l.views_count DESC, l.whatsapp_clicks DESC, l.created_at DESC
   } else if (sortBy === "oldest") {
     orderBy = " ORDER BY l.created_at ASC";
   }
