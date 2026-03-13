@@ -346,43 +346,104 @@ async function startServer() {
   });
 
   app.get("/api/listings", (req, res) => {
-    const { category, university, search, sortBy } = req.query;
-    let query = `
-      SELECT l.*, s.business_name, s.business_logo, s.is_verified 
-      FROM listings l 
-      JOIN sellers s ON l.seller_uid = s.uid 
-      WHERE 1=1
-    `;
-    const params = [];
+  const {
+    category,
+    university,
+    search,
+    sortBy,
+    minPrice,
+    maxPrice,
+    condition,
+    page = "1",
+    pageSize = "12",
+  } = req.query;
 
-    if (category) {
-      query += " AND l.category = ?";
-      params.push(category);
-    }
-    if (university) {
-      query += " AND l.university = ?";
-      params.push(university);
-    }
-    if (search) {
-      query += " AND (l.name LIKE ? OR l.description LIKE ?)";
-      params.push(`%${search}%`, `%${search}%`);
-    }
+  let baseQuery = `
+    FROM listings l
+    JOIN sellers s ON l.seller_uid = s.uid
+    WHERE 1=1
+  `;
 
-    if (sortBy === 'price_asc') {
-      query += " ORDER BY l.price ASC";
-    } else if (sortBy === 'price_desc') {
-      query += " ORDER BY l.price DESC";
-    } else {
-      query += " ORDER BY l.created_at DESC";
-    }
-    
-    const listings = db.prepare(query).all(...params);
-    res.json(listings.map((l: any) => ({
-      ...l,
-      photos: JSON.parse(l.photos || "[]")
-    })));
-  });
+  const params: any[] = [];
 
+  if (category && typeof category === "string") {
+    baseQuery += " AND l.category = ?";
+    params.push(category);
+  }
+
+  if (university && typeof university === "string") {
+    baseQuery += " AND l.university = ?";
+    params.push(university);
+  }
+
+  if (search && typeof search === "string") {
+    baseQuery += " AND (l.name LIKE ? OR l.description LIKE ?)";
+    params.push(`%${search}%`, `%${search}%`);
+  }
+
+  if (condition && typeof condition === "string") {
+    baseQuery += " AND l.condition = ?";
+    params.push(condition);
+  }
+
+  if (minPrice !== undefined && minPrice !== "" && !Number.isNaN(Number(minPrice))) {
+    baseQuery += " AND l.price >= ?";
+    params.push(Number(minPrice));
+  }
+
+  if (maxPrice !== undefined && maxPrice !== "" && !Number.isNaN(Number(maxPrice))) {
+    baseQuery += " AND l.price <= ?";
+    params.push(Number(maxPrice));
+  }
+
+  let orderBy = " ORDER BY l.created_at DESC";
+  if (sortBy === "price_asc") {
+    orderBy = " ORDER BY l.price ASC";
+  } else if (sortBy === "price_desc") {
+    orderBy = " ORDER BY l.price DESC";
+  } else if (sortBy === "popular") {
+    orderBy = " ORDER BY l.views_count DESC, l.created_at DESC";
+  } else if (sortBy === "oldest") {
+    orderBy = " ORDER BY l.created_at ASC";
+  }
+
+  const safePage = Math.max(1, Number(page) || 1);
+  const safePageSize = Math.max(1, Math.min(48, Number(pageSize) || 12));
+  const offset = (safePage - 1) * safePageSize;
+
+  try {
+    const totalRow = db
+      .prepare(`SELECT COUNT(*) as total ${baseQuery}`)
+      .get(...params) as { total: number };
+
+    const rows = db
+      .prepare(`
+        SELECT l.*, s.business_name, s.business_logo, s.is_verified
+        ${baseQuery}
+        ${orderBy}
+        LIMIT ? OFFSET ?
+      `)
+      .all(...params, safePageSize, offset);
+
+    const total = totalRow?.total ?? 0;
+    const totalPages = Math.max(1, Math.ceil(total / safePageSize));
+
+    res.json({
+      items: rows.map((l: any) => ({
+        ...l,
+        photos: JSON.parse(l.photos || "[]"),
+      })),
+      total,
+      page: safePage,
+      pageSize: safePageSize,
+      totalPages,
+    });
+  } catch (error) {
+    console.error("Fetch listings error:", error);
+    res.status(500).json({ error: "Failed to load listings" });
+  }
+});
+  
   app.post("/api/sellers", requireAuth, (req, res) => {
     const uid = req.user!.uid; // secure UID from Firebase
 const {
