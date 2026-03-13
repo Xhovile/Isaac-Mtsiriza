@@ -1671,16 +1671,6 @@ totalResults={totalResults}
 currentPage={currentPage}
 totalPages={totalPages}
 setCurrentPage={setCurrentPage}
-onResetFilters={() => {
-  setSelectedUniv("");
-  setSelectedCat("");
-  setSelectedCondition("");
-  setMinPrice("");
-  setMaxPrice("");
-  setSearch("");
-  setSortBy("newest");
-  setCurrentPage(1);
-}}
 />
       </main>
 
